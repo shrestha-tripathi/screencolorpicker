@@ -1,0 +1,174 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { getCollection, render } from "astro:content";
+import { site, b } from "../../site.config";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("blog", ({ data }) => !data.draft);
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+const postSchema = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "@id": `${site.url}/blog/${post.id}#post`,
+  headline: post.data.title,
+  description: post.data.description,
+  datePublished: post.data.pubDate.toISOString(),
+  ...(post.data.updatedDate && { dateModified: post.data.updatedDate.toISOString() }),
+  author: { "@type": "Person", name: site.author },
+  publisher: { "@id": `${site.url}/#organization` },
+  mainEntityOfPage: { "@type": "WebPage", "@id": `${site.url}/blog/${post.id}` },
+  keywords: post.data.tags.join(", "),
+};
+
+const fmtDate = (d: Date) =>
+  d.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
+---
+<Layout
+  title={post.data.title}
+  description={post.data.description}
+  jsonLd={[postSchema]}
+>
+  <article class="px-4 sm:px-6 py-16 sm:py-24">
+    <div class="mx-auto max-w-2xl">
+      <p class="mb-6">
+        <a href={b("/blog")} class="text-[14px] font-mono uppercase tracking-wider text-[var(--color-fg-subtle)] hover:text-[var(--color-fg)] transition-colors">
+          ← Back to blog
+        </a>
+      </p>
+
+      <div class="mb-2 text-[12px] font-mono uppercase tracking-wider text-[var(--color-fg-subtle)] flex items-center gap-3">
+        <time datetime={post.data.pubDate.toISOString()}>{fmtDate(post.data.pubDate)}</time>
+        {post.data.tags.length > 0 && (
+          <>
+            <span>·</span>
+            <span>{post.data.tags.join(" · ")}</span>
+          </>
+        )}
+      </div>
+
+      <h1 class="heading-display text-[36px] sm:text-[44px] mb-5 text-balance">{post.data.title}</h1>
+      <p class="text-[18px] text-[var(--color-fg-secondary)] leading-[1.6] mb-12">{post.data.description}</p>
+
+      <div class="prose-body">
+        <Content />
+      </div>
+
+      <hr class="mt-16 mb-8" style="border: 0; border-top: 1px solid var(--color-border);" />
+
+      <p class="text-[14px] text-[var(--color-fg-secondary)]">
+        Built by <a href={b("/about")} class="prose-link">{site.author}</a>.
+        Try <a href={b("/")} class="prose-link">{site.name}</a> · Read more on the <a href={b("/blog")} class="prose-link">blog</a>.
+      </p>
+    </div>
+  </article>
+</Layout>
+
+<style>
+  .prose-body :global(h2) {
+    font-size: 1.875rem;
+    font-weight: 600;
+    letter-spacing: -0.025em;
+    line-height: 1.2;
+    color: var(--color-fg);
+    margin-top: 3.25rem;
+    margin-bottom: 1rem;
+  }
+  .prose-body :global(h3) {
+    font-size: 1.25rem;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    color: var(--color-fg);
+    margin-top: 2rem;
+    margin-bottom: 0.6rem;
+  }
+  .prose-body :global(p) {
+    color: var(--color-fg-secondary);
+    line-height: 1.75;
+    margin-bottom: 1.25rem;
+    font-size: 16.5px;
+  }
+  .prose-body :global(ul),
+  .prose-body :global(ol) {
+    color: var(--color-fg-secondary);
+    line-height: 1.75;
+    padding-left: 1.5rem;
+    margin-bottom: 1.25rem;
+    font-size: 16.5px;
+  }
+  .prose-body :global(ul) { list-style: disc; }
+  .prose-body :global(ol) { list-style: decimal; }
+  .prose-body :global(li) { margin-bottom: 0.4rem; }
+  .prose-body :global(strong) { color: var(--color-fg); font-weight: 600; }
+  .prose-body :global(a) {
+    color: var(--color-accent);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .prose-body :global(a:hover) { color: var(--color-accent-hover); }
+  .prose-body :global(code) {
+    font-family: var(--font-mono);
+    font-size: 0.875em;
+    color: var(--color-fg);
+    background: var(--color-surface);
+    box-shadow: var(--shadow-ring);
+    border-radius: 4px;
+    padding: 1px 5px;
+  }
+  .prose-body :global(pre) {
+    background: var(--color-bg-elevated);
+    box-shadow: var(--shadow-ring);
+    border-radius: 8px;
+    padding: 1.25rem;
+    margin: 1.5rem 0;
+    overflow-x: auto;
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+  .prose-body :global(pre code) {
+    background: none;
+    box-shadow: none;
+    padding: 0;
+    border-radius: 0;
+    font-size: inherit;
+    color: var(--color-fg);
+  }
+  .prose-body :global(blockquote) {
+    border-left: 3px solid var(--color-accent);
+    padding-left: 1rem;
+    margin: 1.5rem 0;
+    color: var(--color-fg-secondary);
+    font-style: italic;
+  }
+  .prose-body :global(table) {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+    font-size: 0.9rem;
+  }
+  .prose-body :global(th),
+  .prose-body :global(td) {
+    box-shadow: inset 0 -1px 0 var(--color-border);
+    padding: 0.7rem 0.9rem;
+    text-align: left;
+  }
+  .prose-body :global(th) {
+    color: var(--color-fg);
+    font-weight: 600;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .prose-body :global(hr) {
+    border: 0;
+    border-top: 1px solid var(--color-border);
+    margin: 2.5rem 0;
+  }
+</style>

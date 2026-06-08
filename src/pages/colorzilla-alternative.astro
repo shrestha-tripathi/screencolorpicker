@@ -1,0 +1,208 @@
+---
+import Layout from "../layouts/Layout.astro";
+import ColorPicker from "../components/ColorPicker.astro";
+import { site, b } from "../site.config";
+
+const webAppSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "@id": `${site.url}/colorzilla-alternative#webapp`,
+  name: `${site.name} — ColorZilla Alternative`,
+  url: `${site.url}/colorzilla-alternative`,
+  description: `Free ColorZilla alternative that runs in your browser without permissions, ads, or extensions. Same screen-wide color picking, with HEX, RGB, HSL, and OKLCH output.`,
+  alternateName: [
+    "ColorZilla alternative",
+    "ColorZilla replacement",
+    "Free color picker like ColorZilla",
+    "Color picker no extension",
+    "Browser color picker without extension",
+  ],
+  applicationCategory: "DesignApplication",
+  applicationSubCategory: "ColorPicker",
+  operatingSystem: "Any browser",
+  offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+  publisher: { "@id": `${site.url}/#organization` },
+};
+
+const faqs = [
+  {
+    q: "Is ColorZilla safe to use?",
+    a: "ColorZilla is widely used and not known for malicious behavior, but the underlying issue is the permission model — like every Chrome extension that can sample pixel data, it requires 'read and change all your data on the websites you visit'. That permission lets the extension see passwords, banking pages, private messages — anything in any tab. Even if the developer is trustworthy, an extension update or a compromised author account could expose that surface area. ColorTrail avoids this entirely by using the browser's sandboxed EyeDropper API, which only returns the sampled pixel color, never the surrounding context.",
+  },
+  {
+    q: "Why use ColorTrail instead of ColorZilla?",
+    a: "Three reasons: (1) Zero permissions — we can't see any of your tabs, period. (2) Zero install — no Chrome Web Store, no extension management, no updates. Just bookmark a URL. (3) OKLCH output — modern design systems use OKLCH, and most extensions including ColorZilla don't expose it. ColorTrail also has a built-in Screenshot Picker mode that works in Firefox and Safari, which no Chrome extension can.",
+  },
+  {
+    q: "Does ColorTrail have all the features ColorZilla has?",
+    a: "We have the core: screen-wide picking, multi-format output (HEX/RGB/HSL/OKLCH), palette history, copy-to-clipboard. ColorZilla also has gradient generation, palette browser, and CSS color analysis — features we're considering for v2. For pure 'sample a pixel, copy the color' workflows (which is 90% of usage), ColorTrail is the cleaner choice.",
+  },
+  {
+    q: "Can I use ColorTrail in Firefox or Safari?",
+    a: "Yes — that's a big win over ColorZilla, which is Chrome-only. ColorTrail's live picker works in Chrome, Edge, Brave, and Opera (Chromium-based browsers that have EyeDropper API). For Firefox and Safari, our Screenshot Picker mode uses the universally-supported getDisplayMedia API to capture any window or screen, then lets you pick colors from the captured frame.",
+  },
+  {
+    q: "Is ColorZilla still being maintained?",
+    a: "Yes, ColorZilla is actively maintained. This isn't a 'replace an abandoned tool' story — it's a 'replace a permission-heavy extension with a zero-permission web app' story. The choice depends on whether you trust extensions with broad permissions and prefer extension UX, or whether you prefer a zero-install website with native browser APIs.",
+  },
+];
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "@id": `${site.url}/colorzilla-alternative#faq`,
+  mainEntity: faqs.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: `<p>${f.a}</p>` },
+  })),
+};
+---
+<Layout
+  title="ColorZilla Alternative — Free color picker without browser extensions"
+  description="Free ColorZilla alternative. Same screen-wide color picking, but with zero permissions, zero extensions, no ads, and OKLCH support. Works in Chrome, Edge, Firefox, and Safari."
+  jsonLd={[webAppSchema, faqSchema]}
+>
+  {/* HERO */}
+  <section class="px-4 sm:px-6 pt-16 sm:pt-24 pb-8">
+    <div class="mx-auto max-w-3xl text-center">
+      <div class="inline-flex items-center gap-2 mb-6 px-3 py-1 rounded-pill text-[12px] font-medium font-mono uppercase tracking-wider"
+           style="background-color: var(--color-badge-bg); color: var(--color-badge-fg);">
+        <span class="w-1.5 h-1.5 rounded-full" style="background-color: var(--color-badge-fg);"></span>
+        No extensions · No permissions
+      </div>
+
+      <h1 class="heading-display text-[40px] sm:text-[52px] lg:text-[60px] text-balance">
+        The
+        <span class="text-brand-gradient">ColorZilla</span>
+        alternative.
+      </h1>
+      <p class="mt-6 text-[17px] sm:text-[19px] leading-[1.55] text-[var(--color-fg-secondary)] max-w-2xl mx-auto text-balance">
+        Same screen-wide color picking. Zero browser permissions. Zero extension to install.
+        Modern OKLCH support. Works in Firefox and Safari too.
+      </p>
+    </div>
+  </section>
+
+  {/* LIVE PICKER */}
+  <section class="px-4 sm:px-6 pb-16">
+    <div class="mx-auto max-w-4xl">
+      <ColorPicker />
+    </div>
+  </section>
+
+  {/* COMPARISON */}
+  <section class="px-4 sm:px-6 py-16 sm:py-20" style="background-color: var(--color-bg-elevated); box-shadow: inset 0 1px 0 var(--color-border), inset 0 -1px 0 var(--color-border);">
+    <div class="mx-auto max-w-4xl">
+      <div class="text-center mb-12">
+        <p class="eyebrow mb-3">Side-by-side</p>
+        <h2 class="heading-section text-[30px] sm:text-[38px] text-balance">
+          ColorTrail vs ColorZilla.
+        </h2>
+      </div>
+
+      <div class="overflow-x-auto rounded-lg" style="background-color: var(--color-bg); box-shadow: var(--shadow-card);">
+        <table class="w-full text-[14px] min-w-[600px]">
+          <thead>
+            <tr style="box-shadow: inset 0 -1px 0 var(--color-border);">
+              <th class="text-left py-4 px-5 eyebrow font-mono text-[12px]">&nbsp;</th>
+              <th class="text-center py-4 px-5 font-semibold text-[var(--color-fg)]" style="letter-spacing: -0.01em;">{site.name}</th>
+              <th class="text-center py-4 px-5 font-medium text-[var(--color-fg-secondary)]">ColorZilla</th>
+            </tr>
+          </thead>
+          <tbody class="text-[var(--color-fg)]">
+            {[
+              { row: "Install required", us: "None", a: "Chrome extension", usOk: true, aBad: true },
+              { row: "Permissions needed", us: "None", a: '"Read all data on all websites"', usOk: true, aBad: true },
+              { row: "Works in Firefox/Safari", us: "Yes (Screenshot mode)", a: "No (Chrome-only)", usOk: true, aBad: true },
+              { row: "Screen-wide picking", us: "Yes (outside browser too)", a: "Browser tab only", usOk: true, aBad: true },
+              { row: "OKLCH output", us: "Yes (with HEX/RGB/HSL)", a: "No", usOk: true, aBad: true },
+              { row: "Ad-injected free tier", us: "No (forever free)", a: "Yes (some versions)", usOk: true, aBad: true },
+              { row: "Open source", us: "Yes (MIT)", a: "Mixed (some parts)", usOk: true },
+              { row: "Mobile support", us: "Partial (Screenshot mode)", a: "No (desktop only)", usOk: true, aBad: true },
+              { row: "Gradient generator", us: "Roadmap", a: "Yes", aOk: true },
+              { row: "CSS color analysis", us: "Roadmap", a: "Yes", aOk: true },
+            ].map((r, idx, arr) => (
+              <tr style={`box-shadow: ${idx < arr.length - 1 ? 'inset 0 -1px 0 var(--color-border)' : 'none'};`}>
+                <td class="py-3.5 px-5 font-medium">{r.row}</td>
+                <td class={`py-3.5 px-5 text-center ${r.usOk ? 'text-[var(--color-success)] font-medium' : 'text-[var(--color-fg-secondary)]'}`}>{r.us}</td>
+                <td class={`py-3.5 px-5 text-center ${r.aOk ? 'text-[var(--color-success)]' : r.aBad ? 'text-[var(--color-error)]' : 'text-[var(--color-fg-secondary)]'}`}>{r.a}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <p class="mt-6 text-center text-[14px] text-[var(--color-fg-secondary)]">
+        ColorTrail is the right choice if you want zero extensions + zero permissions + modern formats.
+        ColorZilla is still solid if you need gradient generation built-in.
+      </p>
+    </div>
+  </section>
+
+  {/* THE PERMISSION PROBLEM */}
+  <section class="px-4 sm:px-6 py-16 sm:py-20">
+    <div class="mx-auto max-w-3xl">
+      <p class="eyebrow mb-3">The bigger issue</p>
+      <h2 class="heading-section text-[30px] sm:text-[38px] mb-6 text-balance">
+        Why Chrome extensions need "read all your data".
+      </h2>
+      <div class="grid gap-5 text-[15.5px] leading-[1.7] text-[var(--color-fg-secondary)]">
+        <p>
+          Any Chrome extension that wants to read pixel data from the page must
+          request the <code class="font-mono text-[14px] text-[var(--color-fg)]">activeTab</code> or
+          <code class="font-mono text-[14px] text-[var(--color-fg)]">&lt;all_urls&gt;</code> permission. ColorZilla
+          requests the latter — it can read and modify content on every page you
+          load.
+        </p>
+        <p>
+          In practice, this means an extension update or compromised author
+          account can ship code that reads your password manager, your bank
+          balance, your private DMs — anything in any tab. <strong class="text-[var(--color-fg)]">This isn't a
+          ColorZilla-specific risk. Every extension with broad permissions has it.</strong>
+        </p>
+        <p>
+          The browser-native EyeDropper API was specifically designed to avoid
+          this. It's sandboxed: the only thing returned to JavaScript is a single
+          sRGB pixel value. No surrounding pixels, no screenshot, no DOM access.
+          By using ColorTrail, you get the same screen-picking power without ever
+          granting "read everything" access to anyone.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  {/* FAQ */}
+  <section class="px-4 sm:px-6 py-16 sm:py-20" style="background-color: var(--color-bg-elevated); box-shadow: inset 0 1px 0 var(--color-border), inset 0 -1px 0 var(--color-border);">
+    <div class="mx-auto max-w-3xl">
+      <p class="eyebrow mb-3">FAQ</p>
+      <h2 class="heading-section text-[30px] sm:text-[38px] mb-10 text-balance">ColorZilla switching FAQ</h2>
+      <div class="grid gap-3">
+        {faqs.map((f) => (
+          <details class="group rounded-md p-5" style="background-color: var(--color-bg); box-shadow: var(--shadow-ring);">
+            <summary class="cursor-pointer font-semibold text-[16px] text-[var(--color-fg)] flex items-center justify-between gap-4 list-none" style="letter-spacing: -0.01em;">
+              <span>{f.q}</span>
+              <svg class="w-4 h-4 text-[var(--color-muted)] transition-transform group-open:rotate-180 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="6 9 12 15 18 9"/>
+              </svg>
+            </summary>
+            <p class="mt-3 text-[15px] text-[var(--color-fg-secondary)] leading-relaxed">{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  {/* CTA */}
+  <section class="px-4 sm:px-6 py-16" style="box-shadow: inset 0 1px 0 var(--color-border);">
+    <div class="mx-auto max-w-2xl text-center">
+      <a href={b("/")} class="btn-brand inline-flex items-center justify-center gap-2 rounded-md px-6 py-3.5 text-[15px] mb-4">
+        Try ColorTrail →
+      </a>
+      <p class="text-[13px] text-[var(--color-fg-subtle)]">
+        Or <a href={b("/install")} class="text-[var(--color-accent)] underline underline-offset-2">install as a bookmark/PWA</a>
+        · <a href={b("/blog/colorzilla-vs-colortrail")} class="text-[var(--color-accent)] underline underline-offset-2">read the deep-dive</a>
+      </p>
+    </div>
+  </section>
+</Layout>

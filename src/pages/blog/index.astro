@@ -1,0 +1,80 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { getCollection } from "astro:content";
+import { site, b } from "../../site.config";
+
+const posts = (await getCollection("blog", ({ data }) => !data.draft))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+const blogSchema = {
+  "@context": "https://schema.org",
+  "@type": "Blog",
+  "@id": `${site.url}/blog#blog`,
+  url: `${site.url}/blog`,
+  name: `${site.shortName} Blog`,
+  description: "Posts on color picking, the EyeDropper API, OKLCH, browser tech, and design systems.",
+  publisher: { "@id": `${site.url}/#organization` },
+  blogPost: posts.map((p) => ({
+    "@type": "BlogPosting",
+    headline: p.data.title,
+    description: p.data.description,
+    datePublished: p.data.pubDate.toISOString(),
+    url: `${site.url}/blog/${p.id}`,
+    author: { "@type": "Person", name: site.author },
+  })),
+};
+
+const fmtDate = (d: Date) =>
+  d.toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
+---
+<Layout
+  title="Blog — Color picking, EyeDropper API, OKLCH, browser tech"
+  description={`The ${site.shortName} blog. Long-form posts on color picking, the window.EyeDropper API, OKLCH, design systems, and browser internals.`}
+  jsonLd={[blogSchema]}
+>
+  <section class="px-4 sm:px-6 py-16 sm:py-24">
+    <div class="mx-auto max-w-3xl">
+      <p class="eyebrow mb-4">Blog</p>
+      <h1 class="heading-section text-[36px] sm:text-[44px] mb-4 text-balance">
+        Color tech, demystified.
+      </h1>
+      <p class="text-[18px] text-[var(--color-fg-secondary)] leading-[1.7] mb-12">
+        Long-form posts on color picking, the EyeDropper API, OKLCH,
+        browser-native superpowers, and design-system color tokens.
+      </p>
+
+      {posts.length === 0 ? (
+        <p class="text-[15px] text-[var(--color-fg-secondary)]">No posts yet — check back soon.</p>
+      ) : (
+        <div class="grid gap-4">
+          {posts.map((post) => (
+            <a
+              href={b(`/blog/${post.id}`)}
+              class="block rounded-md p-6 transition-all hover:translate-y-[-1px]"
+              style="background-color: var(--color-bg); box-shadow: var(--shadow-card);"
+            >
+              <div class="flex items-center gap-3 mb-2 text-[12px] font-mono uppercase tracking-wider text-[var(--color-fg-subtle)]">
+                <time datetime={post.data.pubDate.toISOString()}>{fmtDate(post.data.pubDate)}</time>
+                {post.data.tags.length > 0 && (
+                  <>
+                    <span>·</span>
+                    <span>{post.data.tags.join(" · ")}</span>
+                  </>
+                )}
+              </div>
+              <h2 class="text-[22px] font-semibold text-[var(--color-fg)] mb-2" style="letter-spacing: -0.02em;">
+                {post.data.title}
+              </h2>
+              <p class="text-[15px] text-[var(--color-fg-secondary)] leading-[1.6]">
+                {post.data.description}
+              </p>
+              <p class="mt-3 text-[13px] font-medium text-[var(--color-accent)]">
+                Read post →
+              </p>
+            </a>
+          ))}
+        </div>
+      )}
+    </div>
+  </section>
+</Layout>

@@ -1,0 +1,171 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { site, b } from "../site.config";
+
+// Full FAQ corpus — synced with docs/seo-keywords-and-faq.md Section 3
+const faqs = [
+  {
+    cat: "Basics",
+    q: "What is the EyeDropper API and why doesn't every browser have it?",
+    a: "The EyeDropper API (window.EyeDropper) is a browser-native feature shipped in Chrome 95 (Oct 2021), Edge 95+, Brave, and Opera. It turns the cursor into a system-wide color picker — sampling any pixel visible on your screen, including outside the browser, across multiple monitors. Firefox publicly declined to implement it (Mozilla position: 'negative'), and Safari hasn't signaled interest. For those browsers, ColorTrail's Screenshot Picker fills the gap using the universally-supported getDisplayMedia API.",
+  },
+  {
+    cat: "Basics",
+    q: "How do I use ColorTrail to pick a color from anywhere on my screen?",
+    a: "Click the rainbow 'Pick a color' button. Your cursor instantly becomes a precision eyedropper. Move it over any pixel — your IDE, Photoshop, a YouTube video, a PDF, another monitor — and click to capture. The HEX, RGB, HSL, and OKLCH values appear instantly with one-click copy. Or press the keyboard shortcut P from anywhere on the page.",
+  },
+  {
+    cat: "Basics",
+    q: "The eyedropper cancels when I switch tabs. How do I pick from another tab?",
+    a: "Use the 'Pick from screenshot' button next to the live picker. It captures one frozen frame from any window, tab, or screen you choose — then you can leisurely pick colors from that frame with a built-in 10× magnifier. The live EyeDropper is locked to whatever's visible at click-time and cancels on focus loss; that's a browser security constraint, not a ColorTrail limitation.",
+  },
+  {
+    cat: "Trust",
+    q: "Is ColorTrail really free? What's the catch?",
+    a: "100% free, forever. No accounts, no signup, no ads, no upsells, no Pro tier. Your colors never leave your device — everything runs in your browser via the native EyeDropper and getDisplayMedia APIs. We don't collect, store, or transmit any color data. The project is open-source on GitHub.",
+  },
+  {
+    cat: "Trust",
+    q: "Can ColorTrail or any third party see the colors I pick?",
+    a: "No. Both the EyeDropper API and getDisplayMedia API are fully client-side — pixel data stays in JavaScript running in your browser, never sent over the network. Your palette history is stored in your browser's localStorage and never leaves your device. Captured screenshot frames are held in browser memory only and freed when you close the modal.",
+  },
+  {
+    cat: "Trust",
+    q: "Is ColorTrail safe to use? Why is it better than browser extensions?",
+    a: "ColorTrail uses zero browser permissions, can't read any of your other tabs, and runs entirely client-side. Browser extensions like ColorZilla require 'read all data on the websites you visit' — a permission that lets them read passwords, banking pages, anything. The browser-native EyeDropper API is sandboxed and only returns the pixel color, not the surrounding context.",
+  },
+  {
+    cat: "Compatibility",
+    q: "Why doesn't the live picker work in Firefox or Safari?",
+    a: "Firefox and Safari haven't shipped the EyeDropper API yet. Mozilla's official position is that they don't plan to implement it; WebKit (Safari) hasn't signaled support either. For those browsers, use 'Pick from screenshot' — getDisplayMedia is universally supported (Chrome 72+, Firefox 66+, Safari 13+, Edge 79+).",
+  },
+  {
+    cat: "Compatibility",
+    q: "Does ColorTrail work on mobile?",
+    a: "Partially. On mobile Chrome (Android), the EyeDropper API exists but can only sample inside the current browser tab — not from other apps. For full-screen sampling, use a desktop browser. The Screenshot Picker works on mobile too, but mobile browsers offer fewer capture sources than desktop.",
+  },
+  {
+    cat: "Compatibility",
+    q: "What browsers support window.EyeDropper as of 2026?",
+    a: "Chrome 95+ (Oct 2021), Edge 95+, Brave (1.32+), Opera 81+, Arc, Vivaldi, and any Chromium-based browser. Firefox: no, with no plans. Safari: no signal. Mobile Chromium: tab-only sampling. Check caniuse.com/eyedropper-api for real-time status.",
+  },
+  {
+    cat: "Use cases",
+    q: "Can I pick colors from a PDF or video?",
+    a: "Yes. The live EyeDropper picks any visible pixel — including PDFs open in your browser or system PDF reader, video frames paused in any player, streamed content, and images in any app. For paused videos in another tab, Screenshot mode captures the exact frame you want without focus loss.",
+  },
+  {
+    cat: "Use cases",
+    q: "Does ColorTrail work offline?",
+    a: "After your browser has loaded the page once, ColorTrail works fully offline. It's a static site with no backend — no API calls, no analytics pings, no remote dependencies needed at runtime. Install it as a bookmark for instant offline access; we recommend installing as a PWA for fastest launch.",
+  },
+  {
+    cat: "Use cases",
+    q: "How accurate is the color sampling? Does it match Photoshop?",
+    a: "Pixel-perfect. The EyeDropper API returns the exact sRGB color of the sampled pixel, identical to what tools like Photoshop's Eyedropper or macOS Digital Color Meter return for the same pixel. Screenshot mode also samples directly from the captured bitmap with no compression.",
+  },
+  {
+    cat: "Formats",
+    q: "What is OKLCH and why should I care?",
+    a: "OKLCH is a perceptually uniform color space introduced in 2020 by Björn Ottosson. CSS Color Level 4 (2023+) supports it natively. It produces predictable color manipulations — lightening or darkening a color by the same amount perceptually looks like the same amount of change. Modern design systems (Tailwind v4, OpenProps) increasingly use OKLCH for color tokens. Most online color pickers don't expose OKLCH; we do.",
+  },
+  {
+    cat: "Formats",
+    q: "What's the difference between HEX, RGB, HSL, and OKLCH?",
+    a: "HEX (#RRGGBB) is a compact text encoding of RGB — most common in web code. RGB (red, green, blue) is the device-native format. HSL (hue, saturation, lightness) is more intuitive for humans to manipulate but isn't perceptually uniform. OKLCH (lightness, chroma, hue) is the modern perceptually-uniform choice, recommended for design systems shipping in 2024+. ColorTrail shows all four for every color you pick, so you can copy whichever matches your codebase.",
+  },
+  {
+    cat: "Roadmap",
+    q: "Does ColorTrail support color blindness or contrast checking?",
+    a: "Not yet — we're considering a WCAG contrast checker and color blindness simulation modes in a future release. For now, every color output displays in 4 formats simultaneously (HEX, RGB, HSL, OKLCH) so you can plug them into your favorite contrast checker.",
+  },
+  {
+    cat: "Roadmap",
+    q: "Can I export my palette to Figma, Tailwind, or a design file?",
+    a: "Export is on our roadmap (CSS variables, Tailwind tokens, JSON, .ase Adobe Swatch Exchange). For now, your palette is saved in browser localStorage and you can copy individual colors in any of the 4 formats with one click.",
+  },
+  {
+    cat: "Comparisons",
+    q: "How is ColorTrail different from ColorZilla?",
+    a: "ColorZilla is a Chrome extension that requires 'read all data on the websites you visit' permission, is ad-injected in the free tier, and only works inside the browser tab where it's installed. ColorTrail is a zero-install website that uses your browser's native EyeDropper API, requires no permissions, works system-wide (outside the browser too), has no ads, and supports OKLCH out of the box.",
+  },
+  {
+    cat: "Brand",
+    q: "Why 'ColorTrail'? What's with the name?",
+    a: "'Trail' because we save your recent palette as you go — a trail of colors you've picked. We're a tiny one-tap utility, not a full design suite. Less is the moat.",
+  },
+];
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "@id": `${site.url}/faq#faqpage`,
+  mainEntity: faqs.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: `<p>${f.a}</p>` },
+  })),
+};
+
+// Group by category for visible layout
+const grouped = faqs.reduce<Record<string, typeof faqs>>((acc, f) => {
+  if (!acc[f.cat]) acc[f.cat] = [];
+  acc[f.cat]!.push(f);
+  return acc;
+}, {});
+const categoryOrder = ["Basics", "Trust", "Compatibility", "Use cases", "Formats", "Comparisons", "Roadmap", "Brand"];
+---
+<Layout
+  title="FAQ — Common questions about the browser color picker"
+  description={`Common questions about ${site.name}: EyeDropper API support, browser compatibility, privacy, OKLCH, and how to pick colors from anywhere on screen.`}
+  jsonLd={[faqSchema]}
+>
+  <section class="px-4 sm:px-6 py-16 sm:py-24">
+    <div class="mx-auto max-w-3xl">
+      <p class="eyebrow mb-4">FAQ</p>
+      <h1 class="heading-section text-[36px] sm:text-[44px] mb-4 text-balance">
+        Everything you might ask.
+      </h1>
+      <p class="text-[18px] text-[var(--color-fg-secondary)] leading-[1.7] mb-12">
+        Browser support, privacy, color formats, troubleshooting.
+        If your question isn't here, <a href={b("/contact")} class="prose-link">drop us a line</a>.
+      </p>
+
+      {categoryOrder.map((cat) => grouped[cat] && (
+        <div class="mb-14">
+          <div class="flex items-center gap-3 mb-6">
+            <span class="font-mono text-[12px] font-semibold uppercase tracking-wider text-[var(--color-fg)]" style="letter-spacing: 0.08em;">{cat}</span>
+            <span class="flex-1 h-px" style="background-color: var(--color-border);"></span>
+            <span class="font-mono text-[11px] text-[var(--color-fg-subtle)]">{String(grouped[cat].length).padStart(2, "0")}</span>
+          </div>
+          <div class="grid gap-3">
+            {grouped[cat].map((f) => (
+              <details
+                class="group rounded-md p-5 transition-colors"
+                style="background-color: var(--color-bg); box-shadow: var(--shadow-ring);"
+              >
+                <summary class="cursor-pointer font-semibold text-[16px] text-[var(--color-fg)] flex items-center justify-between gap-4 list-none" style="letter-spacing: -0.01em;">
+                  <span>{f.q}</span>
+                  <svg class="w-4 h-4 text-[var(--color-muted)] transition-transform group-open:rotate-180 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <polyline points="6 9 12 15 18 9"/>
+                  </svg>
+                </summary>
+                <p class="mt-3 text-[15px] text-[var(--color-fg-secondary)] leading-relaxed">{f.a}</p>
+              </details>
+            ))}
+          </div>
+        </div>
+      ))}
+
+      <div class="mt-16 p-6 rounded-md text-center" style="background-color: var(--color-bg-elevated); box-shadow: var(--shadow-ring);">
+        <h2 class="text-[20px] font-semibold text-[var(--color-fg)] mb-2" style="letter-spacing: -0.015em;">Still have questions?</h2>
+        <p class="text-[14px] text-[var(--color-fg-secondary)] mb-4">
+          We answer email within 2-3 business days.
+        </p>
+        <a href={b("/contact")} class="inline-flex items-center gap-2 px-4 py-2 rounded-md text-[14px] font-medium bg-[var(--color-fg)] text-[var(--color-bg)] hover:opacity-90 transition-opacity">
+          Contact us →
+        </a>
+      </div>
+    </div>
+  </section>
+</Layout>

@@ -1,0 +1,229 @@
+---
+import Layout from "../layouts/Layout.astro";
+import ColorPicker from "../components/ColorPicker.astro";
+import { site, b } from "../site.config";
+
+const webAppSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "@id": `${site.url}/oklch-color-picker#webapp`,
+  name: `${site.name} — OKLCH Color Picker`,
+  url: `${site.url}/oklch-color-picker`,
+  description: `Free OKLCH color picker for the modern web. Sample any pixel on your screen and get instant OKLCH, HEX, RGB, and HSL output. Built for Tailwind v4 and CSS Color Level 4.`,
+  alternateName: [
+    "OKLCH picker",
+    "OKLCH color picker online",
+    "OKLCH color picker free",
+    "OKLCH converter",
+    "Hex to OKLCH converter",
+    "OKLCH color picker for Tailwind",
+  ],
+  applicationCategory: "DesignApplication",
+  applicationSubCategory: "ColorPicker",
+  operatingSystem: "Any browser",
+  offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+  featureList: [
+    "Sample colors with the native EyeDropper API",
+    "Instant OKLCH output for any pixel",
+    "Conversion across OKLCH, HEX, RGB, and HSL",
+    "Tailwind v4 / CSS Color Level 4 compatible output",
+    "Perceptually-uniform color space",
+  ],
+  publisher: { "@id": `${site.url}/#organization` },
+};
+
+const faqs = [
+  {
+    q: "What is OKLCH and why is it better than HEX or HSL?",
+    a: "OKLCH is a perceptually uniform color space introduced by Björn Ottosson in 2020 and standardized in CSS Color Level 4 (2023+). 'Perceptually uniform' means equal changes in L, C, or H values look like equal changes to the human eye — something HEX, RGB, and HSL all fail at. When you lighten a color in HSL by 10%, the visual change is wildly inconsistent across hues. In OKLCH, +10% lightness always looks the same. That's why Tailwind v4, Radix Colors, OpenProps, and most modern design systems are switching to OKLCH.",
+  },
+  {
+    q: "How do I convert HEX to OKLCH with ColorTrail?",
+    a: "Pick any color from your screen — or click a swatch in your palette history. ColorTrail instantly shows the OKLCH value alongside HEX, RGB, and HSL with one-click copy. The conversion uses the canonical Björn Ottosson sRGB → OKLab → OKLCH pipeline; no rounding errors versus what Tailwind v4 or oklch.com produces.",
+  },
+  {
+    q: "Does ColorTrail support OKLab too, or just OKLCH?",
+    a: "ColorTrail outputs OKLCH (the polar form: Lightness, Chroma, Hue) because that's what CSS Color Level 4 standardized and what design systems use. OKLab is the rectangular underlying form (L, a, b) — OKLCH is computed from it. If you need raw OKLab values, the L from OKLCH is identical; chroma and hue convert trivially with sqrt(a²+b²) and atan2(b,a).",
+  },
+  {
+    q: "Why don't other online color pickers show OKLCH?",
+    a: "Most online color pickers haven't updated to CSS Color Level 4 yet — they were built before OKLCH was standardized. The conversion math is also non-trivial (sRGB → linear → LMS → cube root → OKLab → polar). We do the math, so you don't have to install a converter package.",
+  },
+  {
+    q: "Can I use OKLCH directly in my CSS today?",
+    a: "Yes, in every modern browser. CSS Color Level 4 OKLCH support shipped in Chrome 111+, Safari 15.4+, Firefox 113+, Edge 111+ (as of 2023). Tailwind v4 uses OKLCH as its native color space. You can also use the @supports (color: oklch(0 0 0)) feature query as a fallback gate for older browsers.",
+  },
+];
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "@id": `${site.url}/oklch-color-picker#faq`,
+  mainEntity: faqs.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: `<p>${f.a}</p>` },
+  })),
+};
+---
+<Layout
+  title="OKLCH Color Picker — Free, in-browser, Tailwind v4 ready"
+  description="Free OKLCH color picker for designers and developers. Sample any pixel on your screen and get instant OKLCH, HEX, RGB, HSL output. Tailwind v4 + CSS Color Level 4 ready. Zero install."
+  jsonLd={[webAppSchema, faqSchema]}
+>
+  {/* HERO */}
+  <section class="px-4 sm:px-6 pt-16 sm:pt-24 pb-8">
+    <div class="mx-auto max-w-3xl text-center">
+      <div class="inline-flex items-center gap-2 mb-6 px-3 py-1 rounded-pill text-[12px] font-medium font-mono uppercase tracking-wider"
+           style="background-color: var(--color-badge-bg); color: var(--color-badge-fg);">
+        <span class="w-1.5 h-1.5 rounded-full" style="background-color: var(--color-badge-fg);"></span>
+        CSS Color Level 4 · Tailwind v4
+      </div>
+
+      <h1 class="heading-display text-[40px] sm:text-[52px] lg:text-[60px] text-balance">
+        The free
+        <span class="text-brand-gradient">OKLCH</span>
+        color picker.
+      </h1>
+      <p class="mt-6 text-[17px] sm:text-[19px] leading-[1.55] text-[var(--color-fg-secondary)] max-w-2xl mx-auto text-balance">
+        Sample any pixel on your screen → get instant OKLCH output with HEX, RGB,
+        and HSL alongside. Built for the way design systems work in 2026.
+      </p>
+    </div>
+  </section>
+
+  {/* LIVE PICKER */}
+  <section class="px-4 sm:px-6 pb-16">
+    <div class="mx-auto max-w-4xl">
+      <ColorPicker />
+    </div>
+  </section>
+
+  {/* WHY OKLCH */}
+  <section class="px-4 sm:px-6 py-16 sm:py-20" style="background-color: var(--color-bg-elevated); box-shadow: inset 0 1px 0 var(--color-border), inset 0 -1px 0 var(--color-border);">
+    <div class="mx-auto max-w-3xl">
+      <p class="eyebrow mb-3">Why it matters</p>
+      <h2 class="heading-section text-[30px] sm:text-[38px] mb-6 text-balance">
+        OKLCH fixes what HSL got wrong.
+      </h2>
+      <div class="grid gap-5 text-[15.5px] leading-[1.7] text-[var(--color-fg-secondary)]">
+        <p>
+          For 20 years, designers used <strong class="text-[var(--color-fg)]">HSL</strong> to lighten and
+          darken colors because it was "more intuitive than RGB". But HSL has
+          a fundamental flaw: <strong class="text-[var(--color-fg)]">equal numeric changes don't look equal</strong>.
+          Lighten a yellow by 10% — barely visible. Lighten a blue by 10% — huge
+          change. That's why every Bootstrap, Material, and pre-2023 design system
+          shipped colors that felt "off" at certain lightness levels.
+        </p>
+        <p>
+          <strong class="text-[var(--color-fg)]">OKLCH solves this</strong> with a perceptually uniform color space.
+          The same 10% change in L (lightness) looks like the same 10% change
+          across red, green, blue, yellow — anywhere on the wheel. The same
+          chroma value means "this saturated" anywhere on the wheel.
+        </p>
+        <p>
+          The result: when you build a 50/100/200/.../900 color scale in OKLCH,
+          every shade has uniform perceived spacing. Hover and focus states
+          feel consistent across themes. Color palettes generated from one
+          base color are visually balanced without manual tweaking. That's why
+          <strong class="text-[var(--color-fg)]"> Tailwind v4 switched to OKLCH as its native color space</strong>.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  {/* OKLCH FORMAT EXPLAINED */}
+  <section class="px-4 sm:px-6 py-16 sm:py-20">
+    <div class="mx-auto max-w-3xl">
+      <p class="eyebrow mb-3">Format</p>
+      <h2 class="heading-section text-[30px] sm:text-[38px] mb-8 text-balance">
+        Reading an OKLCH value.
+      </h2>
+      <pre class="rounded-md p-4 text-[15px] overflow-x-auto mb-6" style="background-color: var(--color-bg-elevated); box-shadow: var(--shadow-ring);"><code class="font-mono text-[var(--color-fg)]">oklch(58.51% 0.1817 280.3)
+       ^^^^^^  ^^^^^^  ^^^^^
+        L       C       H</code></pre>
+
+      <div class="grid gap-4 text-[15px] leading-[1.65] text-[var(--color-fg-secondary)]">
+        <p>
+          <strong class="text-[var(--color-fg)]">L (Lightness): 0%–100%</strong> — perceived brightness.
+          0% is pure black, 100% is pure white. Halfway (50%) is a midtone that
+          looks like a midtone <em>across all hues</em>.
+        </p>
+        <p>
+          <strong class="text-[var(--color-fg)]">C (Chroma): 0–~0.4</strong> — color intensity.
+          0 is pure gray. 0.37 is the maximum for sRGB (anything higher is out
+          of gamut). Roughly: 0.05 is muted, 0.15 is vivid, 0.25+ is electric.
+        </p>
+        <p>
+          <strong class="text-[var(--color-fg)]">H (Hue): 0°–360°</strong> — color wheel position.
+          0°/360° is red, 90° is yellow-green, 180° is cyan, 270° is blue-violet.
+          Same numbering as HSL; different perceptual spacing.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  {/* TAILWIND ANGLE */}
+  <section class="px-4 sm:px-6 py-16 sm:py-20" style="background-color: var(--color-bg-elevated); box-shadow: inset 0 1px 0 var(--color-border), inset 0 -1px 0 var(--color-border);">
+    <div class="mx-auto max-w-3xl">
+      <p class="eyebrow mb-3">Tailwind v4</p>
+      <h2 class="heading-section text-[30px] sm:text-[38px] mb-6 text-balance">
+        Drop into your Tailwind config.
+      </h2>
+      <p class="text-[15.5px] text-[var(--color-fg-secondary)] mb-6 leading-relaxed">
+        Tailwind v4's <code class="font-mono text-[14px] text-[var(--color-fg)]">@theme</code> directive
+        uses native CSS color functions. Pick a brand color with ColorTrail,
+        copy the OKLCH output, paste:
+      </p>
+      <pre class="rounded-md p-4 text-[14px] overflow-x-auto" style="background-color: var(--color-bg); box-shadow: var(--shadow-ring);"><code class="font-mono text-[var(--color-fg)]">{`/* global.css */
+@import "tailwindcss";
+
+@theme {
+  --color-brand-50:  oklch(97% 0.012 280);
+  --color-brand-100: oklch(94% 0.025 280);
+  --color-brand-500: oklch(58.51% 0.1817 280.3);  /* ← picked w/ ColorTrail */
+  --color-brand-900: oklch(28% 0.135 280);
+}`}</code></pre>
+
+      <p class="mt-6 text-[14px] text-[var(--color-fg-secondary)]">
+        Now use <code class="font-mono text-[13px] text-[var(--color-fg)]">bg-brand-500</code>,
+        <code class="font-mono text-[13px] text-[var(--color-fg)]">text-brand-900</code>, etc.
+        anywhere. Want a 600 shade between 500 and 900? Interpolate L from
+        58.51% → 28% — perceptually accurate, no manual tweaking.
+      </p>
+    </div>
+  </section>
+
+  {/* FAQ */}
+  <section class="px-4 sm:px-6 py-16 sm:py-20">
+    <div class="mx-auto max-w-3xl">
+      <p class="eyebrow mb-3">Questions</p>
+      <h2 class="heading-section text-[30px] sm:text-[38px] mb-10 text-balance">OKLCH FAQ</h2>
+      <div class="grid gap-3">
+        {faqs.map((f) => (
+          <details class="group rounded-md p-5" style="background-color: var(--color-bg); box-shadow: var(--shadow-ring);">
+            <summary class="cursor-pointer font-semibold text-[16px] text-[var(--color-fg)] flex items-center justify-between gap-4 list-none" style="letter-spacing: -0.01em;">
+              <span>{f.q}</span>
+              <svg class="w-4 h-4 text-[var(--color-muted)] transition-transform group-open:rotate-180 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="6 9 12 15 18 9"/>
+              </svg>
+            </summary>
+            <p class="mt-3 text-[15px] text-[var(--color-fg-secondary)] leading-relaxed">{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  {/* CROSS-LINK CTA */}
+  <section class="px-4 sm:px-6 py-16" style="box-shadow: inset 0 1px 0 var(--color-border);">
+    <div class="mx-auto max-w-2xl text-center">
+      <a href={b("/")} class="btn-brand inline-flex items-center justify-center gap-2 rounded-md px-6 py-3.5 text-[15px] mb-4">
+        Start picking colors →
+      </a>
+      <p class="text-[13px] text-[var(--color-fg-subtle)]">
+        Also see: <a href={b("/screen-color-picker")} class="text-[var(--color-accent)] underline underline-offset-2">screen color picker</a> · <a href={b("/blog/oklch-explained")} class="text-[var(--color-accent)] underline underline-offset-2">why we ship OKLCH</a> · <a href={b("/faq")} class="text-[var(--color-accent)] underline underline-offset-2">full FAQ</a>
+      </p>
+    </div>
+  </section>
+</Layout>

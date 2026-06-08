@@ -1,0 +1,223 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { site, b } from "../site.config";
+
+const howToSchema = {
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "@id": `${site.url}/install#howto`,
+  name: `Install ${site.name} as a bookmark, PWA, or pinned tab`,
+  description: `Step-by-step guide to installing ${site.name} for instant access — as a browser bookmark, PWA, pinned tab, or shortcut.`,
+  totalTime: "PT1M",
+  step: [
+    {
+      "@type": "HowToStep",
+      name: "Open ColorTrail in your browser",
+      text: `Visit ${site.url} in any modern browser (Chrome, Edge, Brave, Opera recommended for the live picker).`,
+    },
+    {
+      "@type": "HowToStep",
+      name: "Bookmark or install",
+      text: "Press Ctrl+D (Windows / Linux) or Cmd+D (Mac) to bookmark, OR follow the platform-specific PWA install steps below for an app-like experience.",
+    },
+    {
+      "@type": "HowToStep",
+      name: "Launch anytime",
+      text: "Open the bookmark or app icon. Press P from anywhere on the page to instantly start picking colors.",
+    },
+  ],
+};
+---
+<Layout
+  title="Install — Pin, bookmark, or add as an app"
+  description={`Install ${site.name} as a bookmark, PWA, or pinned tab for instant access. No app store, no extension, no permissions — under 30 seconds.`}
+  jsonLd={[howToSchema]}
+>
+  <section class="px-4 sm:px-6 pt-16 sm:pt-24 pb-12">
+    <div class="mx-auto max-w-3xl text-center">
+      <p class="eyebrow mb-4">Install</p>
+      <h1 class="heading-display text-[40px] sm:text-[52px] lg:text-[60px] mb-5 text-balance">
+        Install <span class="text-brand-gradient">{site.name}</span>.
+      </h1>
+      <p class="text-[18px] text-[var(--color-fg-secondary)] leading-[1.55] mb-8 max-w-xl mx-auto text-balance">
+        No app store. No download. One tap to bookmark, pin, or install as a PWA.
+      </p>
+
+      <div class="flex flex-wrap items-center justify-center gap-2 sm:gap-2.5 max-w-2xl mx-auto">
+        {[
+          { label: "~5 second install", svg: '<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>' },
+          { label: "No permissions", svg: '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/>' },
+          { label: "Auto-updates", svg: '<path d="M3 12a9 9 0 0 1 15.6-6.2L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-15.6 6.2L3 16"/><path d="M3 21v-5h5"/>' },
+          { label: "~50 KB total", svg: '<polyline points="3 8 12 14 21 8"/><rect x="3" y="8" width="18" height="13" rx="2"/>' },
+        ].map((chip) => (
+          <span
+            class="inline-flex items-center gap-2 px-3 py-1.5 rounded-pill text-[13px] font-medium text-[var(--color-fg-secondary)]"
+            style="background-color: var(--color-bg); box-shadow: var(--shadow-ring);"
+          >
+            <svg viewBox="0 0 24 24" class="w-3.5 h-3.5 text-[var(--color-muted)]" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={chip.svg}></svg>
+            {chip.label}
+          </span>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  {/* ===== INSTALL METHODS ===== */}
+  <section class="px-4 sm:px-6 py-12">
+    <div class="mx-auto max-w-5xl">
+      <div class="grid lg:grid-cols-3 gap-6">
+        {/* Bookmark (universal) */}
+        <div class="rounded-md p-6" style="background-color: var(--color-bg); box-shadow: var(--shadow-card);">
+          <div class="flex items-center gap-3 mb-5">
+            <span class="inline-flex items-center justify-center w-9 h-9 rounded-md" style="background-color: var(--color-surface);">
+              <svg viewBox="0 0 24 24" class="w-4 h-4 text-[var(--color-fg)]" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M19 21V5a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v16l7-3 7 3z"/>
+              </svg>
+            </span>
+            <div>
+              <p class="font-mono text-[11px] uppercase tracking-wider text-[var(--color-fg-subtle)]">Method 01</p>
+              <h2 class="heading-card text-[18px] text-[var(--color-fg)]">Bookmark (universal)</h2>
+            </div>
+          </div>
+          <ol class="text-[14px] text-[var(--color-fg-secondary)] space-y-2.5 mb-4">
+            <li><span class="text-[var(--color-fg)] font-medium">1.</span> Press <kbd class="inline-block px-1.5 py-0.5 rounded font-mono text-[12px] text-[var(--color-fg)]" style="background-color: var(--color-surface); box-shadow: var(--shadow-ring);">Ctrl+D</kbd> (Windows/Linux) or <kbd class="inline-block px-1.5 py-0.5 rounded font-mono text-[12px] text-[var(--color-fg)]" style="background-color: var(--color-surface); box-shadow: var(--shadow-ring);">Cmd+D</kbd> (Mac)</li>
+            <li><span class="text-[var(--color-fg)] font-medium">2.</span> Save to your bookmarks bar for one-click access</li>
+            <li><span class="text-[var(--color-fg)] font-medium">3.</span> Done — press <kbd class="inline-block px-1.5 py-0.5 rounded font-mono text-[12px] text-[var(--color-fg)]" style="background-color: var(--color-surface); box-shadow: var(--shadow-ring);">P</kbd> anytime to pick</li>
+          </ol>
+          <p class="text-[12px] text-[var(--color-fg-subtle)] leading-relaxed">Works in every browser. Fastest way to get started.</p>
+        </div>
+
+        {/* PWA install */}
+        <div class="rounded-md p-6" style="background-color: var(--color-bg); box-shadow: var(--shadow-card);">
+          <div class="flex items-center gap-3 mb-5">
+            <span class="inline-flex items-center justify-center w-9 h-9 rounded-md" style="background-color: var(--color-surface);">
+              <svg viewBox="0 0 24 24" class="w-4 h-4 text-[var(--color-fg)]" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="2" y="3" width="20" height="14" rx="2"/>
+                <path d="M8 21h8M12 17v4"/>
+              </svg>
+            </span>
+            <div>
+              <p class="font-mono text-[11px] uppercase tracking-wider text-[var(--color-fg-subtle)]">Method 02</p>
+              <h2 class="heading-card text-[18px] text-[var(--color-fg)]">Install as app (PWA)</h2>
+            </div>
+          </div>
+          <ol class="text-[14px] text-[var(--color-fg-secondary)] space-y-2.5 mb-4">
+            <li><span class="text-[var(--color-fg)] font-medium">1.</span> Open <code class="font-mono text-[13px] text-[var(--color-fg)]">{site.domain}</code> in Chrome / Edge / Brave</li>
+            <li><span class="text-[var(--color-fg)] font-medium">2.</span> Click the install icon in the address bar (or menu → "Install ColorTrail")</li>
+            <li><span class="text-[var(--color-fg)] font-medium">3.</span> Launch from your desktop / Start menu / dock</li>
+          </ol>
+          <p class="text-[12px] text-[var(--color-fg-subtle)] leading-relaxed">Standalone window, app icon, fastest launch.</p>
+        </div>
+
+        {/* Pinned tab */}
+        <div class="rounded-md p-6" style="background-color: var(--color-bg); box-shadow: var(--shadow-card);">
+          <div class="flex items-center gap-3 mb-5">
+            <span class="inline-flex items-center justify-center w-9 h-9 rounded-md" style="background-color: var(--color-surface);">
+              <svg viewBox="0 0 24 24" class="w-4 h-4 text-[var(--color-fg)]" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <line x1="12" y1="17" x2="12" y2="22"/>
+                <path d="M5 17h14v-1.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V6h1a2 2 0 0 0 0-4H8a2 2 0 0 0 0 4h1v4.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24z"/>
+              </svg>
+            </span>
+            <div>
+              <p class="font-mono text-[11px] uppercase tracking-wider text-[var(--color-fg-subtle)]">Method 03</p>
+              <h2 class="heading-card text-[18px] text-[var(--color-fg)]">Pinned tab</h2>
+            </div>
+          </div>
+          <ol class="text-[14px] text-[var(--color-fg-secondary)] space-y-2.5 mb-4">
+            <li><span class="text-[var(--color-fg)] font-medium">1.</span> Open {site.name} in a tab</li>
+            <li><span class="text-[var(--color-fg)] font-medium">2.</span> Right-click the tab → <em>"Pin tab"</em></li>
+            <li><span class="text-[var(--color-fg)] font-medium">3.</span> Always-on, persists across browser restarts</li>
+          </ol>
+          <p class="text-[12px] text-[var(--color-fg-subtle)] leading-relaxed">Best if you already keep a tab strip open.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* ===== MOBILE INSTALL ===== */}
+  <section class="px-4 sm:px-6 py-16 sm:py-20" style="background-color: var(--color-bg-elevated); box-shadow: inset 0 1px 0 var(--color-border), inset 0 -1px 0 var(--color-border);">
+    <div class="mx-auto max-w-5xl">
+      <div class="text-center mb-10">
+        <p class="eyebrow mb-3">Mobile</p>
+        <h2 class="heading-section text-[28px] sm:text-[36px] text-[var(--color-fg)] text-balance">
+          Install on your phone.
+        </h2>
+        <p class="mt-3 text-[15px] text-[var(--color-fg-secondary)] max-w-xl mx-auto leading-relaxed">
+          Note: live EyeDropper only samples inside the current tab on mobile.
+          Use Screenshot mode for full-screen sampling.
+        </p>
+      </div>
+
+      <div class="grid sm:grid-cols-2 gap-6">
+        {/* Android */}
+        <div class="rounded-md p-6" style="background-color: var(--color-bg); box-shadow: var(--shadow-card);">
+          <h3 class="heading-card text-[18px] text-[var(--color-fg)] mb-3">Android (Chrome / Edge / Brave)</h3>
+          <ol class="text-[14px] text-[var(--color-fg-secondary)] space-y-2.5">
+            <li><span class="text-[var(--color-fg)] font-medium">1.</span> Open <code class="font-mono text-[13px] text-[var(--color-fg)]">{site.domain}</code></li>
+            <li><span class="text-[var(--color-fg)] font-medium">2.</span> Tap the menu (⋮) → <em>"Install app"</em> or <em>"Add to Home screen"</em></li>
+            <li><span class="text-[var(--color-fg)] font-medium">3.</span> Confirm. Icon appears on your home screen.</li>
+          </ol>
+        </div>
+
+        {/* iOS */}
+        <div class="rounded-md p-6" style="background-color: var(--color-bg); box-shadow: var(--shadow-card);">
+          <h3 class="heading-card text-[18px] text-[var(--color-fg)] mb-3">iOS / iPadOS (Safari)</h3>
+          <ol class="text-[14px] text-[var(--color-fg-secondary)] space-y-2.5">
+            <li><span class="text-[var(--color-fg)] font-medium">1.</span> Open <code class="font-mono text-[13px] text-[var(--color-fg)]">{site.domain}</code> in Safari</li>
+            <li><span class="text-[var(--color-fg)] font-medium">2.</span> Tap the Share button → <em>"Add to Home Screen"</em></li>
+            <li><span class="text-[var(--color-fg)] font-medium">3.</span> Name it, tap "Add". Icon appears on your home screen.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* ===== WHY NO STORE ===== */}
+  <section class="px-4 sm:px-6 py-16 sm:py-20">
+    <div class="mx-auto max-w-2xl text-center">
+      <p class="eyebrow mb-3">Web-first</p>
+      <h2 class="heading-section text-[28px] sm:text-[36px] text-[var(--color-fg)] text-balance mb-4">
+        We could ship a native app.<br />We chose not to.
+      </h2>
+      <p class="text-[15px] text-[var(--color-fg-secondary)] leading-relaxed mb-8">
+        A native app would mean: app-store review queues, 30+ MB downloads,
+        platform-specific bugs, slow update cycles, scary permission prompts.
+        ColorTrail ships in seconds, weighs ~50 KB, updates instantly with no
+        review, asks for zero permissions. The web won this category.
+      </p>
+
+      <div class="grid sm:grid-cols-2 gap-4 text-left">
+        <div class="rounded-md p-5" style="background-color: var(--color-bg-elevated); box-shadow: var(--shadow-ring);">
+          <p class="font-mono text-[11px] uppercase tracking-wider text-[var(--color-fg-subtle)] mb-2">Native app</p>
+          <ul class="text-[13px] text-[var(--color-fg-secondary)] space-y-1.5">
+            <li class="flex gap-2"><span class="text-[var(--color-error)] shrink-0">✗</span> App store review (days)</li>
+            <li class="flex gap-2"><span class="text-[var(--color-error)] shrink-0">✗</span> 30-100 MB download</li>
+            <li class="flex gap-2"><span class="text-[var(--color-error)] shrink-0">✗</span> Permission prompts</li>
+            <li class="flex gap-2"><span class="text-[var(--color-error)] shrink-0">✗</span> Manual updates</li>
+            <li class="flex gap-2"><span class="text-[var(--color-error)] shrink-0">✗</span> Separate Mac/Win/Linux code</li>
+          </ul>
+        </div>
+        <div class="rounded-md p-5" style="background-color: var(--color-bg); box-shadow: var(--shadow-card);">
+          <p class="font-mono text-[11px] uppercase tracking-wider text-[var(--color-fg-subtle)] mb-2">{site.name} (PWA)</p>
+          <ul class="text-[13px] text-[var(--color-fg-secondary)] space-y-1.5">
+            <li class="flex gap-2"><span class="text-[var(--color-success)] shrink-0">✓</span> Ship in seconds</li>
+            <li class="flex gap-2"><span class="text-[var(--color-success)] shrink-0">✓</span> ~50 KB total</li>
+            <li class="flex gap-2"><span class="text-[var(--color-success)] shrink-0">✓</span> Zero permissions</li>
+            <li class="flex gap-2"><span class="text-[var(--color-success)] shrink-0">✓</span> Auto-updates on next visit</li>
+            <li class="flex gap-2"><span class="text-[var(--color-success)] shrink-0">✓</span> One codebase, all platforms</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* ===== CTA ===== */}
+  <section class="px-4 sm:px-6 py-16" style="box-shadow: inset 0 1px 0 var(--color-border);">
+    <div class="mx-auto max-w-xl text-center">
+      <a href={b("/")} class="btn-brand inline-flex items-center justify-center gap-2 rounded-md px-6 py-3.5 text-[15px]">
+        Open {site.name} →
+      </a>
+      <p class="mt-4 text-[13px] text-[var(--color-fg-subtle)]">Then press <kbd class="inline-block px-1.5 py-0.5 rounded font-mono text-[12px] text-[var(--color-fg)]" style="background-color: var(--color-bg); box-shadow: var(--shadow-ring);">P</kbd> to pick.</p>
+    </div>
+  </section>
+</Layout>

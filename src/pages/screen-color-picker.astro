@@ -1,0 +1,210 @@
+---
+import Layout from "../layouts/Layout.astro";
+import ColorPicker from "../components/ColorPicker.astro";
+import { site, b } from "../site.config";
+
+const webAppSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "@id": `${site.url}/screen-color-picker#webapp`,
+  name: `${site.name} — Screen Color Picker`,
+  url: `${site.url}/screen-color-picker`,
+  description: `Free screen color picker that works on Windows, Mac, and Linux. Pick any pixel on your screen — inside or outside the browser — with the EyeDropper API. No install, no permissions.`,
+  alternateName: [
+    "Screen color picker online",
+    "Color picker from screen",
+    "Color picker from screen Mac",
+    "Color picker from screen Windows",
+    "Color picker from screen Linux",
+    "Browser screen color picker",
+    "Color picker no install",
+  ],
+  applicationCategory: "DesignApplication",
+  applicationSubCategory: "ColorPicker",
+  operatingSystem: "Windows, macOS, Linux (browser-based)",
+  offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+  publisher: { "@id": `${site.url}/#organization` },
+};
+
+const faqs = [
+  {
+    q: "How do I pick a color from my screen on Windows?",
+    a: "Open ColorTrail in Chrome, Edge, or Brave, and click 'Pick a color'. Your cursor becomes an eyedropper across all monitors — sample from Visual Studio, Photoshop, a Steam game, anywhere. No need for the legacy Windows Magnifier or third-party tools like Just Color Picker.",
+  },
+  {
+    q: "Is there a free color picker that works on Mac?",
+    a: "Yes — ColorTrail. macOS ships Digital Color Meter built-in but it only supports HEX/RGB and has a clunky UI. ColorTrail runs in Safari (Screenshot mode) or Chrome (live mode) with HEX, RGB, HSL, and OKLCH output. Free and zero install — no need to pay $10 for Sip or ColorSnapper.",
+  },
+  {
+    q: "What about Linux? Does ColorTrail work there?",
+    a: "Yes. ColorTrail works on Ubuntu, Fedora, Debian, Arch, Mint, and any Linux distro that runs Chrome / Chromium / Brave / Edge. The EyeDropper API integrates with X11 and Wayland natively, sampling any visible pixel across your monitors.",
+  },
+  {
+    q: "Can I pick colors from another monitor?",
+    a: "Yes. When you click 'Pick a color', the browser hands control to the OS — your cursor becomes a system-wide eyedropper. Just move it to whatever monitor has the color you want and click. The browser doesn't need focus on that monitor.",
+  },
+  {
+    q: "What's the difference between a screen color picker and an image color picker?",
+    a: "Image color pickers only work on files you've uploaded — useless if you want to sample a color from a YouTube video, a streaming app, your IDE, or another desktop app. Screen color pickers work on whatever's visible on your screen right now, regardless of source. ColorTrail does both: live screen sampling (EyeDropper API) plus Screenshot mode for capturing any window's contents.",
+  },
+];
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "@id": `${site.url}/screen-color-picker#faq`,
+  mainEntity: faqs.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: `<p>${f.a}</p>` },
+  })),
+};
+---
+<Layout
+  title="Screen Color Picker — Free, no install, works on Mac / Windows / Linux"
+  description="Free screen color picker that works in any browser. Pick any pixel on your screen — even from another monitor, your IDE, or a streaming video. No install, no permissions, no extensions."
+  jsonLd={[webAppSchema, faqSchema]}
+>
+  {/* HERO */}
+  <section class="px-4 sm:px-6 pt-16 sm:pt-24 pb-8">
+    <div class="mx-auto max-w-3xl text-center">
+      <div class="inline-flex items-center gap-2 mb-6 px-3 py-1 rounded-pill text-[12px] font-medium font-mono uppercase tracking-wider"
+           style="background-color: var(--color-badge-bg); color: var(--color-badge-fg);">
+        <span class="w-1.5 h-1.5 rounded-full" style="background-color: var(--color-badge-fg);"></span>
+        Mac · Windows · Linux
+      </div>
+
+      <h1 class="heading-display text-[40px] sm:text-[52px] lg:text-[60px] text-balance">
+        Free
+        <span class="text-brand-gradient">screen color picker</span>.
+        No install.
+      </h1>
+      <p class="mt-6 text-[17px] sm:text-[19px] leading-[1.55] text-[var(--color-fg-secondary)] max-w-2xl mx-auto text-balance">
+        Pick any pixel anywhere on your screen — even outside the browser, even
+        on another monitor. Works in every modern browser. Zero install. Zero permissions.
+      </p>
+    </div>
+  </section>
+
+  {/* LIVE PICKER */}
+  <section class="px-4 sm:px-6 pb-16">
+    <div class="mx-auto max-w-4xl">
+      <ColorPicker />
+    </div>
+  </section>
+
+  {/* PER-OS SECTIONS */}
+  <section class="px-4 sm:px-6 py-16 sm:py-20" style="background-color: var(--color-bg-elevated); box-shadow: inset 0 1px 0 var(--color-border), inset 0 -1px 0 var(--color-border);">
+    <div class="mx-auto max-w-5xl">
+      <div class="text-center mb-12">
+        <p class="eyebrow mb-3">Built-in alternatives</p>
+        <h2 class="heading-section text-[30px] sm:text-[38px] text-balance">
+          Why not just use your OS's color picker?
+        </h2>
+      </div>
+
+      <div class="grid sm:grid-cols-3 gap-6">
+        {/* Windows */}
+        <div class="rounded-md p-6" style="background-color: var(--color-bg); box-shadow: var(--shadow-card);">
+          <h3 class="heading-card text-[18px] text-[var(--color-fg)] mb-3">Windows</h3>
+          <p class="text-[14px] text-[var(--color-fg-secondary)] leading-relaxed mb-3">
+            Windows ships PowerToys Color Picker (Win+Shift+C) — solid but
+            requires installing PowerToys. Legacy Magnifier shows pixel colors
+            but the UI is clunky.
+          </p>
+          <p class="text-[13px] text-[var(--color-fg-subtle)]">
+            ColorTrail wins on: zero install, OKLCH output, palette history.
+          </p>
+        </div>
+
+        {/* Mac */}
+        <div class="rounded-md p-6" style="background-color: var(--color-bg); box-shadow: var(--shadow-card);">
+          <h3 class="heading-card text-[18px] text-[var(--color-fg)] mb-3">macOS</h3>
+          <p class="text-[14px] text-[var(--color-fg-secondary)] leading-relaxed mb-3">
+            macOS ships Digital Color Meter — pixel-accurate but only HEX/RGB,
+            no HSL or OKLCH, and the UI is locked to 1989. Sip and ColorSnapper
+            cost $10–25.
+          </p>
+          <p class="text-[13px] text-[var(--color-fg-subtle)]">
+            ColorTrail wins on: cost (free), modern UI, 4-format output.
+          </p>
+        </div>
+
+        {/* Linux */}
+        <div class="rounded-md p-6" style="background-color: var(--color-bg); box-shadow: var(--shadow-card);">
+          <h3 class="heading-card text-[18px] text-[var(--color-fg)] mb-3">Linux</h3>
+          <p class="text-[14px] text-[var(--color-fg-secondary)] leading-relaxed mb-3">
+            GNOME ships Color Picker as a built-in app; KDE has KColorChooser.
+            Both work but require navigating to a separate app every time.
+            <code class="font-mono text-[13px] text-[var(--color-fg)]">gpick</code> is good but is a heavyweight install.
+          </p>
+          <p class="text-[13px] text-[var(--color-fg-subtle)]">
+            ColorTrail wins on: works in any browser, instant via P shortcut.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* USE CASES */}
+  <section class="px-4 sm:px-6 py-16 sm:py-20">
+    <div class="mx-auto max-w-5xl">
+      <div class="text-center mb-12">
+        <p class="eyebrow mb-3">Real scenarios</p>
+        <h2 class="heading-section text-[30px] sm:text-[38px] text-balance">
+          When a screen color picker actually wins.
+        </h2>
+      </div>
+
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        {[
+          { e: "🎨", t: "Inspecting design files in Figma desktop", b: "Sample from the canvas without copying objects out." },
+          { e: "💻", t: "Cloning a UI from your IDE", b: "Pick a Slack accent, paste into your Tailwind config." },
+          { e: "📺", t: "Branding from a paused video frame", b: "Grab a streaming service's brand color in one click." },
+          { e: "📊", t: "Matching colors across monitors", b: "Verify the same hex renders identically on each display." },
+          { e: "📄", t: "Pulling colors from a PDF", b: "Brand audit a competitor's PDF deck without screenshotting." },
+          { e: "🖼️", t: "Sampling from any desktop app", b: "Photoshop, Lightroom, OBS — anything visible is fair game." },
+        ].map((u) => (
+          <div class="rounded-md p-5" style="background-color: var(--color-bg); box-shadow: var(--shadow-ring);">
+            <p class="text-[24px] mb-2">{u.e}</p>
+            <h3 class="text-[15px] font-semibold text-[var(--color-fg)] mb-1.5" style="letter-spacing: -0.01em;">{u.t}</h3>
+            <p class="text-[13px] text-[var(--color-fg-secondary)] leading-relaxed">{u.b}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  {/* FAQ */}
+  <section class="px-4 sm:px-6 py-16 sm:py-20" style="background-color: var(--color-bg-elevated); box-shadow: inset 0 1px 0 var(--color-border), inset 0 -1px 0 var(--color-border);">
+    <div class="mx-auto max-w-3xl">
+      <p class="eyebrow mb-3">FAQ</p>
+      <h2 class="heading-section text-[30px] sm:text-[38px] mb-10 text-balance">Screen color picker FAQ</h2>
+      <div class="grid gap-3">
+        {faqs.map((f) => (
+          <details class="group rounded-md p-5" style="background-color: var(--color-bg); box-shadow: var(--shadow-ring);">
+            <summary class="cursor-pointer font-semibold text-[16px] text-[var(--color-fg)] flex items-center justify-between gap-4 list-none" style="letter-spacing: -0.01em;">
+              <span>{f.q}</span>
+              <svg class="w-4 h-4 text-[var(--color-muted)] transition-transform group-open:rotate-180 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="6 9 12 15 18 9"/>
+              </svg>
+            </summary>
+            <p class="mt-3 text-[15px] text-[var(--color-fg-secondary)] leading-relaxed">{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  {/* CTA */}
+  <section class="px-4 sm:px-6 py-16" style="box-shadow: inset 0 1px 0 var(--color-border);">
+    <div class="mx-auto max-w-2xl text-center">
+      <a href={b("/")} class="btn-brand inline-flex items-center justify-center gap-2 rounded-md px-6 py-3.5 text-[15px] mb-4">
+        Start picking →
+      </a>
+      <p class="text-[13px] text-[var(--color-fg-subtle)]">
+        Coming from a Chrome extension? <a href={b("/colorzilla-alternative")} class="text-[var(--color-accent)] underline underline-offset-2">See the ColorZilla comparison</a>
+      </p>
+    </div>
+  </section>
+</Layout>
