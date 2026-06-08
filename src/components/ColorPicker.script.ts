@@ -131,9 +131,9 @@ function setActive(hex: string): void {
   if (fmtHsl) fmtHsl.textContent = formatHsl(rgb);
   if (fmtOklch) fmtOklch.textContent = formatOklch(rgb);
 
-  // CTA button morphs from "Pick a color" → "Pick another color"
-  if (pickBtnLabel) pickBtnLabel.textContent = "Pick another color";
-  if (pickHint) pickHint.textContent = "Click the button to grab another color from your screen.";
+  // CTA button morphs: keep label tight; the hint copy carries context
+  if (pickBtnLabel) pickBtnLabel.textContent = "Pick another";
+  if (pickHint) pickHint.textContent = "Click again to grab another color from your screen.";
 }
 
 // ----------------------------------------------------------------------
@@ -161,8 +161,9 @@ function renderPalette(palette?: string[]): void {
     const btn = document.createElement("button");
     btn.type = "button";
     btn.className =
-      "block w-full aspect-square rounded-md border border-[var(--color-border)] hover:scale-[1.08] hover:z-10 transition-transform shadow";
+      "block w-full aspect-square rounded-md hover:scale-[1.08] hover:z-10 transition-transform";
     btn.style.backgroundColor = hex;
+    btn.style.boxShadow = "var(--shadow-ring)";
     btn.title = hex;
     btn.setAttribute("aria-label", `Select ${hex}`);
     btn.addEventListener("click", () => setActive(hex));
@@ -170,7 +171,7 @@ function renderPalette(palette?: string[]): void {
     const remove = document.createElement("button");
     remove.type = "button";
     remove.className =
-      "absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-[var(--color-fg)] text-[var(--color-bg)] text-xs leading-none opacity-0 group-hover:opacity-100 focus-visible:opacity-100 transition-opacity flex items-center justify-center";
+      "absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-[var(--color-fg)] text-[var(--color-bg)] text-[11px] leading-none opacity-0 group-hover:opacity-100 focus-visible:opacity-100 transition-opacity flex items-center justify-center";
     remove.textContent = "×";
     remove.title = `Remove ${hex}`;
     remove.setAttribute("aria-label", `Remove ${hex} from palette`);

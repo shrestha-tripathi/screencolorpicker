@@ -1,21 +1,21 @@
 ---
-// Theme toggle button. Pure JS, no framework. Talks to window.__setTheme.
+// Theme toggle button. Vercel-style: shadow-bordered icon button.
 ---
 <button
   type="button"
   id="theme-toggle"
-  class="inline-flex items-center justify-center w-9 h-9 rounded-md text-[var(--color-muted)] hover:text-[var(--color-fg)] hover:bg-[var(--color-surface)] transition-colors"
+  class="inline-flex items-center justify-center w-8 h-8 rounded-md text-[var(--color-fg-secondary)] hover:text-[var(--color-fg)] transition-colors"
   aria-label="Toggle dark / light theme"
   title="Toggle theme"
 >
-  <svg id="theme-icon-sun" viewBox="0 0 24 24" class="w-5 h-5 hidden" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+  <svg id="theme-icon-sun" viewBox="0 0 24 24" class="w-4 h-4 hidden" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
     <circle cx="12" cy="12" r="4"/>
     <path d="M12 2v2"/><path d="M12 20v2"/>
     <path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/>
     <path d="M2 12h2"/><path d="M20 12h2"/>
     <path d="m4.93 19.07 1.41-1.41"/><path d="m17.66 6.34 1.41-1.41"/>
   </svg>
-  <svg id="theme-icon-moon" viewBox="0 0 24 24" class="w-5 h-5 hidden" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+  <svg id="theme-icon-moon" viewBox="0 0 24 24" class="w-4 h-4 hidden" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
     <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
   </svg>
 </button>
@@ -28,15 +28,15 @@
     if (!btn || !sun || !moon) return;
 
     function sync() {
-      var t = window.__getTheme ? window.__getTheme() : "dark";
-      // In LIGHT mode show moon (clicking switches to dark).
-      // In DARK mode show sun (clicking switches to light).
-      sun.classList.toggle("hidden", t !== "dark");
+      var t = window.__getTheme ? window.__getTheme() : "light";
+      // LIGHT mode shows moon icon (clicking → dark)
+      // DARK mode shows sun icon (clicking → light)
       moon.classList.toggle("hidden", t !== "light");
+      sun.classList.toggle("hidden", t !== "dark");
     }
     sync();
     btn.addEventListener("click", function () {
-      var t = window.__getTheme ? window.__getTheme() : "dark";
+      var t = window.__getTheme ? window.__getTheme() : "light";
       window.__setTheme(t === "dark" ? "light" : "dark");
     });
     window.addEventListener("themechange", sync);

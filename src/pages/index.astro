@@ -57,164 +57,177 @@ const appJsonLd = {
   <script is:inline type="application/ld+json" set:html={JSON.stringify(appJsonLd)} />
   <script is:inline type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
 
-  <!-- HERO -->
-  <section class="px-4 sm:px-6 pt-12 sm:pt-20 pb-6">
+  {/* ===== HERO ===== */}
+  <section class="px-4 sm:px-6 pt-16 sm:pt-24 pb-8">
     <div class="mx-auto max-w-3xl text-center">
-      <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-balance">
-        Pick any color from your screen.
-        <span class="block mt-2 text-[var(--color-accent)]">Instantly.</span>
+      <div class="inline-flex items-center gap-2 mb-6 px-3 py-1 rounded-pill text-[12px] font-medium font-mono uppercase tracking-wider"
+           style="background-color: var(--color-badge-bg); color: var(--color-badge-fg);">
+        <span class="w-1.5 h-1.5 rounded-full" style="background-color: var(--color-badge-fg);"></span>
+        Built on window.EyeDropper
+      </div>
+
+      <h1 class="heading-display text-[44px] sm:text-[56px] lg:text-[64px] text-balance text-[var(--color-fg)]">
+        Pick any color
+        <br />
+        from your screen.
       </h1>
-      <p class="mt-5 text-lg sm:text-xl text-[var(--color-muted)] text-balance">
-        Free. In your browser. Zero install. Zero permissions. Zero tracking.
+      <p class="mt-5 text-[18px] sm:text-[20px] leading-[1.6] text-[var(--color-fg-secondary)] max-w-xl mx-auto text-balance">
+        Free. In your browser. Zero install, zero permissions, zero tracking.
       </p>
     </div>
   </section>
 
-  <!-- LIVE PICKER -->
-  <section class="px-4 sm:px-6 pb-12">
-    <div class="mx-auto max-w-5xl">
+  {/* ===== LIVE PICKER ===== */}
+  <section class="px-4 sm:px-6 pb-20">
+    <div class="mx-auto max-w-4xl">
       <ColorPicker />
     </div>
   </section>
 
-  <!-- HOW IT WORKS -->
-  <section class="px-4 sm:px-6 py-16 border-t border-[var(--color-border)]">
+  {/* ===== HOW IT WORKS ===== */}
+  <section class="px-4 sm:px-6 py-20" style="box-shadow: inset 0 1px 0 var(--color-border);">
     <div class="mx-auto max-w-5xl">
-      <h2 class="text-3xl sm:text-4xl font-bold text-center mb-3">How it works</h2>
-      <p class="text-center text-[var(--color-muted)] mb-12 max-w-2xl mx-auto">
-        Three taps. No setup, no learning curve, no friction.
-      </p>
+      <div class="text-center mb-14">
+        <p class="eyebrow mb-3">Workflow</p>
+        <h2 class="heading-section text-[32px] sm:text-[40px] text-[var(--color-fg)] text-balance">
+          Three taps. No setup.
+        </h2>
+        <p class="mt-4 text-[16px] sm:text-[18px] text-[var(--color-fg-secondary)] max-w-xl mx-auto leading-relaxed">
+          From cursor to clipboard in under three seconds.
+        </p>
+      </div>
+
       <div class="grid sm:grid-cols-3 gap-6">
-        <div class="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] p-6">
-          <div class="w-10 h-10 rounded-full bg-[var(--color-accent)]/15 text-[var(--color-accent)] font-semibold flex items-center justify-center mb-4">1</div>
-          <h3 class="text-lg font-semibold mb-2">Click the button</h3>
-          <p class="text-sm text-[var(--color-muted)]">
-            Tap the big "Pick a color" button at the top. Your cursor instantly turns into a precision eyedropper.
-          </p>
-        </div>
-        <div class="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] p-6">
-          <div class="w-10 h-10 rounded-full bg-[var(--color-accent)]/15 text-[var(--color-accent)] font-semibold flex items-center justify-center mb-4">2</div>
-          <h3 class="text-lg font-semibold mb-2">Click anywhere</h3>
-          <p class="text-sm text-[var(--color-muted)]">
-            Click on any pixel — inside the browser, in your IDE, in Photoshop, in a YouTube video, on any monitor. Zoom mode shows pixel-level detail.
-          </p>
-        </div>
-        <div class="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] p-6">
-          <div class="w-10 h-10 rounded-full bg-[var(--color-accent)]/15 text-[var(--color-accent)] font-semibold flex items-center justify-center mb-4">3</div>
-          <h3 class="text-lg font-semibold mb-2">Copy in any format</h3>
-          <p class="text-sm text-[var(--color-muted)]">
-            HEX, RGB, HSL, or OKLCH — one click to clipboard. Build up your palette as you go; it's saved locally.
-          </p>
-        </div>
+        {[
+          {
+            num: "01",
+            title: "Click the button",
+            body: "Tap the dark CTA above. Your cursor instantly turns into a precision eyedropper.",
+          },
+          {
+            num: "02",
+            title: "Click anywhere",
+            body: "Sample any pixel — your IDE, Photoshop, a YouTube video, another monitor. Zoom mode shows pixel detail.",
+          },
+          {
+            num: "03",
+            title: "Copy in any format",
+            body: "HEX, RGB, HSL, or OKLCH — one tap to clipboard. Palette saves locally as you build it.",
+          },
+        ].map((step) => (
+          <div
+            class="rounded-md p-6"
+            style="background-color: var(--color-bg); box-shadow: var(--shadow-card);"
+          >
+            <p class="font-mono text-[12px] font-medium uppercase tracking-wider text-[var(--color-fg-subtle)] mb-3">
+              {step.num}
+            </p>
+            <h3 class="heading-card text-[20px] text-[var(--color-fg)] mb-2">{step.title}</h3>
+            <p class="text-[15px] leading-relaxed text-[var(--color-fg-secondary)]">{step.body}</p>
+          </div>
+        ))}
       </div>
     </div>
   </section>
 
-  <!-- COMPARISON -->
-  <section class="px-4 sm:px-6 py-16 border-t border-[var(--color-border)] bg-[var(--color-bg-elevated)]">
-    <div class="mx-auto max-w-4xl">
-      <h2 class="text-3xl sm:text-4xl font-bold text-center mb-3">Why ColorTrail?</h2>
-      <p class="text-center text-[var(--color-muted)] mb-12 max-w-2xl mx-auto">
-        Compared to every other color picker — extensions, native apps, online tools.
-      </p>
+  {/* ===== COMPARISON ===== */}
+  <section class="px-4 sm:px-6 py-20" style="background-color: var(--color-bg-elevated); box-shadow: inset 0 1px 0 var(--color-border), inset 0 -1px 0 var(--color-border);">
+    <div class="mx-auto max-w-5xl">
+      <div class="text-center mb-14">
+        <p class="eyebrow mb-3">Why {site.name}</p>
+        <h2 class="heading-section text-[32px] sm:text-[40px] text-[var(--color-fg)] text-balance">
+          Stop installing extensions.
+        </h2>
+        <p class="mt-4 text-[16px] sm:text-[18px] text-[var(--color-fg-secondary)] max-w-xl mx-auto leading-relaxed">
+          The empty intersection: free, cross-platform, zero-permission, screen-wide.
+        </p>
+      </div>
 
-      <div class="overflow-x-auto -mx-4 sm:mx-0">
-        <table class="w-full text-sm border-collapse min-w-[640px]">
+      <div
+        class="overflow-x-auto rounded-lg"
+        style="background-color: var(--color-bg); box-shadow: var(--shadow-card);"
+      >
+        <table class="w-full text-[14px] min-w-[640px]">
           <thead>
-            <tr class="border-b border-[var(--color-border)]">
-              <th class="text-left py-3 px-4 font-semibold text-[var(--color-muted)]">&nbsp;</th>
-              <th class="text-center py-3 px-4 font-semibold text-[var(--color-accent)]">{site.name}</th>
-              <th class="text-center py-3 px-4 font-semibold text-[var(--color-muted)]">ColorZilla</th>
-              <th class="text-center py-3 px-4 font-semibold text-[var(--color-muted)]">Sip / ColorSnapper</th>
-              <th class="text-center py-3 px-4 font-semibold text-[var(--color-muted)]">Online image pickers</th>
+            <tr style="box-shadow: inset 0 -1px 0 var(--color-border);">
+              <th class="text-left py-4 px-5 eyebrow font-mono text-[12px]">&nbsp;</th>
+              <th class="text-center py-4 px-5 font-semibold text-[var(--color-fg)]" style="letter-spacing: -0.01em;">{site.name}</th>
+              <th class="text-center py-4 px-5 font-medium text-[var(--color-fg-secondary)]">ColorZilla</th>
+              <th class="text-center py-4 px-5 font-medium text-[var(--color-fg-secondary)]">Sip / ColorSnapper</th>
+              <th class="text-center py-4 px-5 font-medium text-[var(--color-fg-secondary)]">Online pickers</th>
             </tr>
           </thead>
           <tbody class="text-[var(--color-fg)]">
-            <tr class="border-b border-[var(--color-border)]">
-              <td class="py-3 px-4 font-medium">Cost</td>
-              <td class="py-3 px-4 text-center text-[var(--color-success)]">Free forever</td>
-              <td class="py-3 px-4 text-center">Free + ads</td>
-              <td class="py-3 px-4 text-center">$10–25</td>
-              <td class="py-3 px-4 text-center">Free + ads</td>
-            </tr>
-            <tr class="border-b border-[var(--color-border)]">
-              <td class="py-3 px-4 font-medium">Install required</td>
-              <td class="py-3 px-4 text-center text-[var(--color-success)]">None</td>
-              <td class="py-3 px-4 text-center">Extension</td>
-              <td class="py-3 px-4 text-center">App</td>
-              <td class="py-3 px-4 text-center text-[var(--color-success)]">None</td>
-            </tr>
-            <tr class="border-b border-[var(--color-border)]">
-              <td class="py-3 px-4 font-medium">Pick from outside browser</td>
-              <td class="py-3 px-4 text-center text-[var(--color-success)]">Yes</td>
-              <td class="py-3 px-4 text-center text-[var(--color-error)]">No</td>
-              <td class="py-3 px-4 text-center text-[var(--color-success)]">Yes</td>
-              <td class="py-3 px-4 text-center text-[var(--color-error)]">No</td>
-            </tr>
-            <tr class="border-b border-[var(--color-border)]">
-              <td class="py-3 px-4 font-medium">Cross-platform</td>
-              <td class="py-3 px-4 text-center text-[var(--color-success)]">Win/Mac/Linux</td>
-              <td class="py-3 px-4 text-center">Browser-only</td>
-              <td class="py-3 px-4 text-center text-[var(--color-error)]">Mac-only</td>
-              <td class="py-3 px-4 text-center text-[var(--color-success)]">Yes</td>
-            </tr>
-            <tr class="border-b border-[var(--color-border)]">
-              <td class="py-3 px-4 font-medium">Permissions needed</td>
-              <td class="py-3 px-4 text-center text-[var(--color-success)]">None</td>
-              <td class="py-3 px-4 text-center text-[var(--color-error)]">All websites</td>
-              <td class="py-3 px-4 text-center">Screen recording</td>
-              <td class="py-3 px-4 text-center text-[var(--color-success)]">None</td>
-            </tr>
-            <tr class="border-b border-[var(--color-border)]">
-              <td class="py-3 px-4 font-medium">OKLCH output</td>
-              <td class="py-3 px-4 text-center text-[var(--color-success)]">Yes</td>
-              <td class="py-3 px-4 text-center text-[var(--color-error)]">No</td>
-              <td class="py-3 px-4 text-center text-[var(--color-error)]">No</td>
-              <td class="py-3 px-4 text-center text-[var(--color-error)]">Rarely</td>
-            </tr>
-            <tr>
-              <td class="py-3 px-4 font-medium">Privacy</td>
-              <td class="py-3 px-4 text-center text-[var(--color-success)]">100% local</td>
-              <td class="py-3 px-4 text-center">Telemetry + ads</td>
-              <td class="py-3 px-4 text-center">100% local</td>
-              <td class="py-3 px-4 text-center">Uploads file</td>
-            </tr>
+            {[
+              { row: "Cost", us: "Free forever", a: "Free + ads", b: "$10–25", c: "Free + ads", usOk: true },
+              { row: "Install required", us: "None", a: "Extension", b: "App", c: "None", usOk: true, cOk: true },
+              { row: "Pick from outside browser", us: "Yes", a: "No", b: "Yes", c: "No", usOk: true, bOk: true, aBad: true, cBad: true },
+              { row: "Cross-platform", us: "Win / Mac / Linux", a: "Browser-only", b: "Mac-only", c: "Yes", usOk: true, cOk: true, bBad: true },
+              { row: "Permissions", us: "None", a: "All websites", b: "Screen recording", c: "None", usOk: true, cOk: true, aBad: true },
+              { row: "OKLCH output", us: "Yes", a: "No", b: "No", c: "Rarely", usOk: true, aBad: true, bBad: true },
+              { row: "Privacy", us: "100% local", a: "Telemetry + ads", b: "100% local", c: "Uploads file", usOk: true, bOk: true, aBad: true, cBad: true },
+            ].map((r, idx, arr) => (
+              <tr style={`box-shadow: ${idx < arr.length - 1 ? 'inset 0 -1px 0 var(--color-border)' : 'none'};`}>
+                <td class="py-3.5 px-5 font-medium">{r.row}</td>
+                <td class={`py-3.5 px-5 text-center ${r.usOk ? 'text-[var(--color-success)] font-medium' : ''}`}>{r.us}</td>
+                <td class={`py-3.5 px-5 text-center text-[var(--color-fg-secondary)] ${r.aBad ? 'text-[var(--color-error)]' : ''}`}>{r.a}</td>
+                <td class={`py-3.5 px-5 text-center text-[var(--color-fg-secondary)] ${r.bOk ? 'text-[var(--color-success)]' : r.bBad ? 'text-[var(--color-error)]' : ''}`}>{r.b}</td>
+                <td class={`py-3.5 px-5 text-center text-[var(--color-fg-secondary)] ${r.cOk ? 'text-[var(--color-success)]' : r.cBad ? 'text-[var(--color-error)]' : ''}`}>{r.c}</td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
     </div>
   </section>
 
-  <!-- FAQ -->
-  <section class="px-4 sm:px-6 py-16 border-t border-[var(--color-border)]">
+  {/* ===== FAQ ===== */}
+  <section class="px-4 sm:px-6 py-20">
     <div class="mx-auto max-w-3xl">
-      <h2 class="text-3xl sm:text-4xl font-bold text-center mb-10">FAQ</h2>
+      <div class="text-center mb-12">
+        <p class="eyebrow mb-3">FAQ</p>
+        <h2 class="heading-section text-[32px] sm:text-[40px] text-[var(--color-fg)] text-balance">
+          Common questions.
+        </h2>
+      </div>
       <div class="grid gap-3">
         {faqs.map((f) => (
-          <details class="group rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] p-5 open:bg-[var(--color-surface)] transition-colors">
-            <summary class="cursor-pointer font-semibold text-base flex items-center justify-between gap-4 list-none">
+          <details
+            class="group rounded-md p-5 transition-colors"
+            style="background-color: var(--color-bg); box-shadow: var(--shadow-ring);"
+          >
+            <summary class="cursor-pointer font-semibold text-[16px] text-[var(--color-fg)] flex items-center justify-between gap-4 list-none" style="letter-spacing: -0.01em;">
               <span>{f.q}</span>
-              <svg class="w-5 h-5 text-[var(--color-muted)] transition-transform group-open:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <svg class="w-4 h-4 text-[var(--color-muted)] transition-transform group-open:rotate-180 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <polyline points="6 9 12 15 18 9"/>
               </svg>
             </summary>
-            <p class="mt-3 text-[var(--color-muted)] leading-relaxed">{f.a}</p>
+            <p class="mt-3 text-[15px] text-[var(--color-fg-secondary)] leading-relaxed">{f.a}</p>
           </details>
         ))}
       </div>
     </div>
   </section>
 
-  <!-- FINAL CTA -->
-  <section class="px-4 sm:px-6 py-16 border-t border-[var(--color-border)]">
-    <div class="mx-auto max-w-3xl text-center">
-      <h2 class="text-2xl sm:text-3xl font-bold mb-3">
-        Stop installing extensions for a color picker.
+  {/* ===== FINAL CTA ===== */}
+  <section class="px-4 sm:px-6 py-20" style="box-shadow: inset 0 1px 0 var(--color-border);">
+    <div class="mx-auto max-w-2xl text-center">
+      <h2 class="heading-section text-[28px] sm:text-[36px] text-[var(--color-fg)] text-balance mb-4">
+        Bookmark <code class="font-mono text-[var(--color-fg-secondary)]" style="letter-spacing: -0.02em;">{site.domain}</code>.
+        <br class="hidden sm:block" />
+        You're done.
       </h2>
-      <p class="text-[var(--color-muted)] text-balance">
-        Bookmark <code class="font-mono text-[var(--color-accent)]">{site.domain}</code> and you're done.
-        Press <kbd class="px-2 py-0.5 rounded bg-[var(--color-surface)] border border-[var(--color-border)] font-mono text-sm">P</kbd> anytime to pick.
+      <p class="text-[16px] text-[var(--color-fg-secondary)] mb-8">
+        Press
+        <kbd class="inline-block mx-1 px-2 py-0.5 rounded-md font-mono text-[13px] text-[var(--color-fg)]" style="background-color: var(--color-bg); box-shadow: var(--shadow-ring);">P</kbd>
+        anytime to pick.
       </p>
+      <a
+        href="#picker-root"
+        class="inline-flex items-center justify-center gap-2 rounded-md px-5 py-3 text-[14px] font-medium bg-[var(--color-fg)] text-[var(--color-bg)] hover:opacity-90 transition-opacity"
+      >
+        Try it now →
+      </a>
     </div>
   </section>
 </Layout>

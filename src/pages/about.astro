@@ -6,58 +6,60 @@ import { site } from "../site.config";
   title="About"
   description={`About ${site.name} — the zero-install screen color picker for designers and developers.`}
 >
-  <section class="px-4 sm:px-6 py-12 sm:py-20">
-    <div class="mx-auto max-w-2xl prose prose-invert">
-      <h1 class="text-4xl font-bold mb-6">About {site.name}</h1>
+  <section class="px-4 sm:px-6 py-16 sm:py-24">
+    <div class="mx-auto max-w-2xl">
+      <p class="eyebrow mb-4">About</p>
+      <h1 class="heading-section text-[36px] sm:text-[44px] mb-6 text-balance">A picker, nothing more.</h1>
 
-      <p class="text-lg text-[var(--color-muted)] leading-relaxed mb-6">
+      <p class="text-[18px] text-[var(--color-fg-secondary)] leading-[1.7] mb-10">
         {site.name} is a one-tap screen color picker that runs entirely in your browser.
         No extensions. No native apps. No accounts. Just open the page and pick.
       </p>
 
-      <h2 class="text-2xl font-bold mt-10 mb-3">Why we built it</h2>
-      <p class="text-[var(--color-muted)] leading-relaxed mb-4">
+      <h2 class="heading-card text-[22px] mt-12 mb-4">Why we built it</h2>
+      <p class="text-[15px] text-[var(--color-fg-secondary)] leading-[1.7] mb-4">
         Every existing solution made us choose between bad options:
       </p>
-      <ul class="text-[var(--color-muted)] leading-relaxed mb-4 list-disc pl-5 space-y-1">
-        <li><strong class="text-[var(--color-fg)]">Browser extensions</strong> like ColorZilla need permission to read every page you visit, and most are ad-injected.</li>
-        <li><strong class="text-[var(--color-fg)]">Native apps</strong> like Sip and ColorSnapper cost $10–25 and are Mac-only.</li>
-        <li><strong class="text-[var(--color-fg)]">Online image pickers</strong> only work on images you upload — useless for sampling a color from your IDE or another desktop app.</li>
+      <ul class="text-[15px] text-[var(--color-fg-secondary)] leading-[1.7] mb-6 list-disc pl-5 space-y-2">
+        <li><span class="text-[var(--color-fg)] font-medium">Browser extensions</span> like ColorZilla need permission to read every page you visit, and most are ad-injected.</li>
+        <li><span class="text-[var(--color-fg)] font-medium">Native apps</span> like Sip and ColorSnapper cost $10–25 and are Mac-only.</li>
+        <li><span class="text-[var(--color-fg)] font-medium">Online image pickers</span> only work on images you upload — useless for sampling a color from your IDE or another desktop app.</li>
       </ul>
-      <p class="text-[var(--color-muted)] leading-relaxed mb-4">
-        In late 2021, Chrome shipped the <code class="text-[var(--color-accent)]">window.EyeDropper</code> API — browser-native, zero-permission, system-wide pixel sampling. Edge, Brave, and Opera followed.
+      <p class="text-[15px] text-[var(--color-fg-secondary)] leading-[1.7] mb-4">
+        In late 2021, Chrome shipped the <code class="font-mono text-[14px] text-[var(--color-fg)]">window.EyeDropper</code> API — browser-native, zero-permission, system-wide pixel sampling. Edge, Brave, and Opera followed.
         Most developers don't even know it exists.
       </p>
-      <p class="text-[var(--color-muted)] leading-relaxed mb-6">
+      <p class="text-[15px] text-[var(--color-fg-secondary)] leading-[1.7] mb-12">
         {site.name} is a clean, polished UI on top of that API. That's it. That's the product.
       </p>
 
-      <h2 class="text-2xl font-bold mt-10 mb-3">Tech stack</h2>
-      <ul class="text-[var(--color-muted)] leading-relaxed mb-6 list-disc pl-5 space-y-1">
+      <h2 class="heading-card text-[22px] mt-12 mb-4">Tech stack</h2>
+      <ul class="text-[15px] text-[var(--color-fg-secondary)] leading-[1.7] mb-12 list-disc pl-5 space-y-2">
         <li>Astro 6 + Tailwind v4 — static site, minimal JS, zero runtime overhead</li>
-        <li>The native <code class="text-[var(--color-accent)]">window.EyeDropper</code> API — no canvas hacks, no library</li>
+        <li>Geist + Geist Mono via Google Fonts</li>
+        <li>The native <code class="font-mono text-[14px] text-[var(--color-fg)]">window.EyeDropper</code> API — no canvas hacks, no library</li>
         <li>localStorage for palette history — never leaves your device</li>
         <li>Custom sRGB → OKLab → OKLCH math (no color-conversion library needed)</li>
         <li>Deployed on Cloudflare Pages — free, fast, global CDN</li>
       </ul>
 
-      <h2 class="text-2xl font-bold mt-10 mb-3">Who's behind it</h2>
-      <p class="text-[var(--color-muted)] leading-relaxed mb-6">
+      <h2 class="heading-card text-[22px] mt-12 mb-4">Who's behind it</h2>
+      <p class="text-[15px] text-[var(--color-fg-secondary)] leading-[1.7] mb-12">
         Built by an indie developer who got tired of installing browser extensions for tiny utilities.
-        Part of a portfolio of <a href="https://worksoffline.in" target="_blank" rel="noopener" class="text-[var(--color-accent)] hover:text-[var(--color-accent-hover)] underline">worksoffline.in</a> tools — software that runs entirely on your device, with no server, no signup, no data leaving your machine.
+        Part of a portfolio of <a href="https://worksoffline.in" target="_blank" rel="noopener" class="prose-link">worksoffline.in</a> tools — software that runs entirely on your device, with no server, no signup, no data leaving your machine.
       </p>
 
-      <h2 class="text-2xl font-bold mt-10 mb-3">100% free, forever</h2>
-      <p class="text-[var(--color-muted)] leading-relaxed mb-6">
+      <h2 class="heading-card text-[22px] mt-12 mb-4">100% free, forever</h2>
+      <p class="text-[15px] text-[var(--color-fg-secondary)] leading-[1.7] mb-6">
         We will never charge for {site.name}. There are no plans for a "Pro" tier.
         No ads. No tracking pixels. No "freemium upsells."
         If we ever break this promise, you have permission to publicly shame us.
       </p>
 
-      <p class="text-[var(--color-muted)] leading-relaxed">
+      <p class="text-[15px] text-[var(--color-fg-secondary)] leading-[1.7]">
         Found a bug or want a feature? File an issue on
         {site.github
-          ? <a href={site.github} target="_blank" rel="noopener" class="text-[var(--color-accent)] hover:text-[var(--color-accent-hover)] underline">GitHub</a>
+          ? <a href={site.github} target="_blank" rel="noopener" class="prose-link">GitHub</a>
           : <span>GitHub (link coming soon)</span>}.
       </p>
     </div>

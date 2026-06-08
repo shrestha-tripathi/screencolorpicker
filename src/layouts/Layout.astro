@@ -26,7 +26,7 @@ const ogUrl = absoluteUrl(ogImage);
 ---
 
 <!doctype html>
-<html lang="en" data-theme="dark">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -38,7 +38,15 @@ const ogUrl = absoluteUrl(ogImage);
     {noindex && <meta name="robots" content="noindex, nofollow" />}
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="theme-color" content="#0a0a0b" id="theme-color-meta" />
+    <meta name="theme-color" content="#ffffff" id="theme-color-meta" />
+
+    {/* Geist + Geist Mono via Google Fonts */}
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
 
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonical} />
@@ -54,35 +62,45 @@ const ogUrl = absoluteUrl(ogImage);
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogUrl} />
 
-    {/* FOUC-free theme bootstrap — inline, synchronous, runs before paint */}
+    {/* FOUC-free theme bootstrap — runs synchronously BEFORE any CSS loads.
+        Default is LIGHT (no data-theme attribute = light theme). */}
     <script is:inline>
       (function () {
         try {
           var stored = localStorage.getItem("colortrail:theme");
           var theme = stored === "light" || stored === "dark"
             ? stored
-            : "dark";
-          document.documentElement.setAttribute("data-theme", theme);
+            : "light"; /* default = light */
+          if (theme === "dark") {
+            document.documentElement.setAttribute("data-theme", "dark");
+          } else {
+            document.documentElement.removeAttribute("data-theme");
+          }
           var meta = document.getElementById("theme-color-meta");
           if (meta) {
-            meta.setAttribute("content", theme === "light" ? "#ffffff" : "#0a0a0b");
+            meta.setAttribute("content", theme === "dark" ? "#0a0a0a" : "#ffffff");
           }
         } catch (e) { /* private mode — ignore */ }
       })();
     </script>
 
-    {/* Public theme API for ThemeToggle component */}
     <script is:inline>
       window.__getTheme = function () {
-        return document.documentElement.getAttribute("data-theme") || "dark";
+        return document.documentElement.getAttribute("data-theme") === "dark"
+          ? "dark"
+          : "light";
       };
       window.__setTheme = function (next) {
         if (next !== "light" && next !== "dark") return;
-        document.documentElement.setAttribute("data-theme", next);
+        if (next === "dark") {
+          document.documentElement.setAttribute("data-theme", "dark");
+        } else {
+          document.documentElement.removeAttribute("data-theme");
+        }
         try { localStorage.setItem("colortrail:theme", next); } catch (e) {}
         var meta = document.getElementById("theme-color-meta");
         if (meta) {
-          meta.setAttribute("content", next === "light" ? "#ffffff" : "#0a0a0b");
+          meta.setAttribute("content", next === "dark" ? "#0a0a0a" : "#ffffff");
         }
         window.dispatchEvent(new CustomEvent("themechange", { detail: { theme: next } }));
       };
