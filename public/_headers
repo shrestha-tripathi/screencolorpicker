@@ -32,6 +32,15 @@ https://screencolorpicker.pages.dev/*
 https://*.screencolorpicker.pages.dev/*
   X-Robots-Tag: noindex, nofollow
 
+# Legacy: the project was originally scaffolded as "colortrail" and the
+# repo+Pages project may still resolve at colortrail.pages.dev. Kill the
+# index there too so the old infra hostname can't compete with the .com.
+https://colortrail.pages.dev/*
+  X-Robots-Tag: noindex, nofollow
+
+https://*.colortrail.pages.dev/*
+  X-Robots-Tag: noindex, nofollow
+
 # ============================================================================
 # Security headers (production + previews)
 # ============================================================================
