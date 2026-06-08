@@ -1,0 +1,125 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { site, b } from "../site.config";
+
+const privacyPolicySchema = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "@id": `${site.url}/privacy-policy#webpage`,
+  url: `${site.url}/privacy-policy`,
+  name: `Privacy Policy — ${site.name}`,
+  description: `Full ${site.name} privacy policy: what we collect, what we don't, GDPR/CCPA rights, cookies, and how to contact us.`,
+  inLanguage: site.locale,
+  isPartOf: { "@id": `${site.url}/#website` },
+  publisher: { "@id": `${site.url}/#organization` },
+};
+
+const lastUpdated = "2026-06-08";
+const effectiveDate = "2026-06-08";
+---
+<Layout
+  title="Privacy Policy"
+  description={`Full ${site.name} privacy policy: GDPR & CCPA compliant, no tracking, no analytics, no data sharing.`}
+  jsonLd={[privacyPolicySchema]}
+>
+  <section class="px-4 sm:px-6 py-16 sm:py-24">
+    <div class="mx-auto max-w-2xl">
+      <p class="eyebrow mb-4">Legal</p>
+      <h1 class="heading-section text-[36px] sm:text-[44px] mb-3 text-balance">Privacy Policy</h1>
+      <p class="text-[13px] font-mono uppercase tracking-wider text-[var(--color-fg-subtle)] mb-8">
+        Last updated: {lastUpdated} · Effective: {effectiveDate}
+      </p>
+
+      <p class="text-[18px] text-[var(--color-fg-secondary)] leading-[1.7] mb-10">
+        <strong class="text-[var(--color-fg)]">TL;DR:</strong> {site.name} runs 100% in your browser.
+        We do not collect, store, or transmit any personal data, including the
+        colors you pick. For the architectural deep-dive on how this works,
+        see <a href={b("/privacy")} class="prose-link">Privacy by design</a>.
+      </p>
+
+      <h2 class="heading-card text-[22px] mt-12 mb-4">1. Data controller</h2>
+      <p class="text-[15px] text-[var(--color-fg-secondary)] leading-[1.7] mb-6">
+        This site is operated by <span class="text-[var(--color-fg)] font-medium">{site.author}</span>
+        ({site.jurisdiction}). For privacy questions, contact
+        <a href={`mailto:${site.contactEmail}`} class="prose-link">{site.contactEmail}</a>.
+      </p>
+
+      <h2 class="heading-card text-[22px] mt-12 mb-4">2. What we collect</h2>
+      <p class="text-[15px] text-[var(--color-fg-secondary)] leading-[1.7] mb-3"><strong class="text-[var(--color-fg)]">Nothing personally identifiable.</strong></p>
+      <ul class="text-[15px] text-[var(--color-fg-secondary)] leading-[1.7] mb-6 list-disc pl-5 space-y-2">
+        <li><strong class="text-[var(--color-fg)]">No accounts.</strong> There is no sign-up form, no login, no profile.</li>
+        <li><strong class="text-[var(--color-fg)]">No analytics.</strong> No Google Analytics, no Plausible, no Cloudflare Web Analytics, no Mixpanel.</li>
+        <li><strong class="text-[var(--color-fg)]">No tracking pixels.</strong> No Facebook Pixel, no LinkedIn Insight, no marketing trackers.</li>
+        <li><strong class="text-[var(--color-fg)]">No third-party advertising.</strong> No AdSense, no Carbon, no banner networks.</li>
+        <li><strong class="text-[var(--color-fg)]">No fingerprinting.</strong> We do not attempt to identify your device or browser.</li>
+      </ul>
+
+      <h2 class="heading-card text-[22px] mt-12 mb-4">3. What stays on your device</h2>
+      <p class="text-[15px] text-[var(--color-fg-secondary)] leading-[1.7] mb-3">Some data is stored locally in your browser. It never leaves your device:</p>
+      <ul class="text-[15px] text-[var(--color-fg-secondary)] leading-[1.7] mb-6 list-disc pl-5 space-y-2">
+        <li><strong class="text-[var(--color-fg)]">Color palette history</strong> — stored in <code class="font-mono text-[14px] text-[var(--color-fg)]">localStorage</code> under the key <code class="font-mono text-[14px] text-[var(--color-fg)]">colortrail:palette:v1</code>.</li>
+        <li><strong class="text-[var(--color-fg)]">Theme preference</strong> (dark/light) — stored in <code class="font-mono text-[14px] text-[var(--color-fg)]">localStorage</code> under <code class="font-mono text-[14px] text-[var(--color-fg)]">colortrail:theme</code>.</li>
+        <li><strong class="text-[var(--color-fg)]">Captured screenshot frames</strong> — held only in browser memory while the screenshot picker modal is open. Freed when you close it.</li>
+      </ul>
+      <p class="text-[15px] text-[var(--color-fg-secondary)] leading-[1.7] mb-6">
+        You can wipe this data anytime via your browser's "Clear site data"
+        setting, or use the "Clear all" button in the recent palette panel.
+      </p>
+
+      <h2 class="heading-card text-[22px] mt-12 mb-4">4. Server logs</h2>
+      <p class="text-[15px] text-[var(--color-fg-secondary)] leading-[1.7] mb-6">
+        Our CDN host (<a href="https://www.cloudflare.com/privacypolicy/" target="_blank" rel="noopener" class="prose-link">Cloudflare Pages</a>) logs basic request metadata (IP address, user agent, request URL) for abuse prevention and infrastructure operations. These logs are not accessible to us at the per-request level and are typically retained by Cloudflare for 30 days. See Cloudflare's privacy policy for details.
+      </p>
+
+      <h2 class="heading-card text-[22px] mt-12 mb-4">5. Third-party services</h2>
+      <p class="text-[15px] text-[var(--color-fg-secondary)] leading-[1.7] mb-3">We use these third parties:</p>
+      <ul class="text-[15px] text-[var(--color-fg-secondary)] leading-[1.7] mb-6 list-disc pl-5 space-y-2">
+        <li><strong class="text-[var(--color-fg)]">Cloudflare Pages</strong> — hosts the static HTML/CSS/JS. <a href="https://www.cloudflare.com/privacypolicy/" target="_blank" rel="noopener" class="prose-link">Privacy policy</a>.</li>
+        <li><strong class="text-[var(--color-fg)]">Google Fonts</strong> — serves the Geist font family from <code class="font-mono text-[14px] text-[var(--color-fg)]">fonts.googleapis.com</code>. <a href="https://policies.google.com/privacy" target="_blank" rel="noopener" class="prose-link">Privacy policy</a>. We may self-host fonts in a future release to remove this dependency.</li>
+      </ul>
+      <p class="text-[15px] text-[var(--color-fg-secondary)] leading-[1.7] mb-6">
+        That's it. No CDN-loaded JavaScript libraries, no third-party scripts,
+        no embedded widgets.
+      </p>
+
+      <h2 class="heading-card text-[22px] mt-12 mb-4">6. Cookies</h2>
+      <p class="text-[15px] text-[var(--color-fg-secondary)] leading-[1.7] mb-6">
+        {site.name} does not set any cookies. The only persistent state is in
+        <code class="font-mono text-[14px] text-[var(--color-fg)]">localStorage</code>, which is technically distinct from cookies and is
+        not transmitted to any server.
+      </p>
+
+      <h2 class="heading-card text-[22px] mt-12 mb-4">7. Your rights (GDPR / CCPA)</h2>
+      <p class="text-[15px] text-[var(--color-fg-secondary)] leading-[1.7] mb-3">
+        Because we don't collect or store personal data, most data-subject
+        rights are trivially satisfied. To exercise any right or ask
+        questions, email <a href={`mailto:${site.contactEmail}`} class="prose-link">{site.contactEmail}</a>.
+      </p>
+      <ul class="text-[15px] text-[var(--color-fg-secondary)] leading-[1.7] mb-6 list-disc pl-5 space-y-2">
+        <li><strong class="text-[var(--color-fg)]">Right to access:</strong> we have no personal data of yours to access.</li>
+        <li><strong class="text-[var(--color-fg)]">Right to deletion:</strong> we have nothing to delete on our end; clear browser site data to remove the local state.</li>
+        <li><strong class="text-[var(--color-fg)]">Right to portability:</strong> your palette is in your browser's localStorage; you can export it via browser dev tools.</li>
+        <li><strong class="text-[var(--color-fg)]">Right to opt out of sale:</strong> we don't sell anything.</li>
+      </ul>
+
+      <h2 class="heading-card text-[22px] mt-12 mb-4">8. Children</h2>
+      <p class="text-[15px] text-[var(--color-fg-secondary)] leading-[1.7] mb-6">
+        {site.name} is suitable for all ages and does not knowingly collect
+        information from anyone, including children under 13.
+      </p>
+
+      <h2 class="heading-card text-[22px] mt-12 mb-4">9. Changes to this policy</h2>
+      <p class="text-[15px] text-[var(--color-fg-secondary)] leading-[1.7] mb-6">
+        We may update this policy as the product evolves. Material changes
+        will be reflected in the "Last updated" date at the top. Continued
+        use after changes constitutes acceptance.
+      </p>
+
+      <h2 class="heading-card text-[22px] mt-12 mb-4">10. Contact</h2>
+      <p class="text-[15px] text-[var(--color-fg-secondary)] leading-[1.7]">
+        For any privacy question, email <a href={`mailto:${site.contactEmail}`} class="prose-link">{site.contactEmail}</a>
+        or visit the <a href={b("/contact")} class="prose-link">contact page</a>.
+      </p>
+    </div>
+  </section>
+</Layout>

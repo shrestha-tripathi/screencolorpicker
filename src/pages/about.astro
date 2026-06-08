@@ -1,10 +1,24 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import { site } from "../site.config";
+
+const aboutSchema = {
+  "@context": "https://schema.org",
+  "@type": "AboutPage",
+  "@id": `${site.url}/about#aboutpage`,
+  url: `${site.url}/about`,
+  name: `About ${site.name}`,
+  description: `${site.name} is a one-tap screen color picker built on the EyeDropper API. Free, zero install, zero permissions, 100% client-side.`,
+  inLanguage: site.locale,
+  isPartOf: { "@id": `${site.url}/#website` },
+  publisher: { "@id": `${site.url}/#organization` },
+  author: { "@type": "Person", name: site.author },
+};
 ---
 <Layout
   title="About"
-  description={`About ${site.name} — the zero-install screen color picker for designers and developers.`}
+  description={`About ${site.name} — the zero-install screen color picker for designers and developers. Built on the browser-native EyeDropper API.`}
+  jsonLd={[aboutSchema]}
 >
   <section class="px-4 sm:px-6 py-16 sm:py-24">
     <div class="mx-auto max-w-2xl">
@@ -20,7 +34,7 @@ import { site } from "../site.config";
       <p class="text-[15px] text-[var(--color-fg-secondary)] leading-[1.7] mb-4">
         Every existing solution made us choose between bad options:
       </p>
-      <ul class="text-[15px] text-[var(--color-fg-secondary)] leading-[1.7] mb-6 list-disc pl-5 space-y-2">
+      <ul class="text-[15px] text-[var(--color-fg-secondary)] leading-[1.7] mb-4 list-disc pl-5 space-y-2">
         <li><span class="text-[var(--color-fg)] font-medium">Browser extensions</span> like ColorZilla need permission to read every page you visit, and most are ad-injected.</li>
         <li><span class="text-[var(--color-fg)] font-medium">Native apps</span> like Sip and ColorSnapper cost $10–25 and are Mac-only.</li>
         <li><span class="text-[var(--color-fg)] font-medium">Online image pickers</span> only work on images you upload — useless for sampling a color from your IDE or another desktop app.</li>
@@ -33,11 +47,21 @@ import { site } from "../site.config";
         {site.name} is a clean, polished UI on top of that API. That's it. That's the product.
       </p>
 
+      <h2 class="heading-card text-[22px] mt-12 mb-4">Our principles</h2>
+      <ul class="text-[15px] text-[var(--color-fg-secondary)] leading-[1.7] mb-12 list-disc pl-5 space-y-2">
+        <li><span class="text-[var(--color-fg)] font-medium">100% client-side.</span> No server processes your colors. No telemetry. No remote dependencies at runtime.</li>
+        <li><span class="text-[var(--color-fg)] font-medium">Zero permissions.</span> ColorTrail can't read any of your other tabs, even if it wanted to.</li>
+        <li><span class="text-[var(--color-fg)] font-medium">Free forever.</span> No accounts, no Pro tier, no usage caps, no ads.</li>
+        <li><span class="text-[var(--color-fg)] font-medium">Web-native.</span> No app to install, no extension to add. Just a URL.</li>
+        <li><span class="text-[var(--color-fg)] font-medium">Open source.</span> Code is on GitHub, MIT licensed. You can self-host or audit it.</li>
+      </ul>
+
       <h2 class="heading-card text-[22px] mt-12 mb-4">Tech stack</h2>
       <ul class="text-[15px] text-[var(--color-fg-secondary)] leading-[1.7] mb-12 list-disc pl-5 space-y-2">
         <li>Astro 6 + Tailwind v4 — static site, minimal JS, zero runtime overhead</li>
         <li>Geist + Geist Mono via Google Fonts</li>
         <li>The native <code class="font-mono text-[14px] text-[var(--color-fg)]">window.EyeDropper</code> API — no canvas hacks, no library</li>
+        <li>The <code class="font-mono text-[14px] text-[var(--color-fg)]">getDisplayMedia</code> API for screenshot fallback in Firefox/Safari</li>
         <li>localStorage for palette history — never leaves your device</li>
         <li>Custom sRGB → OKLab → OKLCH math (no color-conversion library needed)</li>
         <li>Deployed on Cloudflare Pages — free, fast, global CDN</li>
@@ -45,7 +69,7 @@ import { site } from "../site.config";
 
       <h2 class="heading-card text-[22px] mt-12 mb-4">Who's behind it</h2>
       <p class="text-[15px] text-[var(--color-fg-secondary)] leading-[1.7] mb-12">
-        Built by an indie developer who got tired of installing browser extensions for tiny utilities.
+        Built by <span class="text-[var(--color-fg)] font-medium">{site.author}</span>, an indie developer based in {site.jurisdiction} who got tired of installing browser extensions for tiny utilities.
         Part of a portfolio of <a href="https://worksoffline.in" target="_blank" rel="noopener" class="prose-link">worksoffline.in</a> tools — software that runs entirely on your device, with no server, no signup, no data leaving your machine.
       </p>
 
@@ -57,10 +81,9 @@ import { site } from "../site.config";
       </p>
 
       <p class="text-[15px] text-[var(--color-fg-secondary)] leading-[1.7]">
-        Found a bug or want a feature? File an issue on
-        {site.github
-          ? <a href={site.github} target="_blank" rel="noopener" class="prose-link">GitHub</a>
-          : <span>GitHub (link coming soon)</span>}.
+        Found a bug or want a feature?
+        {site.github && <>File an issue on <a href={site.github} target="_blank" rel="noopener" class="prose-link">GitHub</a> or </>}
+        email <a href={`mailto:${site.contactEmail}`} class="prose-link">{site.contactEmail}</a>.
       </p>
     </div>
   </section>

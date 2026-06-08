@@ -1,33 +1,35 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import ColorPicker from "../components/ColorPicker.astro";
-import { site } from "../site.config";
+import { site, b } from "../site.config";
 
-// FAQPage JSON-LD — inlined for SEO
+// =============================================================
+// Top 6 FAQs shown inline on home — full set lives on /faq
+// =============================================================
 const faqs = [
   {
-    q: "I clicked the eyedropper, but switching tabs cancels it. How do I pick from another tab?",
-    a: "Use the 'Pick from screenshot' button next to the live picker. It uses the getDisplayMedia API to capture a single frame from any window, tab, or screen you choose — then you can leisurely pick colors from that frozen frame with a built-in magnifier. The live EyeDropper API is locked to whatever's visible at click-time and cancels on focus loss; that's a browser limitation, not a ColorTrail one.",
-  },
-  {
     q: "What is the EyeDropper API?",
-    a: "The EyeDropper API is a browser-native feature (Chrome 95+, Edge 95+, Brave, Opera) that turns your cursor into a system-wide color picker. It can sample any pixel visible on your screen — including outside the browser, across multiple monitors. It requires zero permissions and works fully offline.",
+    a: "The EyeDropper API (window.EyeDropper) is a browser-native feature shipped in Chrome 95 (Oct 2021), Edge 95+, Brave, and Opera. It turns your cursor into a system-wide color picker that can sample any pixel visible on your screen — including outside the browser, across multiple monitors. Zero permissions, fully offline.",
   },
   {
     q: "Why doesn't the live picker work in Firefox or Safari?",
-    a: "Firefox and Safari haven't shipped the EyeDropper API yet. Mozilla's official position is that they don't plan to implement it; WebKit (Safari) hasn't signaled support either. For those browsers, use 'Pick from screenshot' instead — getDisplayMedia is universally supported (Chrome 72+, Firefox 66+, Safari 13+, Edge 79+).",
+    a: "Firefox publicly declined to implement EyeDropper (Mozilla position: 'negative'); WebKit (Safari) hasn't signaled support either. For those browsers, use 'Pick from screenshot' — it uses the universally-supported getDisplayMedia API (Chrome 72+, Firefox 66+, Safari 13+, Edge 79+).",
+  },
+  {
+    q: "The eyedropper cancels when I switch tabs. How do I pick from another tab?",
+    a: "Use the 'Pick from screenshot' button next to the live picker. It captures one frozen frame from any window, tab, or screen you choose — then you can leisurely pick colors from that frame with a built-in 10× magnifier. The live EyeDropper is locked to whatever's visible at click-time and cancels on focus loss; that's a browser security constraint, not a ColorTrail limitation.",
   },
   {
     q: "Is ColorTrail really free? What's the catch?",
-    a: "100% free, forever. No accounts, no signup, no ads, no upsells. Your colors never leave your device — everything runs locally in your browser. We don't collect, store, or transmit any color data you pick. There is no catch.",
+    a: "100% free, forever. No accounts, no signup, no ads, no upsells, no Pro tier. Your colors never leave your device — everything runs in your browser via native APIs. We don't collect, store, or transmit any color data. The project is open-source on GitHub.",
   },
   {
-    q: "Can ColorTrail see the colors I pick or screenshots I capture?",
-    a: "No. Both the EyeDropper API and getDisplayMedia API are fully client-side — colors and pixel data stay in JavaScript running in your browser, never sent over the network. Your palette history is stored in your browser's localStorage and never leaves your device. Captured screenshot frames are held in browser memory only and freed when you close the modal.",
+    q: "Is it safer than browser extensions like ColorZilla?",
+    a: "Yes. ColorTrail requires zero browser permissions and can't read any of your other tabs. Browser extensions like ColorZilla need 'read all data on the websites you visit' — a permission that could expose passwords, banking pages, anything. The browser-native EyeDropper API is sandboxed: it only returns the sampled pixel color, nothing else.",
   },
   {
-    q: "What is OKLCH and why should I care?",
-    a: "OKLCH is a perceptually uniform color space introduced in 2020 by Björn Ottosson. CSS Color Level 4 (2023+) supports it natively. It produces predictable color manipulations — lightening or darkening a color by the same amount perceptually looks like the same amount of change. Modern design systems (Tailwind v4, OpenProps) increasingly use OKLCH for color tokens. Most online color pickers don't expose OKLCH; we do.",
+    q: "What is OKLCH and why do you support it?",
+    a: "OKLCH is a perceptually uniform color space introduced in 2020 by Björn Ottosson. CSS Color Level 4 (2023+) supports it natively. Modern design systems like Tailwind v4 use it because lightening or darkening a color by the same amount perceptually looks like the same amount of change. Most online color pickers don't expose OKLCH; we do, alongside HEX / RGB / HSL.",
   },
 ];
 
@@ -37,30 +39,72 @@ const faqJsonLd = {
   mainEntity: faqs.map((f) => ({
     "@type": "Question",
     name: f.q,
-    acceptedAnswer: { "@type": "Answer", text: f.a },
+    acceptedAnswer: { "@type": "Answer", text: `<p>${f.a}</p>` },
   })),
 };
 
-const appJsonLd = {
+const webAppSchema = {
   "@context": "https://schema.org",
   "@type": "WebApplication",
+  "@id": `${site.url}/#webapp`,
   name: site.name,
   url: site.url,
-  description: site.tagline,
+  description: site.description,
   applicationCategory: "DesignApplication",
-  operatingSystem: "Web Browser (Chromium-based)",
+  applicationSubCategory: "ColorPicker",
+  operatingSystem: "Any (Chrome, Firefox, Safari, Edge, Opera, Brave)",
+  browserRequirements:
+    "EyeDropper API (Chrome 95+, Edge 95+, Brave, Opera) for live picking; getDisplayMedia (universal) for screenshot mode.",
   offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
-  browserRequirements: "Requires the EyeDropper API (Chrome 95+, Edge 95+, Brave, Opera).",
+  featureList: [
+    "Pick colors from anywhere on screen via EyeDropper API",
+    "Screenshot mode for picking from another tab or window",
+    "HEX, RGB, HSL, and OKLCH output with one-click copy",
+    "10× magnifier loupe for pixel-perfect sampling",
+    "Local palette history (last 24 colors)",
+    "Light and dark theme",
+    "100% client-side, zero tracking, zero permissions",
+  ],
+  publisher: { "@id": `${site.url}/#organization` },
+};
+
+const howToSchema = {
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  name: `How to pick a color from your screen with ${site.name}`,
+  description:
+    "Step-by-step guide to picking a color from anywhere on your screen — inside or outside the browser — using ColorTrail's EyeDropper-powered picker.",
+  totalTime: "PT10S",
+  step: [
+    {
+      "@type": "HowToStep",
+      name: "Click the rainbow 'Pick a color' button",
+      text: "On colortrail.com, click the rainbow 'Pick a color' button (or press the keyboard shortcut P). Your cursor instantly becomes a precision eyedropper.",
+    },
+    {
+      "@type": "HowToStep",
+      name: "Hover over any pixel on your screen",
+      text: "Move your cursor anywhere visible — inside the browser, in your IDE, in Photoshop, in a PDF, on another monitor. A live preview magnifies the pixel under your cursor.",
+    },
+    {
+      "@type": "HowToStep",
+      name: "Click to capture",
+      text: "Click on the pixel you want. The color appears instantly with four format outputs: HEX, RGB, HSL, and OKLCH.",
+    },
+    {
+      "@type": "HowToStep",
+      name: "Copy in your preferred format",
+      text: "Click 'Copy' next to any format to copy that value to your clipboard. The picked color is also automatically saved to your recent palette for one-click recall.",
+    },
+  ],
 };
 ---
 
 <Layout
   title="Free screen color picker — pick from anywhere, even outside your browser"
-  description="Pick any color from anywhere on your screen — your IDE, Photoshop, a YouTube video, a PDF, even another monitor. Free, in-browser, zero install. Built on the EyeDropper API."
+  description={site.description}
+  jsonLd={[webAppSchema, howToSchema, faqJsonLd]}
 >
-  <script is:inline type="application/ld+json" set:html={JSON.stringify(appJsonLd)} />
-  <script is:inline type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
-
   {/* ===== HERO ===== */}
   <section class="relative px-4 sm:px-6 pt-12 sm:pt-20 pb-6 overflow-hidden">
     <div class="mx-auto max-w-4xl text-center relative">
@@ -116,21 +160,214 @@ const appJsonLd = {
   </section>
 
   {/* ===== LIVE PICKER ===== */}
-  <section class="px-4 sm:px-6 pt-10 pb-20">
+  <section class="px-4 sm:px-6 pt-10 pb-16">
     <div class="mx-auto max-w-4xl">
       <ColorPicker />
     </div>
   </section>
 
+  {/* ===== HOW TO USE — user-requested educational section directly below tool ===== */}
+  <section id="how-to-use" class="px-4 sm:px-6 py-16 sm:py-20" style="box-shadow: inset 0 1px 0 var(--color-border);">
+    <div class="mx-auto max-w-5xl">
+      <div class="text-center mb-12">
+        <p class="eyebrow mb-3">How to use</p>
+        <h2 class="heading-section text-[30px] sm:text-[38px] text-[var(--color-fg)] text-balance">
+          Pick a color in 4 seconds.
+        </h2>
+        <p class="mt-4 text-[16px] sm:text-[17px] text-[var(--color-fg-secondary)] max-w-2xl mx-auto leading-relaxed">
+          Zero learning curve. The button does the work — here's exactly what happens.
+        </p>
+      </div>
+
+      <ol class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        {[
+          {
+            num: "01",
+            title: "Click 'Pick a color'",
+            body: "Tap the rainbow CTA at the top of the page, or press the keyboard shortcut P from anywhere.",
+            kbd: "P",
+          },
+          {
+            num: "02",
+            title: "Cursor becomes an eyedropper",
+            body: "Your browser hands control to the system. A magnified preview follows your cursor.",
+          },
+          {
+            num: "03",
+            title: "Click any pixel anywhere",
+            body: "Inside the browser. Outside the browser. Another monitor. Anywhere a pixel exists.",
+          },
+          {
+            num: "04",
+            title: "Copy in HEX / RGB / HSL / OKLCH",
+            body: "Color appears with one-click copy for every format. Auto-saved to your recent palette.",
+          },
+        ].map((step) => (
+          <li
+            class="rounded-md p-5"
+            style="background-color: var(--color-bg); box-shadow: var(--shadow-card); list-style: none;"
+          >
+            <div class="flex items-baseline justify-between mb-3">
+              <span class="font-mono text-[12px] font-medium uppercase tracking-wider text-[var(--color-fg-subtle)]">{step.num}</span>
+              {step.kbd && (
+                <kbd class="px-1.5 py-0.5 rounded font-mono text-[11px] text-[var(--color-fg)]" style="background-color: var(--color-surface); box-shadow: var(--shadow-ring);">
+                  {step.kbd}
+                </kbd>
+              )}
+            </div>
+            <h3 class="text-[16px] font-semibold text-[var(--color-fg)] mb-2" style="letter-spacing: -0.015em;">{step.title}</h3>
+            <p class="text-[14px] text-[var(--color-fg-secondary)] leading-relaxed">{step.body}</p>
+          </li>
+        ))}
+      </ol>
+
+      <p class="mt-8 text-center text-[14px] text-[var(--color-fg-secondary)]">
+        Need more detail or have a different browser?
+        <a href={b("/install")} class="text-[var(--color-accent)] underline underline-offset-2 hover:text-[var(--color-accent-hover)]">Read the full install guide →</a>
+      </p>
+    </div>
+  </section>
+
+  {/* ===== WHAT IS THE EYEDROPPER API — user-requested educational section ===== */}
+  <section id="what-is-eyedropper-api" class="px-4 sm:px-6 py-16 sm:py-20" style="background-color: var(--color-bg-elevated); box-shadow: inset 0 1px 0 var(--color-border), inset 0 -1px 0 var(--color-border);">
+    <div class="mx-auto max-w-3xl">
+      <div class="text-center mb-10">
+        <p class="eyebrow mb-3">Under the hood</p>
+        <h2 class="heading-section text-[30px] sm:text-[38px] text-[var(--color-fg)] text-balance">
+          What is <code class="font-mono text-[var(--color-fg)]" style="background-color: var(--color-bg); padding: 2px 10px; border-radius: 6px; box-shadow: var(--shadow-ring); letter-spacing: -0.01em;">window.EyeDropper</code>?
+        </h2>
+      </div>
+
+      <div class="grid gap-5 text-[15.5px] leading-[1.7] text-[var(--color-fg-secondary)]">
+        <p>
+          The <strong class="text-[var(--color-fg)]">EyeDropper API</strong> is a small but powerful
+          browser feature that turns your cursor into a precision color picker
+          across your <strong class="text-[var(--color-fg)]">entire operating system</strong>, not just the
+          browser tab. It first shipped in Chrome 95 (October 2021) and is
+          part of the
+          <a href="https://wicg.github.io/eyedropper-api/" target="_blank" rel="noopener" class="text-[var(--color-accent)] underline underline-offset-2 hover:text-[var(--color-accent-hover)]">W3C WICG draft spec</a>.
+        </p>
+
+        <p>
+          Until 2021, picking a color from outside the browser required
+          installing a Chrome extension (with scary "read all websites"
+          permissions), a paid desktop app, or a clunky upload-an-image
+          workflow. The EyeDropper API made all of those obsolete in a few
+          lines of JavaScript:
+        </p>
+
+        <pre class="rounded-md p-4 text-[13px] overflow-x-auto" style="background-color: var(--color-bg); box-shadow: var(--shadow-ring);"><code class="font-mono text-[var(--color-fg)]">{`const dropper = new window.EyeDropper();
+const { sRGBHex } = await dropper.open();
+// → "#ff6347" — sampled from anywhere on your screen`}</code></pre>
+
+        <p>
+          That's it. No permissions prompt. No extension review. Just three
+          lines and your browser becomes a Photoshop-grade color picker.
+          ColorTrail adds the rest: HEX/RGB/HSL/OKLCH conversion, palette
+          history, copy-to-clipboard, a Screenshot-mode fallback for
+          Firefox/Safari, and a 10× magnifier loupe.
+        </p>
+
+        <p>
+          The browser sandbox handles security: the API only returns the
+          single pixel's sRGB color — never the surrounding context, never a
+          screenshot. It can't read your password manager, banking page,
+          or private messages. That's the structural advantage over
+          extensions like ColorZilla.
+        </p>
+
+        <p>
+          <strong class="text-[var(--color-fg)]">Why isn't it universal yet?</strong>
+          Mozilla (Firefox) publicly declined to implement, citing performance
+          concerns and the unusual "system-wide" surface. WebKit (Safari)
+          hasn't signaled support either. So until those land, ColorTrail's
+          Screenshot Picker — built on the older but universal
+          <code class="font-mono text-[14px] text-[var(--color-fg)]" style="background-color: var(--color-bg); padding: 1px 6px; border-radius: 4px;">getDisplayMedia</code> API — covers the gap.
+        </p>
+      </div>
+
+      <div class="mt-8 flex flex-wrap gap-3 items-center justify-center text-[13px]">
+        <a href={b("/blog/eyedropper-api-explained")} class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-md font-medium text-[var(--color-fg)]" style="background-color: var(--color-bg); box-shadow: var(--shadow-ring);">
+          Deep-dive: EyeDropper API explained
+          <span aria-hidden="true">→</span>
+        </a>
+        <a href={b("/oklch-color-picker")} class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-md font-medium text-[var(--color-fg)]" style="background-color: var(--color-bg); box-shadow: var(--shadow-ring);">
+          Why we output OKLCH
+          <span aria-hidden="true">→</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  {/* ===== BROWSER COMPATIBILITY — user-requested ===== */}
+  <section id="browser-compatibility" class="px-4 sm:px-6 py-16 sm:py-20">
+    <div class="mx-auto max-w-4xl">
+      <div class="text-center mb-10">
+        <p class="eyebrow mb-3">Browser support</p>
+        <h2 class="heading-section text-[30px] sm:text-[38px] text-[var(--color-fg)] text-balance">
+          Works in every modern browser.
+        </h2>
+        <p class="mt-4 text-[16px] text-[var(--color-fg-secondary)] max-w-2xl mx-auto leading-relaxed">
+          Chromium browsers get the instant magic. Firefox + Safari get the
+          Screenshot Picker fallback. Nobody gets left out.
+        </p>
+      </div>
+
+      <div
+        class="overflow-x-auto rounded-lg"
+        style="background-color: var(--color-bg); box-shadow: var(--shadow-card);"
+      >
+        <table class="w-full text-[14px] min-w-[600px]">
+          <thead>
+            <tr style="box-shadow: inset 0 -1px 0 var(--color-border);">
+              <th class="text-left py-3.5 px-5 eyebrow font-mono text-[11px]">Browser</th>
+              <th class="text-center py-3.5 px-5 eyebrow font-mono text-[11px]">Live picker</th>
+              <th class="text-center py-3.5 px-5 eyebrow font-mono text-[11px]">Screenshot picker</th>
+              <th class="text-left py-3.5 px-5 eyebrow font-mono text-[11px]">Notes</th>
+            </tr>
+          </thead>
+          <tbody class="text-[var(--color-fg)]">
+            {[
+              { b: "Chrome 95+",   live: "✓", shot: "✓", note: "Full system-wide picker, all features." },
+              { b: "Edge 95+",     live: "✓", shot: "✓", note: "Same Chromium engine — full support." },
+              { b: "Brave 1.32+",  live: "✓", shot: "✓", note: "Full support, EyeDropper enabled by default." },
+              { b: "Opera 81+",    live: "✓", shot: "✓", note: "Full support." },
+              { b: "Arc",          live: "✓", shot: "✓", note: "Chromium-based, full support." },
+              { b: "Vivaldi",      live: "✓", shot: "✓", note: "Chromium-based, full support." },
+              { b: "Firefox",      live: "✗", shot: "✓", note: "Mozilla declined EyeDropper. Use Screenshot mode." },
+              { b: "Safari",       live: "✗", shot: "✓", note: "WebKit hasn't shipped it. Use Screenshot mode." },
+              { b: "Mobile Chrome",live: "⚠️", shot: "✓", note: "Tab-only sampling. Use Screenshot mode for full reach." },
+              { b: "Mobile Safari",live: "✗", shot: "⚠️", note: "Limited capture sources on iOS. Best on desktop." },
+            ].map((row, idx, arr) => (
+              <tr style={`box-shadow: ${idx < arr.length - 1 ? 'inset 0 -1px 0 var(--color-border)' : 'none'};`}>
+                <td class="py-3 px-5 font-medium">{row.b}</td>
+                <td class={`py-3 px-5 text-center font-mono text-[15px] ${row.live === "✓" ? "text-[var(--color-success)]" : row.live === "✗" ? "text-[var(--color-error)]" : "text-[var(--color-warning)]"}`}>{row.live}</td>
+                <td class={`py-3 px-5 text-center font-mono text-[15px] ${row.shot === "✓" ? "text-[var(--color-success)]" : row.shot === "✗" ? "text-[var(--color-error)]" : "text-[var(--color-warning)]"}`}>{row.shot}</td>
+                <td class="py-3 px-5 text-[13.5px] text-[var(--color-fg-secondary)]">{row.note}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <p class="mt-6 text-center text-[13px] text-[var(--color-fg-subtle)]">
+        Real-time browser support data:
+        <a href="https://caniuse.com/?search=eyedropper" target="_blank" rel="noopener" class="text-[var(--color-accent)] underline underline-offset-2 hover:text-[var(--color-accent-hover)]">caniuse.com/eyedropper-api</a>
+        ·
+        <a href="https://caniuse.com/?search=getDisplayMedia" target="_blank" rel="noopener" class="text-[var(--color-accent)] underline underline-offset-2 hover:text-[var(--color-accent-hover)]">caniuse.com/getDisplayMedia</a>
+      </p>
+    </div>
+  </section>
+
   {/* ===== TWO MODES ===== */}
-  <section class="px-4 sm:px-6 py-20" style="box-shadow: inset 0 1px 0 var(--color-border);">
+  <section class="px-4 sm:px-6 py-16 sm:py-20" style="background-color: var(--color-bg-elevated); box-shadow: inset 0 1px 0 var(--color-border), inset 0 -1px 0 var(--color-border);">
     <div class="mx-auto max-w-5xl">
       <div class="text-center mb-14">
         <p class="eyebrow mb-3">Two ways to pick</p>
-        <h2 class="heading-section text-[32px] sm:text-[40px] text-[var(--color-fg)] text-balance">
+        <h2 class="heading-section text-[30px] sm:text-[38px] text-[var(--color-fg)] text-balance">
           One product, every browser.
         </h2>
-        <p class="mt-4 text-[16px] sm:text-[18px] text-[var(--color-fg-secondary)] max-w-2xl mx-auto leading-relaxed">
+        <p class="mt-4 text-[16px] sm:text-[17px] text-[var(--color-fg-secondary)] max-w-2xl mx-auto leading-relaxed">
           The live picker is instant magic. The screenshot picker is universal and lets you pick from any tab, window, or screen — without losing focus.
         </p>
       </div>
@@ -201,14 +438,14 @@ const appJsonLd = {
   </section>
 
   {/* ===== COMPARISON ===== */}
-  <section class="px-4 sm:px-6 py-20" style="background-color: var(--color-bg-elevated); box-shadow: inset 0 1px 0 var(--color-border), inset 0 -1px 0 var(--color-border);">
+  <section class="px-4 sm:px-6 py-16 sm:py-20">
     <div class="mx-auto max-w-5xl">
       <div class="text-center mb-14">
         <p class="eyebrow mb-3">Why {site.name}</p>
-        <h2 class="heading-section text-[32px] sm:text-[40px] text-[var(--color-fg)] text-balance">
+        <h2 class="heading-section text-[30px] sm:text-[38px] text-[var(--color-fg)] text-balance">
           Stop installing extensions.
         </h2>
-        <p class="mt-4 text-[16px] sm:text-[18px] text-[var(--color-fg-secondary)] max-w-xl mx-auto leading-relaxed">
+        <p class="mt-4 text-[16px] sm:text-[17px] text-[var(--color-fg-secondary)] max-w-xl mx-auto leading-relaxed">
           The empty intersection: free, cross-platform, zero-permission, screen-wide.
         </p>
       </div>
@@ -248,15 +485,20 @@ const appJsonLd = {
           </tbody>
         </table>
       </div>
+
+      <p class="mt-6 text-center text-[14px] text-[var(--color-fg-secondary)]">
+        Coming from ColorZilla?
+        <a href={b("/colorzilla-alternative")} class="text-[var(--color-accent)] underline underline-offset-2 hover:text-[var(--color-accent-hover)]">See the full ColorZilla alternative comparison →</a>
+      </p>
     </div>
   </section>
 
-  {/* ===== FAQ ===== */}
-  <section class="px-4 sm:px-6 py-20">
+  {/* ===== FAQ — Top 6 inline; full set on /faq ===== */}
+  <section id="faq" class="px-4 sm:px-6 py-16 sm:py-20" style="box-shadow: inset 0 1px 0 var(--color-border);">
     <div class="mx-auto max-w-3xl">
       <div class="text-center mb-12">
         <p class="eyebrow mb-3">FAQ</p>
-        <h2 class="heading-section text-[32px] sm:text-[40px] text-[var(--color-fg)] text-balance">
+        <h2 class="heading-section text-[30px] sm:text-[38px] text-[var(--color-fg)] text-balance">
           Common questions.
         </h2>
       </div>
@@ -276,6 +518,10 @@ const appJsonLd = {
           </details>
         ))}
       </div>
+      <p class="mt-8 text-center text-[14px] text-[var(--color-fg-secondary)]">
+        More questions?
+        <a href={b("/faq")} class="text-[var(--color-accent)] underline underline-offset-2 hover:text-[var(--color-accent-hover)]">See the full FAQ →</a>
+      </p>
     </div>
   </section>
 

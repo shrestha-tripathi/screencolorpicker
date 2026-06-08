@@ -1,0 +1,109 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { site } from "../site.config";
+
+const contactSchema = {
+  "@context": "https://schema.org",
+  "@type": "ContactPage",
+  "@id": `${site.url}/contact#contactpage`,
+  url: `${site.url}/contact`,
+  name: `Contact ${site.name}`,
+  description: `Get in touch with the ${site.name} team. Email, GitHub issues, and security disclosure channels.`,
+  inLanguage: site.locale,
+  isPartOf: { "@id": `${site.url}/#website` },
+  publisher: { "@id": `${site.url}/#organization` },
+  mainEntity: {
+    "@type": "Organization",
+    "@id": `${site.url}/#organization`,
+    contactPoint: [
+      {
+        "@type": "ContactPoint",
+        contactType: "customer support",
+        email: site.contactEmail,
+        availableLanguage: ["English"],
+      },
+    ],
+  },
+};
+---
+<Layout
+  title="Contact"
+  description={`Get in touch with ${site.name}. Email, GitHub issues, or security disclosure — pick whatever works for you.`}
+  jsonLd={[contactSchema]}
+>
+  <section class="px-4 sm:px-6 py-16 sm:py-24">
+    <div class="mx-auto max-w-2xl">
+      <p class="eyebrow mb-4">Contact</p>
+      <h1 class="heading-section text-[36px] sm:text-[44px] mb-6 text-balance">
+        Get in touch.
+      </h1>
+
+      <p class="text-[18px] text-[var(--color-fg-secondary)] leading-[1.7] mb-10">
+        Questions, bug reports, feature ideas, or just want to say hi? Pick a channel.
+        Typical response time is 2–3 business days.
+      </p>
+
+      <div class="grid gap-4">
+        {/* Email */}
+        <div class="rounded-md p-5" style="background-color: var(--color-bg); box-shadow: var(--shadow-ring);">
+          <div class="flex items-start gap-4">
+            <span class="inline-flex items-center justify-center w-10 h-10 rounded-md shrink-0" style="background-color: var(--color-surface);">
+              <svg viewBox="0 0 24 24" class="w-5 h-5 text-[var(--color-fg)]" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="2" y="4" width="20" height="16" rx="2"/>
+                <path d="m22 7-10 5L2 7"/>
+              </svg>
+            </span>
+            <div class="min-w-0 flex-1">
+              <h2 class="text-[16px] font-semibold text-[var(--color-fg)] mb-1" style="letter-spacing: -0.01em;">Email</h2>
+              <p class="text-[14px] text-[var(--color-fg-secondary)] mb-2">For general questions, feedback, partnerships, or anything else.</p>
+              <a href={`mailto:${site.contactEmail}`} class="font-mono text-[14px] text-[var(--color-accent)] underline underline-offset-2 hover:text-[var(--color-accent-hover)]">{site.contactEmail}</a>
+            </div>
+          </div>
+        </div>
+
+        {/* GitHub Issues */}
+        {site.github && (
+          <div class="rounded-md p-5" style="background-color: var(--color-bg); box-shadow: var(--shadow-ring);">
+            <div class="flex items-start gap-4">
+              <span class="inline-flex items-center justify-center w-10 h-10 rounded-md shrink-0" style="background-color: var(--color-surface);">
+                <svg viewBox="0 0 24 24" class="w-5 h-5 text-[var(--color-fg)]" fill="currentColor" aria-hidden="true">
+                  <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.305-5.467-1.334-5.467-5.93 0-1.31.467-2.38 1.235-3.22-.135-.303-.54-1.52.105-3.17 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.4 3-.405 1.02.005 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.65.24 2.867.12 3.17.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.62-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/>
+                </svg>
+              </span>
+              <div class="min-w-0 flex-1">
+                <h2 class="text-[16px] font-semibold text-[var(--color-fg)] mb-1" style="letter-spacing: -0.01em;">GitHub Issues</h2>
+                <p class="text-[14px] text-[var(--color-fg-secondary)] mb-2">Bug reports, feature requests, and contributions. Public + searchable.</p>
+                <a href={`${site.github}/issues`} target="_blank" rel="noopener" class="font-mono text-[14px] text-[var(--color-accent)] underline underline-offset-2 hover:text-[var(--color-accent-hover)]">File an issue →</a>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Security */}
+        <div class="rounded-md p-5" style="background-color: var(--color-bg); box-shadow: var(--shadow-ring);">
+          <div class="flex items-start gap-4">
+            <span class="inline-flex items-center justify-center w-10 h-10 rounded-md shrink-0" style="background-color: var(--color-surface);">
+              <svg viewBox="0 0 24 24" class="w-5 h-5 text-[var(--color-fg)]" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/>
+              </svg>
+            </span>
+            <div class="min-w-0 flex-1">
+              <h2 class="text-[16px] font-semibold text-[var(--color-fg)] mb-1" style="letter-spacing: -0.01em;">Security disclosures</h2>
+              <p class="text-[14px] text-[var(--color-fg-secondary)] mb-2">Found a security issue? Please email us — don't open a public issue.</p>
+              <a href={`mailto:${site.contactEmail}?subject=%5BSecurity%5D`} class="font-mono text-[14px] text-[var(--color-accent)] underline underline-offset-2 hover:text-[var(--color-accent-hover)]">{site.contactEmail}</a>
+              <p class="text-[12px] text-[var(--color-fg-subtle)] mt-1">Use subject prefix <code class="font-mono text-[12px] text-[var(--color-fg)]">[Security]</code></p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h2 class="heading-card text-[20px] mt-16 mb-4">No support contracts</h2>
+      <p class="text-[14px] text-[var(--color-fg-secondary)] leading-[1.7]">
+        {site.name} is a free, open-source side project. We do our best to
+        respond within a few business days, but we make no guarantees. If
+        you need commercial support or an SLA, this isn't the right tool —
+        and that's fine, we'll point you somewhere that is.
+      </p>
+    </div>
+  </section>
+</Layout>

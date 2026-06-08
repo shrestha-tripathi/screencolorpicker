@@ -1,0 +1,122 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { site, b } from "../site.config";
+
+const termsSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "@id": `${site.url}/terms#webpage`,
+  url: `${site.url}/terms`,
+  name: `Terms of Use — ${site.name}`,
+  description: `${site.name} terms of use, governing law, and acceptable-use policy.`,
+  inLanguage: site.locale,
+  isPartOf: { "@id": `${site.url}/#website` },
+  publisher: { "@id": `${site.url}/#organization` },
+};
+
+const lastUpdated = "2026-06-08";
+const effectiveDate = "2026-06-08";
+---
+<Layout
+  title="Terms of Use"
+  description={`${site.name} terms of use — acceptable use, license, disclaimers, governing law.`}
+  jsonLd={[termsSchema]}
+>
+  <section class="px-4 sm:px-6 py-16 sm:py-24">
+    <div class="mx-auto max-w-2xl">
+      <p class="eyebrow mb-4">Legal</p>
+      <h1 class="heading-section text-[36px] sm:text-[44px] mb-3 text-balance">Terms of Use</h1>
+      <p class="text-[13px] font-mono uppercase tracking-wider text-[var(--color-fg-subtle)] mb-8">
+        Last updated: {lastUpdated} · Effective: {effectiveDate}
+      </p>
+
+      <p class="text-[18px] text-[var(--color-fg-secondary)] leading-[1.7] mb-10">
+        By using {site.name} (the "Service"), you agree to these terms. If you
+        do not agree, please don't use the Service.
+      </p>
+
+      <h2 class="heading-card text-[22px] mt-12 mb-4">1. The service</h2>
+      <p class="text-[15px] text-[var(--color-fg-secondary)] leading-[1.7] mb-6">
+        {site.name} is a free, browser-based color picker that uses the
+        <code class="font-mono text-[14px] text-[var(--color-fg)]">window.EyeDropper</code> and
+        <code class="font-mono text-[14px] text-[var(--color-fg)]">getDisplayMedia</code> browser APIs
+        to sample colors from your screen. It runs entirely in your browser.
+        No data is sent to our servers.
+      </p>
+
+      <h2 class="heading-card text-[22px] mt-12 mb-4">2. Acceptable use</h2>
+      <p class="text-[15px] text-[var(--color-fg-secondary)] leading-[1.7] mb-3">You agree to use the Service only for lawful purposes. You will not:</p>
+      <ul class="text-[15px] text-[var(--color-fg-secondary)] leading-[1.7] mb-6 list-disc pl-5 space-y-2">
+        <li>Use the Service to capture, record, or sample content you do not have permission to view (e.g. someone else's private screen).</li>
+        <li>Attempt to disrupt, overload, or compromise the Service's infrastructure.</li>
+        <li>Reverse-engineer the Service for malicious purposes (general security research and code audits are explicitly welcome).</li>
+        <li>Resell the Service as your own product.</li>
+        <li>Use the Service in any manner that violates applicable laws or third-party rights.</li>
+      </ul>
+
+      <h2 class="heading-card text-[22px] mt-12 mb-4">3. License</h2>
+      <p class="text-[15px] text-[var(--color-fg-secondary)] leading-[1.7] mb-6">
+        The Service is provided to you as a non-exclusive, revocable license
+        to access and use it for personal or commercial color-picking
+        purposes. The {site.name} source code is open-source under the MIT
+        license{site.github && <>, available on <a href={site.github} target="_blank" rel="noopener" class="prose-link">GitHub</a></>}.
+        You are free to self-host, fork, modify, or redistribute under the
+        terms of that license.
+      </p>
+
+      <h2 class="heading-card text-[22px] mt-12 mb-4">4. Intellectual property</h2>
+      <p class="text-[15px] text-[var(--color-fg-secondary)] leading-[1.7] mb-6">
+        The {site.name} name, logo, and brand assets are © {new Date().getFullYear()} {site.author}. Source code is MIT-licensed. Colors you pick using the
+        Service belong to you (or to whoever originally created them) —
+        we make no claim over your output.
+      </p>
+
+      <h2 class="heading-card text-[22px] mt-12 mb-4">5. Disclaimers</h2>
+      <p class="text-[15px] text-[var(--color-fg-secondary)] leading-[1.7] mb-6">
+        THE SERVICE IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND, EXPRESS
+        OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+        MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND
+        NON-INFRINGEMENT. We do not warrant that the Service will be
+        uninterrupted, secure, or error-free. Color values are provided as a
+        best-effort sample; sampling accuracy depends on your monitor's
+        color profile, browser implementation, and the source content.
+      </p>
+
+      <h2 class="heading-card text-[22px] mt-12 mb-4">6. Limitation of liability</h2>
+      <p class="text-[15px] text-[var(--color-fg-secondary)] leading-[1.7] mb-6">
+        TO THE MAXIMUM EXTENT PERMITTED BY LAW, IN NO EVENT SHALL {site.author.toUpperCase()},
+        THE {site.name.toUpperCase()} PROJECT, OR ITS CONTRIBUTORS BE LIABLE FOR ANY
+        DIRECT, INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE
+        DAMAGES ARISING FROM YOUR USE OF (OR INABILITY TO USE) THE SERVICE.
+        Total aggregate liability is limited to $0 — the Service is free.
+      </p>
+
+      <h2 class="heading-card text-[22px] mt-12 mb-4">7. Indemnification</h2>
+      <p class="text-[15px] text-[var(--color-fg-secondary)] leading-[1.7] mb-6">
+        You agree to indemnify and hold harmless {site.author}, the
+        {" "}{site.name} project, and its contributors from any claims arising
+        from your misuse of the Service or violation of these terms.
+      </p>
+
+      <h2 class="heading-card text-[22px] mt-12 mb-4">8. Governing law</h2>
+      <p class="text-[15px] text-[var(--color-fg-secondary)] leading-[1.7] mb-6">
+        These terms are governed by the laws of {site.jurisdiction}, without
+        regard to conflict-of-law principles. Any disputes shall be resolved
+        in the courts of {site.jurisdiction}.
+      </p>
+
+      <h2 class="heading-card text-[22px] mt-12 mb-4">9. Changes to these terms</h2>
+      <p class="text-[15px] text-[var(--color-fg-secondary)] leading-[1.7] mb-6">
+        We may update these terms as the Service evolves. Material changes
+        will be reflected in the "Last updated" date. Continued use after
+        changes constitutes acceptance.
+      </p>
+
+      <h2 class="heading-card text-[22px] mt-12 mb-4">10. Contact</h2>
+      <p class="text-[15px] text-[var(--color-fg-secondary)] leading-[1.7]">
+        Questions about these terms? Email <a href={`mailto:${site.contactEmail}`} class="prose-link">{site.contactEmail}</a>
+        or visit the <a href={b("/contact")} class="prose-link">contact page</a>.
+      </p>
+    </div>
+  </section>
+</Layout>
