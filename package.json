@@ -12,6 +12,8 @@
     "build": "astro build",
     "preview": "astro preview",
     "gen:icons": "node scripts/gen-icons.mjs",
+    "gen:og": "node scripts/gen-og-image.mjs",
+    "gen:assets": "npm run gen:icons && npm run gen:og",
     "astro": "astro"
   },
   "dependencies": {

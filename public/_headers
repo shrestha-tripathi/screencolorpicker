@@ -76,6 +76,12 @@ https://*.colortrail.pages.dev/*
 /icon-512.png
   Cache-Control: public, max-age=2592000
 
+# OG image — cache 7 days (short enough to refresh on rebrand,
+# long enough to be useful for repeat unfurl requests)
+/og-image.png
+  Cache-Control: public, max-age=604800
+  Content-Type: image/png
+
 # Manifest — short cache
 /manifest.webmanifest
   Cache-Control: public, max-age=3600
