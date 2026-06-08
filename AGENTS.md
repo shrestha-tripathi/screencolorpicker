@@ -4,7 +4,7 @@ Read this BEFORE making any change to this repo.
 
 ## Project mission
 
-ColorTrail is a one-tap screen color picker that runs entirely in the
+Screen Color Picker is a one-tap screen color picker that runs entirely in the
 browser, via the `window.EyeDropper` API. Zero install, zero permissions,
 zero tracking. The product IS the moat — the moment we add a server, a
 login, a tracking pixel, or a "Pro tier" we've lost the differentiator.
@@ -19,7 +19,7 @@ login, a tracking pixel, or a "Pro tier" we've lost the differentiator.
 
 1. **Brand strings:** ONLY in `src/site.config.ts`. Search before adding new copy:
    ```bash
-   grep -rn "ColorTrail" src/ | grep -v site.config.ts
+   grep -rn "Screen Color Picker" src/ | grep -v site.config.ts
    ```
    Empty = clean. Any hit = inline brand string that won't survive a rename.
 
@@ -39,7 +39,7 @@ login, a tracking pixel, or a "Pro tier" we've lost the differentiator.
 
 7. **`grep` test before claiming a rebrand is done:**
    ```bash
-   grep -rln "ColorTrail" src/ public/ astro.config.* package.json 2>/dev/null \
+   grep -rln "Screen Color Picker" src/ public/ astro.config.* package.json 2>/dev/null \
      | grep -v site.config.ts
    ```
 

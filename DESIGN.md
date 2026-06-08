@@ -1,6 +1,6 @@
-# ColorTrail — Design System (Vercel-inspired)
+# Screen Color Picker — Design System (Vercel-inspired)
 
-**Working brand:** ColorTrail. All brand strings live in `src/site.config.ts`
+**Working brand:** Screen Color Picker. All brand strings live in `src/site.config.ts`
 (env-driven via `PUBLIC_SITE_*`). Never hardcode the brand name anywhere
 in `src/`.
 
@@ -186,7 +186,7 @@ const contrast = (fg, bg) => (Math.max(lum(fg), lum(bg)) + 0.05) /
 
 ## Anti-patterns
 
-- ❌ Hardcoding the brand name "ColorTrail" anywhere outside `site.config.ts`
+- ❌ Hardcoding the brand name "Screen Color Picker" anywhere outside `site.config.ts`
 - ❌ Creating `tailwind.config.js` (v4 ignores it; use `@theme`)
 - ❌ Using `border-*` Tailwind utilities for cards / sections (use `--shadow-ring`)
 - ❌ `font-bold` (700) on body text — max weight is `font-semibold` (600)

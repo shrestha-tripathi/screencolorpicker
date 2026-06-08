@@ -1,6 +1,6 @@
-# ColorTrail — SPEC v0.1
+# Screen Color Picker — SPEC v0.1
 
-**Working name:** ColorTrail. Final domain TBD (working candidates: `hextrail.com`,
+**Working name:** Screen Color Picker. Final domain TBD (working candidates: `hextrail.com`,
 `huetrail.com`, `huegrab.com`, `swatchpicker.com`, `huesteal.com`). Scaffold is
 brand-rename-safe via env-driven `site.config.ts`.
 
@@ -35,7 +35,7 @@ in-browser, zero install, zero permissions.
 ## 2. The Core Flow (v0.1)
 
 ```
-User lands on colortrail.com
+User lands on screencolorpicker.com
   ↓
 Big "🎯 Pick a color" button (centered, instant value visible)
   ↓
@@ -135,7 +135,7 @@ Same stack as p2pdatesharing for muscle memory:
 ## 7. Project Structure (Day 1)
 
 ```
-~/projects/colortrail/
+~/projects/screencolorpicker/
 ├── astro.config.mjs
 ├── package.json
 ├── tsconfig.json
@@ -269,8 +269,8 @@ Settings to use:
 - **Node version:** 22
 - **Environment vars to set (initial):**
   - `PUBLIC_BASE_PATH=/`
-  - `PUBLIC_SITE_URL=https://colortrail.pages.dev` (until domain bought)
-  - `PUBLIC_SITE_DOMAIN=colortrail.pages.dev`
+  - `PUBLIC_SITE_URL=https://screencolorpicker.pages.dev` (until domain bought)
+  - `PUBLIC_SITE_DOMAIN=screencolorpicker.pages.dev`
   - Note: `site.config.ts` has `.pages.dev` rejection guard — these stale vars
     won't poison output once a real domain is set (lesson from p2pds pitfall #40).
 

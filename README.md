@@ -1,4 +1,4 @@
-# ColorTrail
+# Screen Color Picker
 
 > Pick any color from your screen. Free, in-browser, zero install, zero permissions.
 
@@ -6,13 +6,13 @@ A clean polished UI on top of the browser-native [`EyeDropper API`](https://deve
 Outputs HEX / RGB / HSL / OKLCH with click-to-copy and a local palette history.
 
 **Live:** TBD (Cloudflare Pages — coming soon)
-**Working brand:** ColorTrail (rename-safe via env-driven config)
+**Working brand:** Screen Color Picker (rename-safe via env-driven config)
 
 ## Quick start
 
 ```bash
-git clone https://github.com/shrestha-tripathi/colortrail.git
-cd colortrail
+git clone https://github.com/shrestha-tripathi/screencolorpicker.git
+cd screencolorpicker
 npm install
 cp .env.example .env       # optional — override brand strings locally
 npm run dev                # http://localhost:4321
@@ -38,7 +38,7 @@ The EyeDropper API is shipped only by Chromium-based browsers as of mid-2026:
 | Safari | ❌ (no WebKit signal) |
 | Mobile Chromium | ⚠️ Tab-only sampling, not system-wide |
 
-For unsupported browsers, ColorTrail shows a friendly banner suggesting Chrome/Edge.
+For unsupported browsers, Screen Color Picker shows a friendly banner suggesting Chrome/Edge.
 
 ## Architecture
 
