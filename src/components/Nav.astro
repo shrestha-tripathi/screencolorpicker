@@ -19,18 +19,36 @@ import BrandIcon from "./BrandIcon.astro";
       <span>{site.name}</span>
     </a>
 
-    <nav class="flex items-center gap-1 sm:gap-2 text-[14px]">
+    <nav class="flex items-center gap-0.5 sm:gap-1 text-[14px]">
+      <a
+        href={b("/faq")}
+        class="hidden sm:inline-block px-3 py-1.5 rounded-md text-[var(--color-fg-secondary)] hover:text-[var(--color-fg)] font-medium transition-colors"
+      >
+        FAQ
+      </a>
+      <a
+        href={b("/install")}
+        class="hidden sm:inline-block px-3 py-1.5 rounded-md text-[var(--color-fg-secondary)] hover:text-[var(--color-fg)] font-medium transition-colors"
+      >
+        Install
+      </a>
+      <a
+        href={b("/blog")}
+        class="hidden sm:inline-block px-3 py-1.5 rounded-md text-[var(--color-fg-secondary)] hover:text-[var(--color-fg)] font-medium transition-colors"
+      >
+        Blog
+      </a>
       <a
         href={b("/about")}
-        class="hidden sm:inline-block px-3 py-1.5 rounded-md text-[var(--color-fg-secondary)] hover:text-[var(--color-fg)] font-medium transition-colors"
+        class="hidden md:inline-block px-3 py-1.5 rounded-md text-[var(--color-fg-secondary)] hover:text-[var(--color-fg)] font-medium transition-colors"
       >
         About
       </a>
       <a
-        href={b("/privacy")}
-        class="hidden sm:inline-block px-3 py-1.5 rounded-md text-[var(--color-fg-secondary)] hover:text-[var(--color-fg)] font-medium transition-colors"
+        href={b("/contact")}
+        class="hidden md:inline-block px-3 py-1.5 rounded-md text-[var(--color-fg-secondary)] hover:text-[var(--color-fg)] font-medium transition-colors"
       >
-        Privacy
+        Contact
       </a>
       {site.github && (
         <a

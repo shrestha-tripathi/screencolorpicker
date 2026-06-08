@@ -28,11 +28,20 @@ export const site = {
   tagline:
     env.PUBLIC_SITE_TAGLINE ??
     "Pick any color from your screen. Free, private, zero install.",
+  description:
+    env.PUBLIC_SITE_DESCRIPTION ??
+    "Pick any color from anywhere on your screen — your IDE, Photoshop, a YouTube video, a PDF, even another monitor. Free, in-browser, zero install. Built on the EyeDropper API.",
   domain: siteDomain,
   url: siteUrl.replace(/\/+$/, ""),
   basePath: (env.PUBLIC_BASE_PATH ?? "/").replace(/\/?$/, "/"),
-  github: env.PUBLIC_GITHUB_URL ?? "",
+  github: env.PUBLIC_GITHUB_URL ?? "https://github.com/shrestha-tripathi/colortrail",
   ga4Id: env.PUBLIC_GA4_ID ?? "",
+
+  // Author + contact (used by trust pages + JSON-LD)
+  author: env.PUBLIC_SITE_AUTHOR ?? "Shrestha Tripathi",
+  contactEmail: env.PUBLIC_SITE_CONTACT_EMAIL ?? "hello@colortrail.com",
+  jurisdiction: env.PUBLIC_SITE_JURISDICTION ?? "India",
+  locale: env.PUBLIC_SITE_LOCALE ?? "en",
 } as const;
 
 /**

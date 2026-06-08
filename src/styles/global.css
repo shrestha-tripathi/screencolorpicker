@@ -239,6 +239,11 @@ html[data-theme="dark"] { color-scheme: dark; }
     text-transform: uppercase;
     color: var(--color-muted);
   }
+
+  /* Pill shape — used by badges, chips. Tailwind v4 doesn't ship .rounded-pill by default. */
+  .rounded-pill {
+    border-radius: var(--radius-pill);
+  }
 }
 
 /* Toast animation */

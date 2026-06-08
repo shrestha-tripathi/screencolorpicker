@@ -1,4 +1,10 @@
+# ColorTrail — robots.txt
+# Site is fully indexable; ad/analytics scrapers welcome.
+
 User-agent: *
 Allow: /
+
+# Block common abuse — preview deploys send X-Robots-Tag noindex via _headers
+# instead, so we don't need per-URL blocks here.
 
 Sitemap: https://colortrail.com/sitemap.xml

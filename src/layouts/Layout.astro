@@ -10,6 +10,12 @@ interface Props {
   ogImage?: string;
   noindex?: boolean;
   canonicalPath?: string;
+  /**
+   * Optional per-page JSON-LD blocks. Each entry becomes its own
+   * <script type="application/ld+json">. Sitewide Organization + WebSite
+   * schemas are ALWAYS emitted first (so brand-stitching works everywhere).
+   */
+  jsonLd?: Record<string, unknown>[];
 }
 
 const {
@@ -18,15 +24,45 @@ const {
   ogImage = "/og-image.png",
   noindex = false,
   canonicalPath = Astro.url.pathname,
+  jsonLd = [],
 } = Astro.props;
 
 const fullTitle = title ? `${title} · ${site.name}` : `${site.name} — ${site.tagline}`;
 const canonical = absoluteUrl(canonicalPath);
 const ogUrl = absoluteUrl(ogImage);
+
+// =============================================================
+// Sitewide JSON-LD — emitted on EVERY page for brand stitching
+// =============================================================
+
+const orgSchema = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "@id": `${site.url}/#organization`,
+  name: site.name,
+  url: site.url,
+  logo: absoluteUrl("/favicon.svg"),
+  description: site.description,
+  founder: { "@type": "Person", name: site.author },
+  ...(site.github && { sameAs: [site.github] }),
+};
+
+const websiteSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "@id": `${site.url}/#website`,
+  url: site.url,
+  name: site.name,
+  description: site.description,
+  publisher: { "@id": `${site.url}/#organization` },
+  inLanguage: site.locale,
+};
+
+const allJsonLd = [orgSchema, websiteSchema, ...jsonLd];
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={site.locale}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -61,6 +97,15 @@ const ogUrl = absoluteUrl(ogImage);
     <meta name="twitter:title" content={fullTitle} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogUrl} />
+
+    {/* JSON-LD structured data — sitewide always, plus any per-page schemas */}
+    {allJsonLd.map((schema) => (
+      <script
+        is:inline
+        type="application/ld+json"
+        set:html={JSON.stringify(schema)}
+      />
+    ))}
 
     {/* FOUC-free theme bootstrap — runs synchronously BEFORE any CSS loads.
         Default is LIGHT (no data-theme attribute = light theme). */}

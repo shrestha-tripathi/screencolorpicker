@@ -5,27 +5,52 @@ const year = new Date().getFullYear();
 ---
 
 <footer class="mt-24" style="box-shadow: inset 0 1px 0 var(--color-border);">
-  <div class="mx-auto max-w-6xl px-4 sm:px-6 py-10 grid gap-8 sm:grid-cols-2 items-start">
-    <div>
+  <div class="mx-auto max-w-6xl px-4 sm:px-6 py-12 grid gap-10 sm:grid-cols-4">
+    {/* Brand block */}
+    <div class="sm:col-span-1">
       <div class="flex items-center gap-2 text-[15px] font-semibold text-[var(--color-fg)] mb-3" style="letter-spacing: -0.02em;">
         <BrandIcon size={18} />
         <span>{site.name}</span>
       </div>
-      <p class="text-[14px] text-[var(--color-fg-secondary)] leading-relaxed max-w-md">
-        100% free, no signup, no tracking — forever. Built in the browser.
-        Your colors never leave your device.
+      <p class="text-[13px] text-[var(--color-fg-secondary)] leading-relaxed max-w-xs">
+        100% free, no signup, no tracking. Your colors never leave your device.
       </p>
     </div>
 
-    <nav class="flex flex-wrap gap-x-6 gap-y-3 text-[14px] sm:justify-end">
-      <a href={b("/")} class="text-[var(--color-fg-secondary)] hover:text-[var(--color-fg)] transition-colors">Home</a>
-      <a href={b("/about")} class="text-[var(--color-fg-secondary)] hover:text-[var(--color-fg)] transition-colors">About</a>
-      <a href={b("/privacy")} class="text-[var(--color-fg-secondary)] hover:text-[var(--color-fg)] transition-colors">Privacy</a>
-      {site.github && (
-        <a href={site.github} target="_blank" rel="noopener" class="text-[var(--color-fg-secondary)] hover:text-[var(--color-fg)] transition-colors">
-          GitHub →
-        </a>
-      )}
+    {/* Product column */}
+    <nav aria-label="Product" class="sm:col-span-1">
+      <p class="eyebrow mb-4">Product</p>
+      <ul class="grid gap-2.5 text-[14px]">
+        <li><a href={b("/")} class="text-[var(--color-fg-secondary)] hover:text-[var(--color-fg)] transition-colors">Home</a></li>
+        <li><a href={b("/screen-color-picker")} class="text-[var(--color-fg-secondary)] hover:text-[var(--color-fg)] transition-colors">Screen color picker</a></li>
+        <li><a href={b("/oklch-color-picker")} class="text-[var(--color-fg-secondary)] hover:text-[var(--color-fg)] transition-colors">OKLCH color picker</a></li>
+        <li><a href={b("/colorzilla-alternative")} class="text-[var(--color-fg-secondary)] hover:text-[var(--color-fg)] transition-colors">ColorZilla alternative</a></li>
+        <li><a href={b("/install")} class="text-[var(--color-fg-secondary)] hover:text-[var(--color-fg)] transition-colors">Install</a></li>
+      </ul>
+    </nav>
+
+    {/* Company column */}
+    <nav aria-label="Company" class="sm:col-span-1">
+      <p class="eyebrow mb-4">Company</p>
+      <ul class="grid gap-2.5 text-[14px]">
+        <li><a href={b("/about")} class="text-[var(--color-fg-secondary)] hover:text-[var(--color-fg)] transition-colors">About</a></li>
+        <li><a href={b("/blog")} class="text-[var(--color-fg-secondary)] hover:text-[var(--color-fg)] transition-colors">Blog</a></li>
+        <li><a href={b("/faq")} class="text-[var(--color-fg-secondary)] hover:text-[var(--color-fg)] transition-colors">FAQ</a></li>
+        <li><a href={b("/contact")} class="text-[var(--color-fg-secondary)] hover:text-[var(--color-fg)] transition-colors">Contact</a></li>
+        {site.github && (
+          <li><a href={site.github} target="_blank" rel="noopener" class="text-[var(--color-fg-secondary)] hover:text-[var(--color-fg)] transition-colors">GitHub →</a></li>
+        )}
+      </ul>
+    </nav>
+
+    {/* Legal column */}
+    <nav aria-label="Legal" class="sm:col-span-1">
+      <p class="eyebrow mb-4">Legal</p>
+      <ul class="grid gap-2.5 text-[14px]">
+        <li><a href={b("/privacy-policy")} class="text-[var(--color-fg-secondary)] hover:text-[var(--color-fg)] transition-colors">Privacy Policy</a></li>
+        <li><a href={b("/privacy")} class="text-[var(--color-fg-secondary)] hover:text-[var(--color-fg)] transition-colors">Privacy by design</a></li>
+        <li><a href={b("/terms")} class="text-[var(--color-fg-secondary)] hover:text-[var(--color-fg)] transition-colors">Terms of Use</a></li>
+      </ul>
     </nav>
   </div>
   <div style="box-shadow: inset 0 1px 0 var(--color-border);">
