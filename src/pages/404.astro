@@ -1,0 +1,21 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { b, site } from "../site.config";
+---
+<Layout title="404 — Not found" noindex>
+  <section class="px-4 sm:px-6 py-20 sm:py-32">
+    <div class="mx-auto max-w-md text-center">
+      <p class="text-7xl font-bold text-[var(--color-accent)] mb-4">404</p>
+      <h1 class="text-2xl font-bold mb-3">That page doesn't exist.</h1>
+      <p class="text-[var(--color-muted)] mb-8">
+        But your colors do. Head back and start picking.
+      </p>
+      <a
+        href={b("/")}
+        class="inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-base font-semibold bg-[var(--color-accent)] text-[var(--color-accent-fg)] hover:bg-[var(--color-accent-hover)] transition-colors"
+      >
+        ← Back to {site.name}
+      </a>
+    </div>
+  </section>
+</Layout>

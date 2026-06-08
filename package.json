@@ -1,7 +1,9 @@
 {
-  "name": "tasty-telescope",
+  "name": "colortrail",
   "type": "module",
-  "version": "0.0.1",
+  "version": "0.1.0",
+  "description": "Pick any color from your screen. Free, in-browser, zero install, zero permissions.",
+  "private": true,
   "engines": {
     "node": ">=22.12.0"
   },
@@ -12,6 +14,13 @@
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^6.4.4"
+    "@tailwindcss/vite": "^4.3.0",
+    "astro": "^6.4.4",
+    "tailwindcss": "^4.3.0"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.9",
+    "@types/node": "^25.9.2",
+    "typescript": "^6.0.3"
   }
 }

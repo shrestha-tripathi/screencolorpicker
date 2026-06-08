@@ -1,0 +1,62 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { site } from "../site.config";
+---
+<Layout
+  title="Privacy"
+  description={`${site.name} privacy policy — we don't collect or transmit your colors. Everything runs locally.`}
+>
+  <section class="px-4 sm:px-6 py-12 sm:py-20">
+    <div class="mx-auto max-w-2xl">
+      <h1 class="text-4xl font-bold mb-6">Privacy</h1>
+
+      <p class="text-lg text-[var(--color-muted)] leading-relaxed mb-8">
+        <strong class="text-[var(--color-fg)]">Short version:</strong> {site.name} runs 100% in your browser.
+        We don't collect, store, or transmit the colors you pick. We never see them. They never leave your device.
+      </p>
+
+      <h2 class="text-xl font-bold mb-3">What we don't collect</h2>
+      <ul class="text-[var(--color-muted)] leading-relaxed mb-8 list-disc pl-5 space-y-1.5">
+        <li>The colors you pick — they're returned directly by the browser to JavaScript running on this page; the network never sees them.</li>
+        <li>Your palette history — stored exclusively in your browser's <code class="text-[var(--color-accent)]">localStorage</code>, which we have no way to read remotely.</li>
+        <li>Your IP address, beyond the standard webserver logs that every site keeps for 30 days for abuse prevention.</li>
+        <li>Any account info — there are no accounts. We don't even have a sign-up form.</li>
+      </ul>
+
+      <h2 class="text-xl font-bold mb-3">What we might collect (only if enabled)</h2>
+      <p class="text-[var(--color-muted)] leading-relaxed mb-3">
+        We may add anonymous analytics in the future to track aggregate page views (e.g. Cloudflare Web Analytics, which is cookieless and privacy-respecting).
+        If we do, we'll document it here and never use any provider that fingerprints visitors.
+      </p>
+      <p class="text-[var(--color-muted)] leading-relaxed mb-8">
+        Today, the only data anyone collects is whatever Cloudflare's CDN logs at the edge for the public-facing serving of the static page itself.
+      </p>
+
+      <h2 class="text-xl font-bold mb-3">Third-party services we use</h2>
+      <ul class="text-[var(--color-muted)] leading-relaxed mb-8 list-disc pl-5 space-y-1.5">
+        <li><strong class="text-[var(--color-fg)]">Cloudflare Pages</strong> — hosts the static HTML/CSS/JS. <a href="https://www.cloudflare.com/privacypolicy/" target="_blank" rel="noopener" class="text-[var(--color-accent)] hover:text-[var(--color-accent-hover)] underline">Their privacy policy</a>.</li>
+      </ul>
+      <p class="text-[var(--color-muted)] leading-relaxed mb-8">
+        That's it. No Google Fonts, no Analytics, no ad networks, no third-party scripts.
+      </p>
+
+      <h2 class="text-xl font-bold mb-3">Your local data</h2>
+      <p class="text-[var(--color-muted)] leading-relaxed mb-3">
+        Your palette history is saved in <code class="text-[var(--color-accent)]">localStorage</code> under the key <code class="text-[var(--color-accent)]">colortrail:palette:v1</code>.
+        To wipe it, click <em>"Clear all"</em> in the palette section, or clear site data via browser settings.
+      </p>
+      <p class="text-[var(--color-muted)] leading-relaxed mb-8">
+        Your theme preference (dark/light) is also in localStorage under <code class="text-[var(--color-accent)]">colortrail:theme</code>.
+      </p>
+
+      <h2 class="text-xl font-bold mb-3">Contact</h2>
+      <p class="text-[var(--color-muted)] leading-relaxed">
+        Questions? File a GitHub issue. Or just don't use the site — we won't be sad, because we have no way of knowing.
+      </p>
+
+      <p class="text-sm text-[var(--color-fg-subtle)] mt-12">
+        Last updated: {new Date().toISOString().slice(0, 10)}
+      </p>
+    </div>
+  </section>
+</Layout>

@@ -1,46 +1,74 @@
-# Astro Starter Kit: Basics
+# ColorTrail
 
-```sh
-npm create astro@latest -- --template basics
+> Pick any color from your screen. Free, in-browser, zero install, zero permissions.
+
+A clean polished UI on top of the browser-native [`EyeDropper API`](https://developer.mozilla.org/en-US/docs/Web/API/EyeDropper).
+Outputs HEX / RGB / HSL / OKLCH with click-to-copy and a local palette history.
+
+**Live:** TBD (Cloudflare Pages — coming soon)
+**Working brand:** ColorTrail (rename-safe via env-driven config)
+
+## Quick start
+
+```bash
+git clone https://github.com/shrestha-tripathi/colortrail.git
+cd colortrail
+npm install
+cp .env.example .env       # optional — override brand strings locally
+npm run dev                # http://localhost:4321
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## Scripts
 
-## 🚀 Project Structure
+| Command | Action |
+|---|---|
+| `npm run dev` | Start dev server with HMR |
+| `npm run build` | Production static build → `./dist/` |
+| `npm run preview` | Preview production build locally |
+| `npx astro check` | Type + diagnostics check |
 
-Inside of your Astro project, you'll see the following folders and files:
+## Browser support
 
-```text
-/
-├── public/
-│   └── favicon.svg
-├── src
-│   ├── assets
-│   │   └── astro.svg
-│   ├── components
-│   │   └── Welcome.astro
-│   ├── layouts
-│   │   └── Layout.astro
-│   └── pages
-│       └── index.astro
-└── package.json
+The EyeDropper API is shipped only by Chromium-based browsers as of mid-2026:
+
+| Browser | Support |
+|---|---|
+| Chrome 95+, Edge 95+, Brave, Opera 81+ | ✅ |
+| Firefox | ❌ ([Mozilla position: no](https://mozilla.github.io/standards-positions/)) |
+| Safari | ❌ (no WebKit signal) |
+| Mobile Chromium | ⚠️ Tab-only sampling, not system-wide |
+
+For unsupported browsers, ColorTrail shows a friendly banner suggesting Chrome/Edge.
+
+## Architecture
+
+- **Astro 6** static MPA (no React, no SSR)
+- **Tailwind CSS v4** via `@tailwindcss/vite` (no config file, `@theme` directive)
+- **TypeScript strict**
+- **Zero backend** — localStorage for palette persistence
+- **Cloudflare Pages** for hosting (auto-deploys on push to `main`)
+
+```
+src/
+├── site.config.ts           # env-driven brand strings (single source of truth)
+├── lib/
+│   ├── colorFormats.ts      # HEX/RGB/HSL/OKLCH conversion math
+│   ├── paletteStore.ts      # localStorage palette persistence
+│   └── browserSupport.ts    # EyeDropper API feature detection
+├── components/
+│   ├── Nav.astro
+│   ├── Footer.astro
+│   ├── ThemeToggle.astro
+│   └── ColorPicker.astro + ColorPicker.script.ts   # the main feature
+├── layouts/Layout.astro     # OG meta, canonical, theme bootstrap
+└── pages/                   # index, about, privacy, 404, sitemap.xml
 ```
 
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
+## Roadmap
 
-## 🧞 Commands
+See [`SPEC.md`](./SPEC.md) for the locked v0.1 scope and the v0.2+ backlog
+(Pantone matcher, WCAG contrast checker, palette export, etc.).
 
-All commands are run from the root of the project, from a terminal:
+## License
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+MIT. See [`LICENSE`](./LICENSE).

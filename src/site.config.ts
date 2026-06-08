@@ -1,0 +1,54 @@
+/**
+ * Single source of truth for all user-facing brand strings + URLs.
+ *
+ * NEVER hardcode the brand name or domain in any other file. Always import
+ * from this module — that way a rebrand is a single .env edit + this file.
+ *
+ * `.pages.dev` rejection guard included from day one — Cloudflare Pages users
+ * routinely set PUBLIC_SITE_URL to the *.pages.dev URL during pre-domain
+ * deploys, and that stale value poisons canonical/OG/sitemap forever. See
+ * p2pdatasharing pitfall #40.
+ */
+
+const env = import.meta.env;
+
+const DEFAULT_DOMAIN = "colortrail.com";
+const DEFAULT_URL = `https://${DEFAULT_DOMAIN}`;
+const TOXIC = /\.pages\.dev/i;
+
+const rawSiteUrl = env.PUBLIC_SITE_URL ?? DEFAULT_URL;
+const rawSiteDomain = env.PUBLIC_SITE_DOMAIN ?? DEFAULT_DOMAIN;
+
+const siteUrl = TOXIC.test(rawSiteUrl) ? DEFAULT_URL : rawSiteUrl;
+const siteDomain = TOXIC.test(rawSiteDomain) ? DEFAULT_DOMAIN : rawSiteDomain;
+
+export const site = {
+  name: env.PUBLIC_SITE_NAME ?? "ColorTrail",
+  shortName: env.PUBLIC_SITE_SHORT_NAME ?? "ColorTrail",
+  tagline:
+    env.PUBLIC_SITE_TAGLINE ??
+    "Pick any color from your screen. Free, private, zero install.",
+  domain: siteDomain,
+  url: siteUrl.replace(/\/+$/, ""),
+  basePath: (env.PUBLIC_BASE_PATH ?? "/").replace(/\/?$/, "/"),
+  github: env.PUBLIC_GITHUB_URL ?? "",
+  ga4Id: env.PUBLIC_GA4_ID ?? "",
+} as const;
+
+/**
+ * Build an absolute internal URL respecting `basePath`. Use everywhere instead
+ * of bare `/foo` so the same build works under `/` and `/subpath/`.
+ */
+export const b = (path: string): string => {
+  const cleanBase = site.basePath.replace(/\/+$/, "");
+  const cleanPath = path.startsWith("/") ? path : `/${path}`;
+  return `${cleanBase}${cleanPath}`;
+};
+
+/**
+ * Build an absolute URL (origin + path) for OG meta, canonical, sitemap.
+ */
+export const absoluteUrl = (path: string): string => {
+  const cleanPath = path.startsWith("/") ? path : `/${path}`;
+  return `${site.url}${cleanPath}`;
+};

@@ -1,0 +1,34 @@
+---
+import { site, b } from "../site.config";
+const year = new Date().getFullYear();
+---
+
+<footer class="border-t border-[var(--color-border)] mt-16">
+  <div class="mx-auto max-w-6xl px-4 sm:px-6 py-8 grid gap-6 sm:grid-cols-2 items-center">
+    <div class="text-sm text-[var(--color-muted)]">
+      <p>
+        <span class="font-semibold text-[var(--color-fg)]">{site.name}</span> —
+        100% free, no signup, no tracking. <span class="text-[var(--color-success)]">Forever.</span>
+      </p>
+      <p class="mt-1 text-xs">
+        Built in browser. Colors never leave your device.
+      </p>
+    </div>
+
+    <nav class="flex flex-wrap gap-x-5 gap-y-2 text-sm sm:justify-end">
+      <a href={b("/")} class="text-[var(--color-muted)] hover:text-[var(--color-fg)]">Home</a>
+      <a href={b("/about")} class="text-[var(--color-muted)] hover:text-[var(--color-fg)]">About</a>
+      <a href={b("/privacy")} class="text-[var(--color-muted)] hover:text-[var(--color-fg)]">Privacy</a>
+      {site.github && (
+        <a href={site.github} target="_blank" rel="noopener" class="text-[var(--color-muted)] hover:text-[var(--color-fg)]">
+          GitHub
+        </a>
+      )}
+    </nav>
+  </div>
+  <div class="border-t border-[var(--color-border)]">
+    <div class="mx-auto max-w-6xl px-4 sm:px-6 py-3 text-xs text-[var(--color-fg-subtle)] text-center">
+      © {year} {site.name}. Open-source love · 🇮🇳 Built with care.
+    </div>
+  </div>
+</footer>
