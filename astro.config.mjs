@@ -10,7 +10,11 @@ const BASE_PATH = process.env.PUBLIC_BASE_PATH || "/";
 export default defineConfig({
   site: SITE_URL,
   base: BASE_PATH,
-  trailingSlash: "ignore",
+  // "always" → built pages live at /foo/index.html and Astro.url.pathname
+  // carries the trailing slash, matching Cloudflare Pages' 308 /foo → /foo/
+  // behaviour. Keeps sitemap + canonical + internal links pointing straight
+  // at the 200 URL (no redirect hop, no "Alternate page with canonical" in GSC).
+  trailingSlash: "always",
   build: {
     inlineStylesheets: "auto",
   },

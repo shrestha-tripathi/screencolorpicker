@@ -61,19 +61,40 @@ export const site = {
 } as const;
 
 /**
+ * Normalize a path to ALWAYS end with a trailing slash (except a bare query/
+ * hash or a file with an extension like .xml / .png). This matches Cloudflare
+ * Pages' default behaviour (it 308-redirects /foo → /foo/) so our sitemap,
+ * canonical, and internal links all point straight at the URL that returns
+ * 200 — no redirect hop, no canonical mismatch. astro.config sets
+ * `trailingSlash: "always"` so the built output agrees.
+ */
+export const withTrailingSlash = (path: string): string => {
+  // Split off any query string or hash so we don't append a slash after them.
+  const [base, ...rest] = path.split(/(?=[?#])/);
+  const suffix = rest.join("");
+  if (base === "" || base === "/") return `/${suffix}`;
+  // Leave real files (last segment contains a dot) alone, e.g. /sitemap.xml.
+  const lastSeg = base.split("/").pop() ?? "";
+  if (lastSeg.includes(".")) return `${base}${suffix}`;
+  return base.endsWith("/") ? `${base}${suffix}` : `${base}/${suffix}`;
+};
+
+/**
  * Build an absolute internal URL respecting `basePath`. Use everywhere instead
  * of bare `/foo` so the same build works under `/` and `/subpath/`.
+ * Always emits a trailing slash to avoid the Cloudflare 308 redirect hop.
  */
 export const b = (path: string): string => {
   const cleanBase = site.basePath.replace(/\/+$/, "");
   const cleanPath = path.startsWith("/") ? path : `/${path}`;
-  return `${cleanBase}${cleanPath}`;
+  return withTrailingSlash(`${cleanBase}${cleanPath}`);
 };
 
 /**
  * Build an absolute URL (origin + path) for OG meta, canonical, sitemap.
+ * Always emits a trailing slash so submitted/canonical URLs return 200 directly.
  */
 export const absoluteUrl = (path: string): string => {
   const cleanPath = path.startsWith("/") ? path : `/${path}`;
-  return `${site.url}${cleanPath}`;
+  return `${site.url}${withTrailingSlash(cleanPath)}`;
 };

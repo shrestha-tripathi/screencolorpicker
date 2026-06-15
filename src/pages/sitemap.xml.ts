@@ -1,6 +1,6 @@
 import type { APIRoute } from "astro";
 import { getCollection } from "astro:content";
-import { site } from "../site.config";
+import { absoluteUrl } from "../site.config";
 
 // Auto-derived sitemap: all static pages + blog collection.
 // Edit STATIC_PAGES when you add a new static .astro page under src/pages/.
@@ -47,7 +47,7 @@ export const GET: APIRoute = async () => {
 ${all
   .map(
     (e) => `  <url>
-    <loc>${site.url}${e.path}</loc>
+    <loc>${absoluteUrl(e.path)}</loc>
     <lastmod>${e.lastmod ?? today}</lastmod>
     <changefreq>${e.changefreq}</changefreq>
     <priority>${e.priority.toFixed(1)}</priority>
