@@ -24,18 +24,23 @@ import { site } from "../site.config";
         <li>Any account info — there are no accounts. We don't even have a sign-up form.</li>
       </ul>
 
-      <h2 class="heading-card text-[20px] mb-4 mt-12">What we might collect (only if enabled)</h2>
+      <h2 class="heading-card text-[20px] mb-4 mt-12">What we do measure (aggregate only)</h2>
       <p class="text-[15px] text-[var(--color-fg-secondary)] leading-[1.7] mb-4">
-        We may add anonymous analytics in the future to track aggregate page views (e.g. Cloudflare Web Analytics, which is cookieless and privacy-respecting).
-        If we do, we'll document it here and never use any provider that fingerprints visitors.
+        To keep a free tool alive we use <span class="text-[var(--color-fg)] font-medium">Google Analytics 4</span> for anonymous, aggregate usage
+        (page views, approximate region, device type). It sets analytics cookies and never sees the colors you pick.
+        We may also show <span class="text-[var(--color-fg)] font-medium">Google AdSense</span> ads, which use advertising cookies.
+        Both are disclosed in full — including how to opt out — in our
+        <a href="/privacy-policy/" class="prose-link">Privacy Policy</a>.
       </p>
       <p class="text-[15px] text-[var(--color-fg-secondary)] leading-[1.7] mb-12">
-        Today, the only data anyone collects is whatever Cloudflare's CDN logs at the edge for the public-facing serving of the static page itself.
+        Beyond that, the only other data anyone collects is whatever Cloudflare's CDN logs at the edge to serve the static page itself.
       </p>
 
       <h2 class="heading-card text-[20px] mb-4 mt-12">Third-party services we use</h2>
       <ul class="text-[15px] text-[var(--color-fg-secondary)] leading-[1.7] mb-6 list-disc pl-5 space-y-2">
         <li><span class="text-[var(--color-fg)] font-medium">Cloudflare Pages</span> — hosts the static HTML/CSS/JS. <a href="https://www.cloudflare.com/privacypolicy/" target="_blank" rel="noopener" class="prose-link">Their privacy policy</a>.</li>
+        <li><span class="text-[var(--color-fg)] font-medium">Google Analytics 4</span> — anonymous aggregate usage measurement. <a href="https://policies.google.com/privacy" target="_blank" rel="noopener" class="prose-link">Google's privacy policy</a>.</li>
+        <li><span class="text-[var(--color-fg)] font-medium">Google AdSense</span> (if ads are shown) — contextual advertising. <a href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener" class="prose-link">How Google uses advertising data</a>.</li>
         <li><span class="text-[var(--color-fg)] font-medium">Google Fonts</span> — serves the Geist font family. <a href="https://policies.google.com/privacy" target="_blank" rel="noopener" class="prose-link">Google's privacy policy</a>. We may self-host fonts in a future release to remove this dependency.</li>
       </ul>
 
@@ -50,7 +55,8 @@ import { site } from "../site.config";
 
       <h2 class="heading-card text-[20px] mb-4 mt-12">Contact</h2>
       <p class="text-[15px] text-[var(--color-fg-secondary)] leading-[1.7]">
-        Questions? File a GitHub issue. Or just don't use the site — we won't be sad, because we have no way of knowing.
+        Questions about privacy? Email <a href={`mailto:${site.contactEmail}`} class="prose-link">{site.contactEmail}</a>,
+        or see the full <a href="/privacy-policy/" class="prose-link">Privacy Policy</a> for your GDPR/CCPA rights and opt-out links.
       </p>
 
       <p class="text-[12px] font-mono uppercase tracking-wider text-[var(--color-fg-subtle)] mt-16">
