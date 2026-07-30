@@ -1,0 +1,94 @@
+---
+/**
+ * Consent banner — Google Consent Mode v2 UI.
+ *
+ * Purely presentational shell + a small inline script. The consent *defaults*
+ * are set in Layout.astro's <head> BEFORE gtag.js loads (that's the legally
+ * load-bearing part). This banner only lets the visitor grant/deny and calls
+ * gtag('consent','update', ...) plus persists the choice to localStorage under
+ * `screencolorpicker:consent`.
+ *
+ * Shown only when no prior choice is stored. Zero dependencies. Respects the
+ * Vercel-monochrome design tokens + both themes. On non-prod / no-gaId builds
+ * the banner still renders but is harmless (no gtag present → update no-ops).
+ */
+import { b } from "../site.config";
+---
+<div
+  id="consent-banner"
+  hidden
+  role="dialog"
+  aria-live="polite"
+  aria-label="Cookie consent"
+  class="fixed inset-x-0 bottom-0 z-[60] px-4 pb-4 sm:px-6 sm:pb-6"
+>
+  <div
+    class="mx-auto max-w-3xl rounded-2xl bg-[var(--color-bg)] p-5 sm:p-6"
+    style="box-shadow: var(--shadow-card);"
+  >
+    <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <p class="text-[14px] leading-[1.6] text-[var(--color-fg-secondary)] sm:pr-4">
+        We use cookies for anonymous analytics and, if enabled, ads to keep this
+        tool free. The colors you pick never leave your device. See our
+        <a href={b("/privacy-policy")} class="prose-link">Privacy Policy</a>.
+      </p>
+      <div class="flex shrink-0 gap-2">
+        <button
+          type="button"
+          id="consent-deny"
+          class="rounded-pill px-4 py-2 text-[14px] font-medium text-[var(--color-fg-secondary)] transition-colors hover:text-[var(--color-fg)]"
+          style="box-shadow: var(--shadow-ring);"
+        >Decline</button>
+        <button
+          type="button"
+          id="consent-accept"
+          class="rounded-pill bg-[var(--color-fg)] px-4 py-2 text-[14px] font-medium text-[var(--color-bg)] transition-opacity hover:opacity-90"
+        >Accept</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script is:inline>
+  (function () {
+    var KEY = "screencolorpicker:consent";
+    var banner = document.getElementById("consent-banner");
+    if (!banner) return;
+
+    var stored;
+    try { stored = localStorage.getItem(KEY); } catch (e) { stored = null; }
+
+    // Only show the banner if the visitor hasn't decided yet.
+    if (stored !== "granted" && stored !== "denied") {
+      banner.hidden = false;
+    }
+
+    function decide(value) {
+      try { localStorage.setItem(KEY, value); } catch (e) {}
+      if (typeof window.gtag === "function") {
+        window.gtag("consent", "update", {
+          ad_storage: value,
+          ad_user_data: value,
+          ad_personalization: value,
+          analytics_storage: value,
+        });
+      }
+      banner.hidden = true;
+    }
+
+    var accept = document.getElementById("consent-accept");
+    var deny = document.getElementById("consent-deny");
+    if (accept) accept.addEventListener("click", function () { decide("granted"); });
+    if (deny) deny.addEventListener("click", function () { decide("denied"); });
+
+    // Allow re-opening from a footer "Cookie settings" link (href="#cookie-settings").
+    window.__openConsent = function () { banner.hidden = false; };
+    document.addEventListener("click", function (e) {
+      var t = e.target;
+      if (t && t.closest && t.closest('a[href="#cookie-settings"]')) {
+        e.preventDefault();
+        banner.hidden = false;
+      }
+    });
+  })();
+</script>

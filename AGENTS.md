@@ -32,8 +32,16 @@ login, a tracking pixel, or a "Pro tier" we've lost the differentiator.
 4. **Light + dark must both pass.** After any visual change, manually verify
    both themes via the toggle. ~50% of visitors get light by default via OS.
 
-5. **No accounts, no server, no tracking.** Anything that adds these breaks the
+5. **No accounts, no server.** Anything that adds these breaks the
    privacy/moat promise. Bring it to the user before opening a PR.
+   **Monetization exception (Jul 2026):** the tool is monetized via Google
+   Analytics 4 (`site.gaId`) + Google AdSense. The moat is now scoped to the
+   *product data* — the colors you pick and screenshot frames NEVER leave the
+   device. Aggregate analytics + ad cookies ARE used and are fully disclosed in
+   `/privacy-policy`. A Google-certified consent banner (Consent Mode v2,
+   `ConsentBanner.astro`) gates ad/analytics storage for EEA/UK visitors.
+   Keep policy copy accurate to what actually ships — never re-add
+   "no tracking / no analytics / cookieless" claims.
 
 6. **One feature = one commit.** Rollback-safe. No combined feat+refactor commits.
 

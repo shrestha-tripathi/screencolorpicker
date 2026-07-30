@@ -3,6 +3,7 @@ import "../styles/global.css";
 import { site, absoluteUrl } from "../site.config";
 import Nav from "../components/Nav.astro";
 import Footer from "../components/Footer.astro";
+import ConsentBanner from "../components/ConsentBanner.astro";
 
 interface Props {
   title?: string;
@@ -83,6 +84,37 @@ const allJsonLd = [orgSchema, websiteSchema, ...(breadcrumbSchema ? [breadcrumbS
     <meta name="generator" content={Astro.generator} />
 
     {/*
+      Google Consent Mode v2 — MUST run before gtag.js loads. Defaults ad +
+      analytics storage to "denied" for EEA/UK/CH regions (legal requirement
+      before personalized ads/analytics may store cookies); granted for the
+      rest of the world. If the visitor already made a choice (stored in
+      localStorage), we replay it immediately so their preference persists
+      across page loads. The visible <ConsentBanner /> lets anyone change it.
+    */}
+    {import.meta.env.PROD && site.gaId && (
+      <script is:inline>
+        {`window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        var EEA = ['AT','BE','BG','HR','CY','CZ','DK','EE','FI','FR','DE','GR','HU','IE','IT','LV','LT','LU','MT','NL','PL','PT','RO','SK','SI','ES','SE','IS','LI','NO','GB','CH'];
+        gtag('consent', 'default', {
+          ad_storage: 'granted', ad_user_data: 'granted', ad_personalization: 'granted', analytics_storage: 'granted'
+        });
+        gtag('consent', 'default', {
+          region: EEA,
+          ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied', analytics_storage: 'denied', wait_for_update: 500
+        });
+        try {
+          var c = localStorage.getItem('screencolorpicker:consent');
+          if (c === 'granted' || c === 'denied') {
+            gtag('consent', 'update', {
+              ad_storage: c, ad_user_data: c, ad_personalization: c, analytics_storage: c
+            });
+          }
+        } catch (e) {}`}
+      </script>
+    )}
+
+    {/*
       Google Analytics 4 — only injected in production builds with a configured
       measurement ID. Gating on import.meta.env.PROD keeps localhost dev traffic
       out of the analytics property. Empty site.gaId disables entirely (forks).
@@ -91,8 +123,6 @@ const allJsonLd = [orgSchema, websiteSchema, ...(breadcrumbSchema ? [breadcrumbS
       <>
         <script async src={`https://www.googletagmanager.com/gtag/js?id=${site.gaId}`}></script>
         <script is:inline define:vars={{ gaId: site.gaId }}>
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
           gtag('config', gaId);
         </script>
@@ -196,5 +226,6 @@ const allJsonLd = [orgSchema, websiteSchema, ...(breadcrumbSchema ? [breadcrumbS
       <slot />
     </main>
     <Footer />
+    <ConsentBanner />
   </body>
 </html>
