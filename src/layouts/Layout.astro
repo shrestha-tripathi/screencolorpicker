@@ -93,7 +93,7 @@ const allJsonLd = [orgSchema, websiteSchema, ...(breadcrumbSchema ? [breadcrumbS
     */}
     {import.meta.env.PROD && site.gaId && (
       <script is:inline>
-        {`window.dataLayer = window.dataLayer || [];
+        window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         var EEA = ['AT','BE','BG','HR','CY','CZ','DK','EE','FI','FR','DE','GR','HU','IE','IT','LV','LT','LU','MT','NL','PL','PT','RO','SK','SI','ES','SE','IS','LI','NO','GB','CH'];
         gtag('consent', 'default', {
@@ -110,7 +110,7 @@ const allJsonLd = [orgSchema, websiteSchema, ...(breadcrumbSchema ? [breadcrumbS
               ad_storage: c, ad_user_data: c, ad_personalization: c, analytics_storage: c
             });
           }
-        } catch (e) {}`}
+        } catch (e) {}
       </script>
     )}
 
