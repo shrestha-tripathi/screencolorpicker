@@ -129,6 +129,19 @@ const allJsonLd = [orgSchema, websiteSchema, ...(breadcrumbSchema ? [breadcrumbS
       </>
     )}
 
+    {/*
+      Google AdSense — publisher verification + ad serving. Gated on PROD so
+      the loader never fires on localhost dev. Consent Mode v2 (above) already
+      gates ad-cookie storage for EEA/UK/CH visitors.
+    */}
+    {import.meta.env.PROD && (
+      <script
+        async
+        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4489093375929447"
+        crossorigin="anonymous"
+      ></script>
+    )}
+
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
