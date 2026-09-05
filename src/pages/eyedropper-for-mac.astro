@@ -1,0 +1,100 @@
+---
+import KeywordPage from "../components/KeywordPage.astro";
+
+const sections = [
+  {
+    eyebrow: "macOS",
+    heading: "Your options for an eyedropper on Mac.",
+    body: [
+      `macOS is unusual in shipping a genuine colour picker in the box — but it's buried, and it's not always the right tool.`,
+      `<strong class="text-[var(--color-fg)]">Digital Color Meter.</strong> Already installed at <code class="font-mono text-[14px]">/Applications/Utilities/</code>, or just Spotlight it. It reads the pixel under your cursor continuously and shows RGB values live. It's precise, it supports averaging over a region, and it handles colour profiles natively. Two annoyances: it displays values but copying a hex code requires <code class="font-mono text-[14px]">⇧⌘C</code> and knowing to switch the display format first, and it has no palette history.`,
+      `<strong class="text-[var(--color-fg)]">The system colour panel.</strong> Any app that opens the standard macOS colour picker — Pages, Keynote, Sketch, most native apps — has a magnifying-glass eyedropper in the top left that samples system-wide. Convenient when you're already in such an app, useless otherwise.`,
+      `<strong class="text-[var(--color-fg)]">The browser.</strong> Every Chromium browser on macOS — Chrome, Edge, Brave, Arc, Opera, Vivaldi — ships a native eyedropper that reads any pixel on your screen. Open this page, click, sample from Figma, Preview, a paused video, or another app. No install, and unlike Digital Color Meter it gives you HEX, RGB, HSL and OKLCH at once with one-click copy and a persistent palette.`,
+    ],
+  },
+  {
+    eyebrow: "Permissions",
+    heading: "Screen Recording permission, and why the browser skips it.",
+    elevated: true,
+    body: [
+      `On macOS Catalina and later, any application that reads screen pixels must be granted <strong class="text-[var(--color-fg)]">Screen Recording</strong> permission in System Settings → Privacy & Security. That includes Digital Color Meter and every third-party colour utility.`,
+      `It's worth understanding how broad that permission is: it allows continuous capture of your entire display, indefinitely. For a first-party Apple utility that's fine. For a random freeware picker downloaded from a search result, it is a genuine risk — you're granting a program the ability to watch everything you do.`,
+      `The browser-based approach sidesteps this entirely, and not by cheating. The <code class="font-mono text-[14px]">EyeDropper</code> API hands control to the <strong class="text-[var(--color-fg)]">browser process</strong>, which already has whatever screen access it needs. The browser draws the magnifier, tracks your cursor, reads the pixel, and returns <em>one colour string</em> to the page — only after you deliberately click. The web page never sees your screen, your cursor position, or which application you sampled from. Press Escape and it receives nothing at all.`,
+      `That's why there's no permission prompt: a single user-selected pixel isn't enough data to protect. It's a good example of narrowing a capability until the permission becomes unnecessary.`,
+    ],
+  },
+  {
+    eyebrow: "Practicalities",
+    heading: "Mac-specific gotchas.",
+    body: [
+      `<strong class="text-[var(--color-fg)]">Display P3 and colour profiles.</strong> Every Mac made in the last several years has a P3 wide-gamut display. If content is tagged sRGB and shown on a P3 panel — or vice versa — macOS converts before painting, and you sample the converted result. For web work this is usually what you want, since browsers assume sRGB. For print or brand-critical work, prefer a declared value from the source file over a sampled one.`,
+      `<strong class="text-[var(--color-fg)]">Retina scaling.</strong> Retina displays render at 2× and downscale. Small elements get interpolated, so a 12px icon may have almost no authored pixels left. Zoom the source in before sampling anything small.`,
+      `<strong class="text-[var(--color-fg)]">Safari doesn't work.</strong> Safari has not implemented the EyeDropper API and Apple has not signalled intent to. On Safari, use Digital Color Meter or open a Chromium browser.`,
+      `<strong class="text-[var(--color-fg)]">Protected video.</strong> Some DRM players composite through a protected path and read back as pure black. If a bright frame samples as <code class="font-mono text-[14px]">#000000</code>, that's the cause — use a promotional still instead.`,
+      `<strong class="text-[var(--color-fg)]">Sampling from Figma or Sketch.</strong> Works fine, but consider whether you want the <em>rendered</em> pixel. If a layer has opacity or a blend mode, you're sampling the composited result, not the declared fill. Check the tool's inspector for the source value.`,
+    ],
+  },
+];
+
+const faqs = [
+  {
+    q: "Does macOS have a built-in colour picker?",
+    a: "Yes — Digital Color Meter, in /Applications/Utilities/. It reads the pixel under your cursor and shows RGB values live, with region averaging and native colour-profile handling. Its limitations are no palette history and a slightly awkward copy flow. The system colour panel in native apps also has a system-wide eyedropper.",
+  },
+  {
+    q: "How do I pick a colour from another app on a Mac?",
+    a: "Open this page in Chrome, Edge, Brave, Arc, Opera or Vivaldi and click Pick a color. The cursor becomes a magnifier that works across your whole screen — Figma, Preview, Photoshop, a paused video, another browser. No install and no Screen Recording permission required.",
+  },
+  {
+    q: "Why does a browser eyedropper not need Screen Recording permission?",
+    a: "Because the web page never gets screen access. The browser process — which already has the necessary access — draws the overlay, tracks the cursor and reads the pixel, then hands the page a single colour string only after you click. Press Escape and the page receives nothing. There is no continuous capture to protect against, so no prompt is needed.",
+  },
+  {
+    q: "Does this work in Safari?",
+    a: "No. Safari has not implemented the EyeDropper API on macOS or iOS, and Apple has not indicated that it will. Use Digital Color Meter, or open a Chromium browser for the ten seconds the task takes.",
+  },
+  {
+    q: "Why is my sampled colour slightly different from the source file?",
+    a: "Most often colour-profile conversion. Macs have Display P3 panels, and if the content is tagged with a different profile macOS converts it before painting — you sample the converted pixel. Retina downscaling can also interpolate small elements. Zoom in before sampling, and prefer declared values from SVG source or CSS variables when brand accuracy matters.",
+  },
+  {
+    q: "Is Digital Color Meter or a browser picker better?",
+    a: "Digital Color Meter for colour-critical precision work — region averaging and native profile handling are things browsers do not offer. The browser for everyday work, because it gives HEX, RGB, HSL and OKLCH simultaneously with one-click copy and a persistent local palette, with no permission grant.",
+  },
+];
+---
+
+<KeywordPage
+  title="Eyedropper for Mac — pick any screen colour, no permissions"
+  description="Pick a colour from anywhere on your Mac screen — Figma, Preview, apps, video — using your browser's built-in eyedropper. No install, no Screen Recording permission. Compares Digital Color Meter."
+  path="/eyedropper-for-mac"
+  badge="macOS · Apple Silicon & Intel"
+  h1Before="An eyedropper for"
+  h1Highlight="Mac"
+  h1After="without the permission prompt."
+  lede="Sample any pixel on your Mac screen — Figma, Preview, Photoshop, a paused video — straight from your browser. No install and no Screen Recording permission."
+  appName="Eyedropper for Mac"
+  alternateNames={[
+    "eyedropper for mac",
+    "color picker mac",
+    "macos screen color picker",
+    "digital color meter alternative",
+    "pick color from screen mac",
+    "mac eyedropper tool",
+  ]}
+  features={[
+    "Sample any Mac screen pixel from the browser",
+    "No install and no Screen Recording permission",
+    "Works across applications, PDFs and design tools",
+    "HEX, RGB, HSL and OKLCH output",
+    "Local palette history, nothing uploaded",
+  ]}
+  sections={sections}
+  faqs={faqs}
+  faqHeading="Mac eyedropper FAQ"
+  related={[
+    ["eyedropper for Windows", "/eyedropper-for-windows"],
+    ["why no permissions", "/blog/why-eyedropper-needs-no-permissions"],
+    ["tool comparison", "/blog/best-color-picker-for-developers"],
+  ]}
+/>

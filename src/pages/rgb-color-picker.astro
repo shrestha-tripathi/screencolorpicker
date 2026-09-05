@@ -1,0 +1,99 @@
+---
+import KeywordPage from "../components/KeywordPage.astro";
+
+const sections = [
+  {
+    eyebrow: "The format",
+    heading: "Reading an RGB colour value.",
+    body: [
+      `RGB describes a colour as three light intensities: <code class="font-mono text-[14px] text-[var(--color-fg)]">rgb(61 165 255)</code> means 61 units of red, 165 of green, 255 of blue, each on a 0–255 scale. It is <em>additive</em> — the channels add light together, so all three at maximum gives white and all three at zero gives black. This is the opposite of paint, where mixing everything gives mud.`,
+      `Modern CSS uses <strong class="text-[var(--color-fg)]">space-separated syntax</strong>: <code class="font-mono text-[14px]">rgb(61 165 255)</code>, with a slash before alpha — <code class="font-mono text-[14px]">rgb(61 165 255 / 50%)</code>. The old comma form <code class="font-mono text-[14px]">rgba(61, 165, 255, 0.5)</code> still works everywhere and always will, but the space-separated version is what CSS Color Level 4 standardised and what you'll see in new codebases.`,
+      `RGB and HEX carry identical information. <code class="font-mono text-[14px]">rgb(61 165 255)</code> and <code class="font-mono text-[14px]">#3da5ff</code> are the same three numbers in different bases. Choosing between them is a readability decision, not an accuracy one.`,
+    ],
+  },
+  {
+    eyebrow: "The gamma trap",
+    heading: "Why RGB 128 is not half-brightness.",
+    elevated: true,
+    body: [
+      `This catches almost everyone who writes colour code for the first time. The channel value <code class="font-mono text-[14px]">128</code> is not half as bright as <code class="font-mono text-[14px]">255</code>. sRGB applies a <strong class="text-[var(--color-fg)]">gamma curve</strong>, and perceived half-brightness actually sits nearer <code class="font-mono text-[14px]">188</code>.`,
+      `The reason is historical and physiological at once. Human vision is far more sensitive to differences in dark tones than bright ones, so encoding brightness non-linearly spends more of the available 256 steps where the eye can actually see them. CRT phosphors happened to have a matching response curve, which is why the standard stuck.`,
+      `The practical consequence: <strong class="text-[var(--color-fg)]">naive averaging of RGB values is wrong</strong>. Crossfade two colours by linearly interpolating channels and the midpoint comes out too dark, often passing through an ugly grey. Correct blending requires converting to linear-light first, interpolating there, and converting back:`,
+      `<span class="font-mono text-[14px]">linear = c ≤ 0.03928 ? c/12.92 : ((c+0.055)/1.055)^2.4</span>`,
+      `The same conversion is why <strong class="text-[var(--color-fg)]">luminance</strong> isn't the average of the channels. WCAG weights them 0.2126 red, 0.7152 green, 0.0722 blue — green carries over 70% of perceived brightness because human eyes have far more green-sensitive cones. This is exactly why pure blue looks dark despite <code class="font-mono text-[14px]">rgb(0 0 255)</code> maxing out a channel.`,
+    ],
+  },
+  {
+    eyebrow: "When to use it",
+    heading: "RGB is the format for code that touches pixels.",
+    body: [
+      `If you're working with canvas <code class="font-mono text-[14px]">ImageData</code>, WebGL, image processing, or shader code, you're in RGB whether you chose it or not — that's how the hardware stores pixels. A canvas buffer is a flat array of red, green, blue, alpha bytes, and every read or write is in those terms.`,
+      `RGB is also the better choice when you need <strong class="text-[var(--color-fg)]">readable alpha</strong>. <code class="font-mono text-[14px]">rgb(61 165 255 / 50%)</code> says what it means; the 8-digit hex equivalent <code class="font-mono text-[14px]">#3da5ff80</code> requires you to know that <code class="font-mono text-[14px]">80</code> is 128 is roughly half.`,
+      `Where RGB is the wrong tool is anything involving human perception. You cannot look at two RGB triples and know which is lighter. You cannot generate a colour scale by stepping channels. You cannot reason about contrast. For those, convert to <strong class="text-[var(--color-fg)]">OKLCH</strong>, where lightness is perceptually uniform and the numbers actually correspond to what you see.`,
+    ],
+  },
+];
+
+const faqs = [
+  {
+    q: "How do I get the RGB value of a colour on my screen?",
+    a: "Click Pick a color and then click any pixel — inside the browser or outside it, in a PDF, a native application, a design tool, or a paused video. The RGB value appears immediately alongside HEX, HSL and OKLCH, each one click to copy. The browser itself reads the pixel; the page only receives the resulting colour.",
+  },
+  {
+    q: "What's the difference between rgb() and rgba()?",
+    a: "Functionally none in modern browsers. rgba() was the old separate function for adding an alpha channel. CSS Color Level 4 merged them, so rgb() now accepts an optional alpha after a slash: rgb(61 165 255 / 50%). Both forms work everywhere; the modern space-separated syntax is preferred in new code.",
+  },
+  {
+    q: "Is RGB the same as HEX?",
+    a: "Yes, mathematically. Hex is RGB written in base 16 with the punctuation removed. rgb(61 165 255) and #3da5ff produce pixel-identical output. Hex is more compact and better for handoff; RGB is easier to compute with and has clearer alpha syntax.",
+  },
+  {
+    q: "Why does rgb(0 0 255) look so much darker than rgb(0 255 0)?",
+    a: "Because human eyes are far more sensitive to green than blue. Perceived brightness weights the channels roughly 0.21 red, 0.72 green, 0.07 blue — so a maxed blue channel contributes only about 7% of possible luminance while a maxed green contributes 72%. This is physiology, not a display problem, and it is why blue text on white often fails contrast checks despite looking dark.",
+  },
+  {
+    q: "Can RGB represent every colour?",
+    a: "No. Standard 8-bit sRGB covers about 35% of visible colours. It cannot express the more saturated greens and cyans that wide-gamut displays can show. Newer formats like OKLCH and color(display-p3 ...) reach beyond sRGB into the P3 gamut that most modern laptops and phones support.",
+  },
+  {
+    q: "Does this picker work in Firefox or on mobile?",
+    a: "No. It relies on the browser's native EyeDropper API, which is Chromium desktop only — Chrome, Edge, Brave, Arc, Opera and Vivaldi on Windows, macOS, Linux and ChromeOS. Firefox and Safari have not shipped it, and no mobile browser has.",
+  },
+];
+---
+
+<KeywordPage
+  title="RGB Color Picker — sample any pixel, get RGB instantly"
+  description="Free online RGB colour picker. Click any pixel on your screen and get the rgb() value instantly, with HEX, HSL and OKLCH alongside. Works outside the browser. Nothing installed, nothing uploaded."
+  path="/rgb-color-picker"
+  badge="Free · No install"
+  h1Before="The instant"
+  h1Highlight="RGB"
+  h1After="color picker."
+  lede="Sample any pixel on your screen and read its rgb() value immediately — with HEX, HSL and OKLCH alongside. Works across PDFs, native apps, and design tools."
+  appName="RGB Color Picker"
+  alternateNames={[
+    "rgb color picker",
+    "rgb colour picker online",
+    "rgb value picker",
+    "get rgb from screen",
+    "rgba color picker",
+    "free rgb color picker",
+    "screen rgb picker",
+  ]}
+  features={[
+    "Sample any screen pixel with the native EyeDropper API",
+    "Instant rgb() output with one-click copy",
+    "Modern space-separated CSS Color Level 4 syntax",
+    "HEX, HSL and OKLCH shown alongside",
+    "Local palette history, nothing uploaded",
+  ]}
+  sections={sections}
+  faqs={faqs}
+  faqHeading="RGB colour picker FAQ"
+  related={[
+    ["HEX picker", "/hex-color-picker"],
+    ["HSL picker", "/hsl-color-picker"],
+    ["format comparison", "/blog/hex-vs-rgb-vs-hsl-vs-oklch"],
+  ]}
+/>

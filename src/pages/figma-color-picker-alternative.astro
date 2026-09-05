@@ -1,0 +1,99 @@
+---
+import KeywordPage from "../components/KeywordPage.astro";
+
+const sections = [
+  {
+    eyebrow: "The problem",
+    heading: "Figma's eyedropper stops at the canvas edge.",
+    body: [
+      `Figma has a colour picker, and inside Figma it's good. Open any fill, click the eyedropper, and you can sample from anywhere on your canvas.`,
+      `The limitation shows up the moment your reference isn't in Figma. A brand PDF open in Preview. A competitor's live site in another window. A paused video frame. A screenshot a client sent on Slack. Figma's eyedropper reads from the Figma canvas — in the desktop app it can reach further, but in the <strong class="text-[var(--color-fg)]">browser version</strong> it is confined to the document.`,
+      `The usual workaround is to import the reference into Figma as an image first: screenshot it, drag it in, sample it, delete it. Three steps and a polluted layer list to get one hex code.`,
+      `A browser-native eyedropper skips all of that. It reads pixels from <em>anywhere on your screen</em> — including the Figma tab itself, and including every application that isn't Figma.`,
+    ],
+  },
+  {
+    eyebrow: "The other gap",
+    heading: "Figma doesn't output OKLCH.",
+    elevated: true,
+    body: [
+      `Figma gives you HEX, RGB, HSL, HSB and CSS. It does not give you <strong class="text-[var(--color-fg)]">OKLCH</strong>, and as of 2026 that's a real gap for anyone whose design output is code.`,
+      `OKLCH is the perceptually uniform colour space standardised in CSS Color Level 4. Tailwind v4 uses it as the native colour space. Radix Colors, OpenProps and most seriously-built design systems have moved to it. The reason is that equal numeric changes in OKLCH produce equal <em>perceived</em> changes — which means a shade ramp built by stepping lightness actually looks evenly spaced, and hover states derived arithmetically feel consistent across every hue.`,
+      `HSL does not have this property. Two colours with identical HSL lightness can differ by six times in measured luminance. That's why palettes generated in HSL have a shade that "looks wrong" and nobody can say which.`,
+      `So the handoff problem is real: a designer picks in Figma, exports hex, and the engineer building in Tailwind v4 has to convert to OKLCH anyway — usually by pasting into some converter. Sampling in OKLCH directly removes that step.`,
+    ],
+  },
+  {
+    eyebrow: "The workflow",
+    heading: "Using both together.",
+    body: [
+      `The practical setup is not "replace Figma" — it's using the right tool for each half of the job.`,
+      `<strong class="text-[var(--color-fg)]">Use Figma's picker</strong> for sampling within your own design, checking layer fills, and anything where you need the <em>declared</em> value of a layer rather than the rendered pixel. This matters: if a layer has opacity or a blend mode applied, the rendered pixel is the composited result, not the fill you set.`,
+      `<strong class="text-[var(--color-fg)]">Use a browser eyedropper</strong> for anything outside Figma — brand PDFs, competitor sites, video frames, native apps — and whenever you need OKLCH for handoff. Open it in a tab, click, sample, copy, switch back. The whole loop is a few seconds and nothing gets imported into your file.`,
+      `A concrete example: a client sends a brand guideline PDF. Open it in Preview or the browser's PDF viewer, sample the brand colour directly from the large colour chip, get the OKLCH value, and build the ramp in your <code class="font-mono text-[14px]">@theme</code> block. Figma never has to know the PDF exists.`,
+    ],
+  },
+];
+
+const faqs = [
+  {
+    q: "Can Figma pick colours from outside the app?",
+    a: "The desktop app can reach beyond the canvas in some contexts, but the browser version is confined to the Figma document. Anything in a PDF, another application, a video, or a different browser tab requires importing a screenshot first — or using a browser-native eyedropper that reads any screen pixel directly.",
+  },
+  {
+    q: "Does Figma support OKLCH?",
+    a: "Not as an output format as of 2026. Figma offers HEX, RGB, HSL, HSB and CSS. If you're building in Tailwind v4 or any modern design system that uses OKLCH natively, you have to convert after export. Sampling in OKLCH directly removes that conversion step.",
+  },
+  {
+    q: "How do I pick a colour from a PDF while designing in Figma?",
+    a: "Open the PDF in any viewer, open this page in a Chromium browser, click Pick a color, and sample directly from the PDF window. The eyedropper reads composited screen pixels regardless of which application drew them, so no import is needed. Zoom the PDF to 200% or more first, since viewers render at screen resolution and small swatches will be antialiased.",
+  },
+  {
+    q: "Why does the colour I sample from a Figma layer differ from the layer's fill?",
+    a: "Because you're sampling the rendered result. If the layer has opacity, a blend mode, or an effect applied, the pixel on screen is the composited output, not the declared fill. For the source value, use Figma's own inspector. For matching what a user will actually see, the sampled pixel is correct.",
+  },
+  {
+    q: "Is this a Figma plugin?",
+    a: "No. It's a web page that uses your browser's built-in EyeDropper API, so there's nothing to install into Figma and no plugin permissions to grant. It works alongside Figma in a separate tab or window.",
+  },
+  {
+    q: "Which browsers does it work in?",
+    a: "Chromium desktop only — Chrome, Edge, Brave, Arc, Opera and Vivaldi on Windows, macOS, Linux and ChromeOS. Firefox and Safari have not implemented the EyeDropper API, and no mobile browser has.",
+  },
+];
+---
+
+<KeywordPage
+  title="Figma Color Picker Alternative — sample outside the canvas"
+  description="Figma's eyedropper can't reach PDFs, other apps, or video — and it doesn't output OKLCH. Sample any pixel on your screen from the browser and get HEX, RGB, HSL and OKLCH. No plugin, no install."
+  path="/figma-color-picker-alternative"
+  badge="Works alongside Figma"
+  h1Before="A colour picker that reaches"
+  h1Highlight="beyond"
+  h1After="the Figma canvas."
+  lede="Sample brand PDFs, competitor sites, video frames and native apps — then get the OKLCH value Figma doesn't give you. No plugin, no import, no install."
+  appName="Figma Color Picker Alternative"
+  alternateNames={[
+    "figma color picker alternative",
+    "figma eyedropper outside canvas",
+    "figma oklch",
+    "pick color from pdf for figma",
+    "figma color picker plugin alternative",
+    "screen color picker for designers",
+  ]}
+  features={[
+    "Sample any screen pixel, not just the Figma canvas",
+    "OKLCH output for Tailwind v4 handoff",
+    "Reads PDFs, native apps, video and other browsers",
+    "No plugin install and no plugin permissions",
+    "Local palette history, nothing uploaded",
+  ]}
+  sections={sections}
+  faqs={faqs}
+  faqHeading="Figma alternative FAQ"
+  related={[
+    ["OKLCH picker", "/oklch-color-picker"],
+    ["extracting brand colours", "/blog/extracting-brand-colors-from-a-logo"],
+    ["building a palette", "/blog/building-an-accessible-color-palette"],
+  ]}
+/>
