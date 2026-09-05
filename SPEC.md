@@ -278,3 +278,81 @@ Settings to use:
 
 **End of SPEC v0.1.** Build begins immediately. One feature = one commit
 discipline. Will push to GitHub when minimal v0.1 is green.
+
+
+---
+
+## 14. Content expansion for AdSense (Sept 2026)
+
+**Trigger:** Google AdSense rejected the site with *"Low value content — your site
+does not yet meet the criteria of use in the Google publisher network."*
+
+**Diagnosis (audit run 2026-09-05).** The rejection was about *volume*, not quality
+or compliance. Evidence:
+
+| Signal | State at rejection | Verdict |
+|---|---|---|
+| Trust pages (About/Contact/Privacy/Terms) | all present, footer-linked | ✅ |
+| AdSense + DART + GDPR + CCPA + aboutads disclosure | present in `/privacy-policy` | ✅ |
+| `ads.txt` (pub-4489093375929447) | live at root | ✅ |
+| AdSense snippet | firing sitewide | ✅ |
+| robots / sitemap / 404 / canonical | clean, no Googlebot block | ✅ |
+| Pages under 600 words | **zero** (thinnest was the 404 at 642w) | ✅ |
+| **Total pages** | **16** | ❌ bar is 25–30+ |
+| **Blog posts** | **3** | ❌ no ongoing publishing signal |
+| **Domain age** | 3 months (registered 2026-06-08) | ❌ India/APAC informally wants ~6mo |
+
+**Response shipped 2026-09-05** — two commits, two branches:
+
+- `feat/blog-batch-adsense` — 7 long-form posts (1985–2374 words each):
+  `how-to-pick-a-color-from-any-app`, `hex-vs-rgb-vs-hsl-vs-oklch`,
+  `wcag-contrast-explained`, `building-an-accessible-color-palette`,
+  `why-eyedropper-needs-no-permissions`, `extracting-brand-colors-from-a-logo`,
+  `best-color-picker-for-developers`. Blog 3 → 10 posts.
+- `feat/pseo-landing-pages` — 7 keyword landing pages (2100–2500 words each):
+  `/hex-color-picker`, `/rgb-color-picker`, `/hsl-color-picker`,
+  `/color-picker-from-image`, `/color-picker-without-extension`,
+  `/figma-color-picker-alternative`, `/eyedropper-for-windows`,
+  `/eyedropper-for-mac`.
+
+**Result:** 16 → 31 pages, 30 sitemap URLs, still zero pages under 600 words.
+
+### 14.1 `src/components/KeywordPage.astro` (new)
+
+The `/oklch-color-picker` layout was extracted into a reusable shell so landing
+pages are content-only. Props: `title`, `description`, `path`, `badge`,
+`h1Before/h1Highlight/h1After`, `lede`, `appName`, `alternateNames`, `features`,
+`sections[]`, `faqs[]`, `faqHeading`, `related[]`. It renders hero → live
+`<ColorPicker />` → prose bands (alternating `elevated`) → FAQ accordion →
+cross-link CTA, and emits `WebApplication` + `FAQPage` JSON-LD automatically.
+
+**Rules when adding a new landing page:**
+1. Create `src/pages/<slug>.astro` that imports `KeywordPage` and passes props only.
+2. Brand strings stay in `site.config.ts` — the shell imports `site` / `b`; never
+   inline the brand name in a page file (AGENTS.md rule 1). Blog *prose* may
+   mention the brand; `.astro` page files may not.
+3. Add the route to `STATIC_PAGES` in `src/pages/sitemap.xml.ts`.
+4. Add a footer link in `src/components/Footer.astro`.
+5. `section.body[]` entries are rendered with `set:html` — inline markup allowed,
+   but keep it to `<strong>`, `<em>`, `<code>`, `<br>`, `<span>`.
+6. Target **2000+ words** rendered. Verify:
+   `sed 's/<[^>]*>/ /g' dist/<slug>/index.html | tr -s ' ' | wc -w`
+
+### 14.2 Privacy copy constraint
+
+`why-eyedropper-needs-no-permissions.md` discusses privacy at length. Per
+AGENTS.md rule 5 it explicitly states that GA4 + AdSense are used and disclosed,
+and scopes the moat to *product data* (picked colours and palette stay on-device).
+**Never re-add "no tracking / no analytics / cookieless" claims** to any page.
+
+### 14.3 Reapply plan
+
+Do **not** click "Request review" until the domain is ~6 months old. A second
+rejection on unchanged content costs a longer cooldown and a negative signal.
+
+- Target date: **2026-12-08** (domain hits 6 months). A cron job is scheduled to
+  re-run the `adsense-readiness-checklist` §8 evidence pass and give a GO/NO-GO.
+- Before reapplying, confirm pages show as **Indexed** in Search Console — not
+  just "Discovered". Resubmit the sitemap after this deploy.
+- Console path: AdSense → Sites → "We found some policy violations" card →
+  tick "I confirm I have fixed the issues" → Request review.
