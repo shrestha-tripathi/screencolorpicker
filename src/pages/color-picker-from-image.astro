@@ -1,0 +1,101 @@
+---
+import KeywordPage from "../components/KeywordPage.astro";
+
+const sections = [
+  {
+    eyebrow: "The source",
+    heading: "Getting a colour out of a PDF.",
+    body: [
+      `PDF brand guidelines are the canonical example of a document that specifies colours beautifully and gives you no practical way to use them. Fifty pages about tone of voice, a gorgeous colour chip on page 12, and no hex code anywhere near it.`,
+      `<strong class="text-[var(--color-fg)]">Check for a declared value first.</strong> Before sampling anything, search the document for <code class="font-mono text-[14px]">#</code>, "HEX", "RGB", "CMYK" or "Pantone". Most guidelines list values in a table, and if the PDF has selectable text you can copy the exact authored string. A declared value always beats a reconstructed one.`,
+      `<strong class="text-[var(--color-fg)]">If you must sample, zoom first.</strong> PDF viewers render at screen resolution, so a small swatch is heavily antialiased and its edges are unreliable. Zoom to 200% or more, then sample the middle of the largest flat chip. Brand guidelines usually include large colour blocks specifically for this — use those, never the small inline examples.`,
+      `<strong class="text-[var(--color-fg)]">Beware CMYK.</strong> Print-oriented PDFs often specify colours in CMYK. What your screen shows is a conversion, and CMYK-to-RGB conversion is not lossless or unique — different converters give different results. If the guideline is print-first, sampling gives you an approximation. Ask for the digital value.`,
+    ],
+  },
+  {
+    eyebrow: "The source",
+    heading: "Getting a colour out of an image.",
+    elevated: true,
+    body: [
+      `Images have their own failure modes, and all of them produce a value that's <em>nearly</em> right — which is worse than obviously wrong, because it looks subtly off next to the real asset and nobody can say why.`,
+      `<strong class="text-[var(--color-fg)]">JPEG artefacts.</strong> JPEG stores colour at reduced resolution and introduces ringing near sharp edges. Screenshots sent through messaging apps are almost always re-compressed JPEG. The test: sample the same region twice, a few pixels apart. If the values differ, you're in an artefact zone — move toward the centre until two samples agree. PNG is lossless and doesn't have this problem, so ask for PNG when you can.`,
+      `<strong class="text-[var(--color-fg)]">Transparency.</strong> A semi-transparent pixel composites against whatever is behind it. Open the image on a white background and sample a translucent region and you get the colour <em>blended with white</em>. Test by viewing the same image against a dark background — if the value changes, that area isn't opaque.`,
+      `<strong class="text-[var(--color-fg)]">Text and thin strokes.</strong> Subpixel antialiasing lights individual red, green and blue subpixels to fake horizontal resolution. Sampling a letterform edge gives you a value tinged orange or cyan that exists nowhere in the design. Sample only from solid areas.`,
+      `<strong class="text-[var(--color-fg)]">SVG is different, and better.</strong> An SVG is XML — open it in a text editor and the fill values are literal strings. That's the authored value with no rendering in between, and it's the most reliable source there is.`,
+    ],
+  },
+  {
+    eyebrow: "How it works",
+    heading: "Why nothing needs uploading.",
+    body: [
+      `Most "pick a colour from an image" tools work by having you upload the file. The image goes to a server, or at minimum into the page, and the tool reads pixels from it with a canvas.`,
+      `That's an unnecessary data transfer for a task this small, and it also constrains what you can sample — you need the source to be an exportable image file, which rules out a PDF in your native viewer, a live web page, a native application, or a paused video.`,
+      `This picker works differently. It uses the browser's built-in <code class="font-mono text-[14px]">EyeDropper</code> API, where the <strong class="text-[var(--color-fg)]">browser process</strong> reads the pixel directly off your screen at the OS level. Whatever is visible — a PDF in Preview, an image in your file manager's preview pane, a Figma board, a paused video — is sampleable, because the browser doesn't care which application painted it.`,
+      `And the page receives exactly one thing: the colour string you clicked. No file, no image data, no screenshot. There's nothing to upload because there's nothing to upload <em>from</em> — the file never enters the page at all.`,
+    ],
+  },
+];
+
+const faqs = [
+  {
+    q: "How do I get a hex code from a PDF?",
+    a: "First search the PDF for a declared value — most brand guidelines list HEX or RGB in a table you can copy from. If none exists, open the PDF in any viewer, zoom to 200% or more, then use the eyedropper to sample the middle of the largest colour chip. Zooming matters because PDF viewers render at screen resolution and small swatches are heavily antialiased.",
+  },
+  {
+    q: "Do I need to upload the image?",
+    a: "No. The browser's EyeDropper API reads the pixel directly off your screen, so the file never enters the page. Just open the image or PDF in any viewer and sample it where it sits. This also means you can sample from sources that aren't files at all — a live web page, a native app, a paused video.",
+  },
+  {
+    q: "Why does the colour I sample from a JPEG look wrong?",
+    a: "JPEG compression stores colour at reduced resolution and creates ringing near edges, so pixels near a boundary are blends rather than the real colour. Sample the same region twice a few pixels apart — if the values differ, you're in an artefact zone and should move toward the centre of the flat area. PNG is lossless and avoids this entirely.",
+  },
+  {
+    q: "Can I pick a colour from a transparent PNG?",
+    a: "Yes, but only from fully opaque regions. Semi-transparent pixels composite against whatever is behind them, so you'd be sampling the colour blended with the backdrop. Check by viewing the image against a dark background — if the sampled value changes, that region isn't opaque.",
+  },
+  {
+    q: "What about CMYK colours in a print PDF?",
+    a: "What your screen displays is already a conversion, and CMYK-to-RGB conversion is neither lossless nor unique — different converters produce different results. Sampling gives you an approximation that may not match what the brand intends digitally. Ask for the RGB or HEX value directly when the guideline is print-first.",
+  },
+  {
+    q: "Which browsers does this work in?",
+    a: "Chromium desktop only — Chrome, Edge, Brave, Arc, Opera and Vivaldi on Windows, macOS, Linux and ChromeOS. Firefox and Safari have not implemented the EyeDropper API, and no mobile browser has.",
+  },
+];
+---
+
+<KeywordPage
+  title="Color Picker from Image or PDF — no upload required"
+  description="Pick a colour from any image or PDF without uploading it. The browser reads the pixel directly off your screen — works with PDFs, PNGs, JPEGs, SVGs and live pages. HEX, RGB, HSL and OKLCH."
+  path="/color-picker-from-image"
+  badge="No upload · Nothing leaves your device"
+  h1Before="Pick a colour from any"
+  h1Highlight="image or PDF"
+  h1After="— no upload."
+  lede="Open the file in any viewer and sample it where it sits. The browser reads the pixel off your screen, so nothing is ever uploaded and no file enters the page."
+  appName="Color Picker from Image"
+  alternateNames={[
+    "color picker from image",
+    "color picker from pdf",
+    "get hex code from image",
+    "image color picker online",
+    "pdf color picker",
+    "color picker no upload",
+    "extract color from photo",
+  ]}
+  features={[
+    "Sample colours from images and PDFs without uploading",
+    "Works with PNG, JPEG, SVG, PDF and live pages",
+    "Reads pixels from any application on screen",
+    "HEX, RGB, HSL and OKLCH output",
+    "Local palette history, nothing uploaded",
+  ]}
+  sections={sections}
+  faqs={faqs}
+  faqHeading="Image and PDF colour picking FAQ"
+  related={[
+    ["extracting brand colours", "/blog/extracting-brand-colors-from-a-logo"],
+    ["HEX picker", "/hex-color-picker"],
+    ["privacy by design", "/privacy"],
+  ]}
+/>

@@ -1,0 +1,100 @@
+---
+import KeywordPage from "../components/KeywordPage.astro";
+
+const sections = [
+  {
+    eyebrow: "Windows",
+    heading: "Your options for an eyedropper on Windows.",
+    body: [
+      `Windows has no built-in system-wide colour picker in the way macOS does — but it has three good paths, and one of them requires no install at all.`,
+      `<strong class="text-[var(--color-fg)]">The browser itself.</strong> Every Chromium browser on Windows — Chrome, Edge, Brave, Arc, Opera, Vivaldi — ships a native eyedropper that reads pixels from <em>anywhere on your screen</em>, not just the current tab. Open this page, click the pick button, and sample from Photoshop, a PDF, File Explorer, a game in windowed mode, or another browser entirely. Nothing to install, no permission prompt, no background process.`,
+      `<strong class="text-[var(--color-fg)]">Microsoft PowerToys.</strong> Microsoft's own free utility suite includes a Color Picker activated with <code class="font-mono text-[14px]">Win + Shift + C</code>. It's excellent — system-wide, keyboard-driven, with a colour history and an editor. Worth installing if you sample colours many times a day. It does mean a background process and an install.`,
+      `<strong class="text-[var(--color-fg)]">Snipping Tool.</strong> Not a colour picker, but if you just need to capture a region and inspect it later, <code class="font-mono text-[14px]">Win + Shift + S</code> is already on every Windows 11 machine.`,
+    ],
+  },
+  {
+    eyebrow: "Which to choose",
+    heading: "Browser-native vs PowerToys.",
+    elevated: true,
+    body: [
+      `These are the two real contenders on Windows, and the choice comes down to frequency.`,
+      `Use the <strong class="text-[var(--color-fg)]">browser</strong> when you need a colour occasionally and want zero friction — no install, no admin rights (relevant on a locked-down work machine), no background process, and no software to keep updated. It also gives you HEX, RGB, HSL <em>and</em> OKLCH simultaneously, which PowerToys does not.`,
+      `Use <strong class="text-[var(--color-fg)]">PowerToys</strong> when colour sampling is part of your daily loop. A global hotkey beats switching to a browser tab, and it works even when no browser is open. It also handles full-screen exclusive applications more reliably.`,
+      `A note on <strong class="text-[var(--color-fg)]">browser extensions</strong>: a colour-picker extension typically requests permission to read and change your data on <em>all websites</em>. That's not a colour-picking permission — it's full access to every page you visit, including your bank. Extensions have been sold to new owners and quietly turned into data harvesters after the fact. If an extension's advanced features genuinely earn that, fine; if you just need a hex code, they don't.`,
+    ],
+  },
+  {
+    eyebrow: "Practicalities",
+    heading: "Windows-specific gotchas.",
+    body: [
+      `<strong class="text-[var(--color-fg)]">Display scaling.</strong> Windows commonly runs at 125% or 150% scaling on high-DPI laptops. The eyedropper reads the physical pixel actually painted, so on a scaled display you may be sampling an interpolated pixel rather than an authored one. Zoom the source content in before sampling anything small.`,
+      `<strong class="text-[var(--color-fg)]">Multiple monitors with different profiles.</strong> If your laptop panel and external monitor have different colour profiles, the same content sampled on each can give different values. Sample on the display you'll be evaluating the design on, and if two displays disagree significantly, trust a declared value over a sampled one.`,
+      `<strong class="text-[var(--color-fg)]">Full-screen games.</strong> Exclusive fullscreen sometimes prevents the browser overlay from drawing on top. Switch the game to windowed or borderless-window mode and it works normally.`,
+      `<strong class="text-[var(--color-fg)]">Protected video.</strong> Some DRM-protected players composite through a protected path and read back as pure black. If a bright Netflix frame samples as <code class="font-mono text-[14px]">#000000</code>, that's what happened — sample a promotional still instead.`,
+      `<strong class="text-[var(--color-fg)]">Firefox users.</strong> Firefox on Windows has not implemented the EyeDropper API. Either use PowerToys, or open a Chromium browser for the ten seconds the task takes.`,
+    ],
+  },
+];
+
+const faqs = [
+  {
+    q: "Does Windows have a built-in colour picker?",
+    a: "Not system-wide by default, unlike macOS which ships Digital Color Meter. Microsoft PowerToys — a free first-party download — adds one on Win + Shift + C. Alternatively, every Chromium browser on Windows already includes a native eyedropper that reads any pixel on your screen with nothing installed.",
+  },
+  {
+    q: "How do I pick a colour from another application on Windows?",
+    a: "Open this page in Chrome, Edge, Brave, Arc, Opera or Vivaldi and click Pick a color. Your cursor becomes a magnifier that works across the entire screen, including other applications, PDFs, design tools and paused video. The browser reads the pixel and hands the page only the resulting colour.",
+  },
+  {
+    q: "Is PowerToys Color Picker better than a browser picker?",
+    a: "It's better if you sample colours constantly — a global hotkey is faster than switching to a tab, and it works with no browser open. The browser is better if you sample occasionally, need no install or admin rights, or want HEX, RGB, HSL and OKLCH output simultaneously, which PowerToys does not provide.",
+  },
+  {
+    q: "Why does the colour I sample look different from the original file?",
+    a: "Usually display scaling or colour profiles. At 125% or 150% scaling, small elements are interpolated, so you may sample a blended pixel — zoom in first. And if your monitor's ICC profile differs from the content's tagged profile, Windows converts before painting and you sample the converted result. Sampling on two monitors and comparing will reveal whether this is happening.",
+  },
+  {
+    q: "Does this work in Firefox on Windows?",
+    a: "No. Firefox has not implemented the EyeDropper API on any platform. Use a Chromium browser, or install PowerToys.",
+  },
+  {
+    q: "Do I need admin rights?",
+    a: "Not for the browser-based picker — it's just a web page and requires no install, no admin rights and no permission prompt. PowerToys does require an install, which on a managed corporate machine may need IT approval.",
+  },
+];
+---
+
+<KeywordPage
+  title="Eyedropper for Windows — pick any screen colour, no install"
+  description="Pick a colour from anywhere on your Windows screen — apps, PDFs, games, design tools — using your browser's built-in eyedropper. No install, no admin rights. Compares browser-native vs PowerToys."
+  path="/eyedropper-for-windows"
+  badge="Windows 10 · 11"
+  h1Before="An eyedropper for"
+  h1Highlight="Windows"
+  h1After="with nothing to install."
+  lede="Sample any pixel on your Windows screen — Photoshop, a PDF, File Explorer, a paused video — straight from your browser. No download, no admin rights, no background process."
+  appName="Eyedropper for Windows"
+  alternateNames={[
+    "eyedropper for windows",
+    "color picker windows 11",
+    "windows screen color picker",
+    "powertoys color picker alternative",
+    "pick color from screen windows",
+    "windows eyedropper tool",
+  ]}
+  features={[
+    "Sample any Windows screen pixel from the browser",
+    "No install, no admin rights, no background process",
+    "Works across applications, PDFs and windowed games",
+    "HEX, RGB, HSL and OKLCH output",
+    "Local palette history, nothing uploaded",
+  ]}
+  sections={sections}
+  faqs={faqs}
+  faqHeading="Windows eyedropper FAQ"
+  related={[
+    ["eyedropper for Mac", "/eyedropper-for-mac"],
+    ["tool comparison", "/blog/best-color-picker-for-developers"],
+    ["install guide", "/install"],
+  ]}
+/>

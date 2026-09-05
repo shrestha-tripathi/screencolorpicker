@@ -1,0 +1,100 @@
+---
+import KeywordPage from "../components/KeywordPage.astro";
+
+const sections = [
+  {
+    eyebrow: "The format",
+    heading: "Hue, saturation, lightness.",
+    body: [
+      `HSL describes a colour with three human-facing numbers. <code class="font-mono text-[14px] text-[var(--color-fg)]">hsl(210 100% 62%)</code> means hue 210° around the colour wheel, 100% saturation, 62% lightness.`,
+      `<strong class="text-[var(--color-fg)]">Hue (0–360°)</strong> is position on the wheel: 0° red, 60° yellow, 120° green, 180° cyan, 240° blue, 300° magenta, back to red at 360°. <strong class="text-[var(--color-fg)]">Saturation (0–100%)</strong> is how far from grey — 0% is always grey regardless of hue, 100% is fully vivid. <strong class="text-[var(--color-fg)]">Lightness (0–100%)</strong> runs black at 0%, the pure hue at 50%, white at 100%.`,
+      `The appeal is obvious the moment you use it. "Same colour, less saturated" is a one-number edit. "Rotate the hue 30 degrees" is a one-number edit. Neither is expressible in hex or RGB without conversion. For twenty years this made HSL the default way to generate shades in CSS, and it's why virtually every pre-2023 design system was built on it.`,
+      `Modern syntax drops the commas and puts alpha behind a slash: <code class="font-mono text-[14px]">hsl(210 100% 62% / 50%)</code>. The old <code class="font-mono text-[14px]">hsla(210, 100%, 62%, 0.5)</code> form still works everywhere.`,
+    ],
+  },
+  {
+    eyebrow: "The catch",
+    heading: "HSL lightness lies about brightness.",
+    elevated: true,
+    body: [
+      `Here is the problem that eventually bites everyone who builds a design system in HSL. Compare these two:`,
+      `<span class="font-mono text-[14px]">hsl(60 100% 50%)</span> — yellow, blindingly bright.<br><span class="font-mono text-[14px]">hsl(240 100% 50%)</span> — blue, nearly navy.`,
+      `Both claim 50% lightness. Side by side, one almost glows and the other is dark. The yellow has roughly <strong class="text-[var(--color-fg)]">six times</strong> the actual measured luminance of the blue at the identical number.`,
+      `The cause is that HSL "lightness" is a geometric construction — the midpoint of the RGB cube along a particular axis — not a perceptual measurement. It never accounted for the fact that human eyes weight green far more heavily than blue.`,
+      `The consequences are concrete and familiar. Build a 50→900 ramp by stepping lightness and your yellow ramp washes out at the top while your blue still reads solid. Generate hover states with <code class="font-mono text-[14px]">L + 10%</code> and the change is dramatic on blue, invisible on yellow. Compare lightness values to estimate contrast and you'll ship inaccessible text. Every designer who has stared at a mathematically-correct palette muttering "why does this shade look wrong" has hit exactly this.`,
+    ],
+  },
+  {
+    eyebrow: "In practice",
+    heading: "Where HSL still earns its place.",
+    body: [
+      `None of that makes HSL useless — it makes it a <strong class="text-[var(--color-fg)]">quick-edit</strong> format rather than a <strong class="text-[var(--color-fg)]">system</strong> format.`,
+      `It's excellent for one-off adjustments in devtools, for prototypes, for "give me a muted version of this", and for reasoning about relationships between colours you already have. Complementary colours are 180° apart; triads are 120°. That arithmetic is genuinely useful and genuinely intuitive.`,
+      `Where you should stop using it is anything systematic: generating shade ramps, deriving interactive states, checking contrast, or inverting a theme for dark mode. Those all depend on lightness meaning something consistent, and in HSL it doesn't.`,
+      `The replacement is <strong class="text-[var(--color-fg)]">OKLCH</strong>, which has the same three-axis structure — lightness, chroma, hue — but built on a perceptually uniform space. Equal numeric changes produce equal perceived changes across every hue. It shipped in all major browsers in 2023 and Tailwind v4 made it the native colour space. If you like how HSL thinks, you'll find OKLCH familiar and correct.`,
+    ],
+  },
+];
+
+const faqs = [
+  {
+    q: "How do I get the HSL value of a colour on my screen?",
+    a: "Click Pick a color and then click any pixel — inside or outside the browser, in a PDF, a design tool, a native app, or a paused video. The hsl() value appears instantly alongside HEX, RGB and OKLCH, each one click to copy.",
+  },
+  {
+    q: "What do the three HSL numbers mean?",
+    a: "Hue is the angle on the colour wheel from 0 to 360 degrees — 0 is red, 120 green, 240 blue. Saturation from 0% to 100% is how far the colour is from grey. Lightness from 0% to 100% runs from black through the pure hue at 50% to white at 100%.",
+  },
+  {
+    q: "Why do two colours with the same HSL lightness look so different in brightness?",
+    a: "Because HSL lightness is a geometric construction rather than a perceptual measurement. hsl(60 100% 50%) yellow has about six times the measured luminance of hsl(240 100% 50%) blue despite the identical 50% figure. Human vision weights green far more heavily than blue, and HSL never accounted for that. Use OKLCH if you need lightness numbers you can trust.",
+  },
+  {
+    q: "What's the difference between HSL and HSV or HSB?",
+    a: "They share the hue and saturation axes but differ on the third. HSL's lightness puts the pure hue at 50% with white at 100%. HSV/HSB's value or brightness puts the pure hue at 100% and there is no path to white without also reducing saturation. HSL is what CSS uses; HSV is common in design applications like Photoshop.",
+  },
+  {
+    q: "Should I use HSL or OKLCH for my design system?",
+    a: "OKLCH, without much hesitation. It has the same intuitive three-axis structure but its lightness is perceptually uniform, so shade ramps, hover states and theme inversion all behave predictably. It has full support in Chrome, Safari, Firefox and Edge since 2023, and Tailwind v4 uses it natively. Keep HSL for quick manual tweaks.",
+  },
+  {
+    q: "Does this work in Firefox or on my phone?",
+    a: "No. It depends on the native EyeDropper API, which is Chromium desktop only — Chrome, Edge, Brave, Arc, Opera and Vivaldi. Firefox and Safari have not implemented it, and no mobile browser has, because there is no cursor to hover over an arbitrary pixel on a touchscreen.",
+  },
+];
+---
+
+<KeywordPage
+  title="HSL Color Picker — sample any pixel, get HSL instantly"
+  description="Free online HSL colour picker. Click any pixel on your screen and get the hsl() value instantly, with HEX, RGB and OKLCH alongside. Works outside the browser. No install, nothing uploaded."
+  path="/hsl-color-picker"
+  badge="Free · No install"
+  h1Before="The instant"
+  h1Highlight="HSL"
+  h1After="color picker."
+  lede="Sample any pixel on your screen and read hue, saturation and lightness immediately — with HEX, RGB and OKLCH alongside."
+  appName="HSL Color Picker"
+  alternateNames={[
+    "hsl color picker",
+    "hsl colour picker online",
+    "hue saturation lightness picker",
+    "get hsl from screen",
+    "hsla color picker",
+    "free hsl color picker",
+  ]}
+  features={[
+    "Sample any screen pixel with the native EyeDropper API",
+    "Instant hsl() output with one-click copy",
+    "HEX, RGB and OKLCH shown alongside",
+    "Reads pixels from outside the browser",
+    "Local palette history, nothing uploaded",
+  ]}
+  sections={sections}
+  faqs={faqs}
+  faqHeading="HSL colour picker FAQ"
+  related={[
+    ["OKLCH picker", "/oklch-color-picker"],
+    ["RGB picker", "/rgb-color-picker"],
+    ["format comparison", "/blog/hex-vs-rgb-vs-hsl-vs-oklch"],
+  ]}
+/>

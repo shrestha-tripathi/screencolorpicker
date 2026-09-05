@@ -1,0 +1,101 @@
+---
+import KeywordPage from "../components/KeywordPage.astro";
+
+const sections = [
+  {
+    eyebrow: "The permission problem",
+    heading: "What a colour-picker extension actually asks for.",
+    body: [
+      `Install almost any colour-picker extension and the Chrome Web Store shows a variant of: <strong class="text-[var(--color-fg)]">"Read and change all your data on all websites."</strong>`,
+      `That is not a colour-picking permission. It is total access to every page you visit — your bank, your email, your admin dashboards, your password manager's web vault. The extension can read the DOM, inject scripts, and see form contents on every site, forever, in the background.`,
+      `The reason extensions need this is architectural. They can't read screen pixels directly, so they inject a content script that renders the page to a canvas and samples from that. To do that on any site, they need access to every site.`,
+      `Most such extensions are honest. The risk isn't primarily malice at install time — it's <strong class="text-[var(--color-fg)]">ownership change</strong>. Extensions get sold. The new owner pushes an update, it auto-installs silently to everyone who trusted the previous maintainer, and a utility becomes a data-harvesting pipeline. This has happened repeatedly across the extension ecosystem, and by design you don't get asked again.`,
+    ],
+  },
+  {
+    eyebrow: "The alternative",
+    heading: "The browser already has one built in.",
+    elevated: true,
+    body: [
+      `Since 2021, every Chromium browser ships a native eyedropper — the <code class="font-mono text-[14px]">EyeDropper</code> API. Any web page can invoke it, and it reads pixels from <em>anywhere on your screen</em>, not just the current tab.`,
+      `That last part is the genuine capability upgrade, not just a privacy trade. Because extensions sample by rendering the page to a canvas, they are confined to web page content. They cannot read a PDF in the native viewer, a native application, a design tool, a paused video in another app, or a different browser. The native API can, because the <strong class="text-[var(--color-fg)]">browser process</strong> does the reading at the OS level.`,
+      `The security model is why no permission prompt is needed. When you invoke it, control passes to the browser: the browser draws the magnifier, tracks your cursor, reads the pixel, and returns <strong class="text-[var(--color-fg)]">one colour string</strong> to the page — only after you deliberately click. The page never sees your screen, your cursor position, or which application you sampled from. Press Escape and it receives nothing at all.`,
+      `A page cannot even start the eyedropper on its own; it throws unless called from a user gesture. So the theoretical "loop it to steal a screenshot" attack requires a deliberate human click per pixel, with a giant magnifier visible the whole time — roughly two months of continuous clicking to capture one screen.`,
+    ],
+  },
+  {
+    eyebrow: "Being fair",
+    heading: "When an extension is genuinely the right call.",
+    body: [
+      `Extensions aren't strictly worse — they do things the native API cannot, and if you need those, the permissions may be a reasonable trade.`,
+      `<strong class="text-[var(--color-fg)]">Page-wide palette extraction.</strong> ColorZilla can enumerate every colour used on a page and present it as a palette. Because it has DOM access, it can do this; a native picker fundamentally cannot.`,
+      `<strong class="text-[var(--color-fg)]">CSS gradient generation and editing.</strong> A genuinely useful feature set with no browser-native equivalent.`,
+      `<strong class="text-[var(--color-fg)]">Firefox and Safari.</strong> Neither has implemented the EyeDropper API. On those browsers an extension or a desktop utility is your only option.`,
+      `<strong class="text-[var(--color-fg)]">Synced history across machines.</strong> Extensions can use browser sync; a web page's <code class="font-mono text-[14px]">localStorage</code> is per-device.`,
+      `If you need none of those — and for grabbing a hex code, you don't — the extension is pure downside: an install, a broad permission, a background process, and a maintainer you have to keep trusting.`,
+    ],
+  },
+];
+
+const faqs = [
+  {
+    q: "Can I pick colours without installing an extension?",
+    a: "Yes. Every Chromium desktop browser has a native eyedropper built in since 2021. Open this page, click Pick a color, and sample any pixel on your screen — including outside the browser. No install, no extension, no permission prompt.",
+  },
+  {
+    q: "Why do colour-picker extensions ask to read all my data on all websites?",
+    a: "Because they sample by injecting a content script that renders the page to a canvas. To work on any site, they need permission on every site. That permission also allows reading the DOM and form contents on every page you visit — far more than colour picking requires.",
+  },
+  {
+    q: "Are colour-picker extensions dangerous?",
+    a: "Most are honest, and the risk isn't usually at install time. It's that extensions get sold and updates auto-install silently. A new owner can turn a trusted utility into a data harvester with one push, and you never get asked again. If an extension's advanced features genuinely earn the permission, use it — with an identifiable maintainer and recent updates. If you just need a hex code, the permission buys you nothing.",
+  },
+  {
+    q: "Does a browser-native picker work outside the browser?",
+    a: "Yes, and this is where it beats extensions outright. It reads any pixel on your screen — PDFs in the native viewer, native applications, design tools, paused video, even a different browser. Extensions are confined to web page content because of how they sample.",
+  },
+  {
+    q: "What does a colour-picker extension do that the native API can't?",
+    a: "Page-wide palette extraction, which needs DOM access. CSS gradient generation and editing. History synced across machines via browser sync. And support in Firefox and Safari, neither of which has implemented the native API.",
+  },
+  {
+    q: "Which browsers support the built-in eyedropper?",
+    a: "Chromium desktop only — Chrome, Edge, Brave, Arc, Opera and Vivaldi on Windows, macOS, Linux and ChromeOS. Not Firefox, not Safari, and not any mobile browser, since there is no cursor to hover over an arbitrary pixel on a touchscreen.",
+  },
+];
+---
+
+<KeywordPage
+  title="Color Picker Without an Extension — no install, no permissions"
+  description="Skip the browser extension that wants to read all your data on all websites. Your browser already has a native eyedropper that reads any screen pixel — including outside the browser. No install."
+  path="/color-picker-without-extension"
+  badge="No extension · No permissions"
+  h1Before="A colour picker with"
+  h1Highlight="no extension"
+  h1After="to install."
+  lede="Colour-picker extensions ask to read all your data on all websites. Your browser already has a native eyedropper that reads any screen pixel — and it reaches further than extensions can."
+  appName="Color Picker Without Extension"
+  alternateNames={[
+    "color picker without extension",
+    "color picker no install",
+    "online color picker no extension",
+    "eyedropper without extension",
+    "chrome color picker built in",
+    "color picker no permissions",
+  ]}
+  features={[
+    "Native browser eyedropper, no extension required",
+    "No permission grant and no background process",
+    "Reads pixels outside the browser, unlike extensions",
+    "HEX, RGB, HSL and OKLCH output",
+    "Local palette history, nothing uploaded",
+  ]}
+  sections={sections}
+  faqs={faqs}
+  faqHeading="No-extension colour picker FAQ"
+  related={[
+    ["ColorZilla alternative", "/colorzilla-alternative"],
+    ["why no permissions", "/blog/why-eyedropper-needs-no-permissions"],
+    ["tool comparison", "/blog/best-color-picker-for-developers"],
+  ]}
+/>

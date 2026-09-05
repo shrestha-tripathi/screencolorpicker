@@ -1,0 +1,102 @@
+---
+import KeywordPage from "../components/KeywordPage.astro";
+
+const sections = [
+  {
+    eyebrow: "The format",
+    heading: "What a HEX colour code actually is.",
+    body: [
+      `A hex colour code is three bytes written in base 16. <code class="font-mono text-[14px] text-[var(--color-fg)]">#3da5ff</code> is red <strong class="text-[var(--color-fg)]">3d</strong> (61), green <strong class="text-[var(--color-fg)]">a5</strong> (165), blue <strong class="text-[var(--color-fg)]">ff</strong> (255). Each pair runs from <code class="font-mono text-[14px]">00</code> (none of that channel) to <code class="font-mono text-[14px]">ff</code> (all of it), giving 256 levels per channel and 16.7 million combinations total.`,
+      `That's it. Hex is RGB wearing a compact skin. There is no extra information in a hex code that isn't in the equivalent <code class="font-mono text-[14px]">rgb()</code> value — it's the same three numbers, written more briefly and with less punctuation.`,
+      `The <strong class="text-[var(--color-fg)]">shorthand form</strong> exists too: <code class="font-mono text-[14px]">#f0c</code> expands to <code class="font-mono text-[14px]">#ff00cc</code> by doubling each digit. It only works when both digits of each pair match, so most real colours can't use it. And the <strong class="text-[var(--color-fg)]">8-digit form</strong> adds alpha: <code class="font-mono text-[14px]">#3da5ff80</code> is the same blue at roughly 50% opacity. Supported everywhere modern, but genuinely hard to read — <code class="font-mono text-[14px]">80</code> meaning "half" is obvious to nobody.`,
+      `Hex has been the web's default colour notation since the first HTML specs in the early nineties, and its staying power is entirely about ergonomics: it's short, it survives copy-paste, it never has ambiguous syntax, and every tool on earth accepts it.`,
+    ],
+  },
+  {
+    eyebrow: "Getting it right",
+    heading: "Sampling a hex code accurately.",
+    elevated: true,
+    body: [
+      `The failure mode with hex sampling isn't getting a wildly wrong colour — it's getting one that's <em>nearly</em> right. A value two digits off looks fine in isolation and subtly wrong next to the real thing, and nobody can articulate why.`,
+      `<strong class="text-[var(--color-fg)]">Sample from the middle of a large flat area.</strong> Every accuracy problem is a variation of breaking this rule. Zoom in first if the region is small — a 40px logo has almost no truly flat pixels, but the same logo at 400px has an obvious safe zone.`,
+      `<strong class="text-[var(--color-fg)]">Never sample text.</strong> Text is drawn with subpixel antialiasing, which lights individual red, green and blue subpixels to fake horizontal resolution. Sample a letterform edge and you get a value tinged orange or cyan that appears nowhere in the actual design.`,
+      `<strong class="text-[var(--color-fg)]">Watch for JPEG artefacts.</strong> Compression introduces colour ringing near sharp edges. The test: sample the same region twice, a few pixels apart. If the two values differ, you're in an artefact zone — move toward the centre until they agree.`,
+      `<strong class="text-[var(--color-fg)]">Check for transparency.</strong> A semi-transparent pixel composites against whatever is behind it. If the sampled value changes when you put the asset on a different background, that region isn't opaque and your reading is a blend, not the colour.`,
+    ],
+  },
+  {
+    eyebrow: "Beyond hex",
+    heading: "When hex is the wrong tool.",
+    body: [
+      `Hex is a <strong class="text-[var(--color-fg)]">transport</strong> format, not a <strong class="text-[var(--color-fg)]">thinking</strong> format. You cannot look at <code class="font-mono text-[14px]">#3da5ff</code> and <code class="font-mono text-[14px]">#5ab0ff</code> and say which is lighter without base-16 arithmetic. You cannot make a colour 10% darker by editing the string. You cannot tell whether two hex codes are the same brightness at different hues.`,
+      `That matters the moment you stop grabbing one colour and start building a system. Generating a 50–900 shade ramp, computing hover states, checking contrast, inverting for dark mode — none of those operations are expressible in hex.`,
+      `This is why modern design systems have moved to <strong class="text-[var(--color-fg)]">OKLCH</strong>, where lightness is perceptually uniform and stepping it produces evenly-spaced-looking shades. Tailwind v4 uses it as the native colour space. Hex also physically cannot express colours outside sRGB, which rules out the wider Display P3 gamut that most modern laptops and phones can show.`,
+      `The practical split: use hex when handing a colour to a human or another tool, and use OKLCH when generating anything. This picker gives you both from the same sample, so you never have to choose at pick time.`,
+    ],
+  },
+];
+
+const faqs = [
+  {
+    q: "How do I get the hex code of a colour on my screen?",
+    a: "Click Pick a color, then click any pixel on your screen — including inside other applications, a PDF, a paused video, or a design tool. The hex code appears instantly alongside RGB, HSL and OKLCH, each one click to copy. It works because Chromium browsers ship a native EyeDropper that the browser itself operates; the page only ever receives the single colour you clicked.",
+  },
+  {
+    q: "What does each pair of characters in a hex code mean?",
+    a: "The first pair is red, the second green, the third blue, each in base 16 from 00 to ff (0–255 in decimal). So #3da5ff is red 61, green 165, blue 255 — a fairly bright blue. A fourth optional pair encodes alpha: #3da5ff80 is the same colour at about 50% opacity.",
+  },
+  {
+    q: "Why is my sampled hex code slightly different from the brand's official value?",
+    a: "Usually one of three causes. Antialiasing, if you sampled near text or a thin stroke. JPEG compression, if the source was a compressed screenshot — sample twice a few pixels apart to detect this. Or colour-profile conversion, if the content is tagged Display P3 and your monitor is sRGB, in which case the OS converts before painting and you sample the converted result. Always prefer a declared value from an SVG source or CSS variable when one exists.",
+  },
+  {
+    q: "What's the difference between 3-digit, 6-digit and 8-digit hex?",
+    a: "6-digit is the standard form: two characters each for red, green, blue. 3-digit is shorthand that doubles each character, so #f0c means #ff00cc — it only works when both digits of every pair are identical. 8-digit adds a fourth pair for alpha transparency, supported in every modern browser.",
+  },
+  {
+    q: "Is hex better than RGB?",
+    a: "They are the same three numbers, so neither is more accurate. Hex is shorter and more universally recognised, which makes it better for handoff. RGB is easier to do arithmetic on and has more readable alpha syntax, which makes it better inside code that manipulates pixels. For generating colour scales, neither is appropriate — use OKLCH.",
+  },
+  {
+    q: "Does this work in Firefox or on my phone?",
+    a: "No. The EyeDropper API is Chromium desktop only — Chrome, Edge, Brave, Arc, Opera and Vivaldi on Windows, macOS, Linux and ChromeOS. Firefox and Safari have not implemented it, and no mobile browser has, because there is no cursor to hover over an arbitrary pixel on a touchscreen.",
+  },
+];
+---
+
+<KeywordPage
+  title="HEX Color Picker — grab any hex code from your screen, free"
+  description="Free online hex colour picker. Sample any pixel on your screen — PDFs, apps, videos, design tools — and get the HEX code instantly, plus RGB, HSL and OKLCH. No install, nothing uploaded."
+  path="/hex-color-picker"
+  badge="Free · No install"
+  h1Before="The instant"
+  h1Highlight="HEX"
+  h1After="color picker."
+  lede="Click any pixel on your screen and get its hex code immediately — with RGB, HSL and OKLCH alongside. Works across PDFs, native apps, and paused video."
+  appName="HEX Color Picker"
+  alternateNames={[
+    "hex color picker",
+    "hex code picker",
+    "hex colour picker online",
+    "get hex code from screen",
+    "screen hex picker",
+    "free hex color picker",
+    "html color picker",
+    "hex color grabber",
+  ]}
+  features={[
+    "Sample any screen pixel with the native EyeDropper API",
+    "Instant HEX code output with one-click copy",
+    "RGB, HSL and OKLCH shown alongside",
+    "Reads pixels from outside the browser",
+    "Local palette history, nothing uploaded",
+  ]}
+  sections={sections}
+  faqs={faqs}
+  faqHeading="HEX colour picker FAQ"
+  related={[
+    ["RGB picker", "/rgb-color-picker"],
+    ["OKLCH picker", "/oklch-color-picker"],
+    ["format comparison", "/blog/hex-vs-rgb-vs-hsl-vs-oklch"],
+  ]}
+/>
