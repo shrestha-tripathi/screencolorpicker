@@ -1,0 +1,87 @@
+# Screen Color Picker
+
+> Free in-browser color picker: sample any pixel on your screen (even outside the browser) and copy it as HEX, RGB, HSL or OKLCH. No install, no account.
+
+## What it does
+Uses the browser-native EyeDropper API (desktop Chrome/Edge/Brave/Opera 95+) to sample any on-screen pixel. A screenshot mode (getDisplayMedia + 10x magnifier) works in Firefox and Safari too. Keeps a local palette of recent colors.
+
+## Privacy
+Picked colors and screenshot frames are processed locally and never uploaded. Palette history is stored in localStorage. The site uses Google Analytics 4 and AdSense behind a consent banner (see /privacy-policy/).
+
+## Limits
+Live picking is Chromium desktop only; no mobile browser supports EyeDropper. The live picker cancels on focus loss. Screenshot mode needs a screen-share prompt each time.
+
+## Pages
+- [Home: live screen color picker (EyeDropper) + screenshot mode](https://screencolorpicker.com/): Home: live screen color picker (EyeDropper) + screenshot mode
+- [Screen color picker overview](https://screencolorpicker.com/screen-color-picker/): Screen color picker overview
+- [Get HEX codes from any screen pixel](https://screencolorpicker.com/hex-color-picker/): Get HEX codes from any screen pixel
+- [RGB values from the screen](https://screencolorpicker.com/rgb-color-picker/): RGB values from the screen
+- [HSL values from the screen](https://screencolorpicker.com/hsl-color-picker/): HSL values from the screen
+- [OKLCH output for modern CSS / Tailwind v4](https://screencolorpicker.com/oklch-color-picker/): OKLCH output for modern CSS / Tailwind v4
+- [Pick colors from images and PDFs](https://screencolorpicker.com/color-picker-from-image/): Pick colors from images and PDFs
+- [No-extension color picking](https://screencolorpicker.com/color-picker-without-extension/): No-extension color picking
+- [Permission-free ColorZilla alternative](https://screencolorpicker.com/colorzilla-alternative/): Permission-free ColorZilla alternative
+- [Sampling outside Figma](https://screencolorpicker.com/figma-color-picker-alternative/): Sampling outside Figma
+- [Eyedropper on Windows](https://screencolorpicker.com/eyedropper-for-windows/): Eyedropper on Windows
+- [Eyedropper on macOS](https://screencolorpicker.com/eyedropper-for-mac/): Eyedropper on macOS
+- [Install as a PWA](https://screencolorpicker.com/install/): Install as a PWA
+- [Full FAQ](https://screencolorpicker.com/faq/): Full FAQ
+- [Guides](https://screencolorpicker.com/blog/): Guides
+- [Privacy by design](https://screencolorpicker.com/privacy/): Privacy by design
+
+## FAQ
+
+### What is the EyeDropper API and why doesn't every browser have it?
+The EyeDropper API (window.EyeDropper) is a browser-native feature shipped in Chrome 95 (Oct 2021), Edge 95+, Brave, and Opera. It turns the cursor into a system-wide color picker — sampling any pixel visible on your screen, including outside the browser, across multiple monitors. Firefox publicly declined to implement it (Mozilla position: 'negative'), and Safari hasn't signaled interest. For those browsers, Screen Color Picker's Screenshot Picker fills the gap using the universally-supported getDisplayMedia API.
+
+### How do I use Screen Color Picker to pick a color from anywhere on my screen?
+Click the rainbow 'Pick a color' button. Your cursor instantly becomes a precision eyedropper. Move it over any pixel — your IDE, Photoshop, a YouTube video, a PDF, another monitor — and click to capture. The HEX, RGB, HSL, and OKLCH values appear instantly with one-click copy. Or press the keyboard shortcut P from anywhere on the page.
+
+### The eyedropper cancels when I switch tabs. How do I pick from another tab?
+Use the 'Pick from screenshot' button next to the live picker. It captures one frozen frame from any window, tab, or screen you choose — then you can leisurely pick colors from that frame with a built-in 10× magnifier. The live EyeDropper is locked to whatever's visible at click-time and cancels on focus loss; that's a browser security constraint, not a Screen Color Picker limitation.
+
+### Is Screen Color Picker really free? What's the catch?
+100% free, forever. No accounts, no signup, no ads, no upsells, no Pro tier. Your colors never leave your device — everything runs in your browser via the native EyeDropper and getDisplayMedia APIs. We don't collect, store, or transmit any color data. The project is open-source on GitHub.
+
+### Can Screen Color Picker or any third party see the colors I pick?
+No. Both the EyeDropper API and getDisplayMedia API are fully client-side — pixel data stays in JavaScript running in your browser, never sent over the network. Your palette history is stored in your browser's localStorage and never leaves your device. Captured screenshot frames are held in browser memory only and freed when you close the modal.
+
+### Is Screen Color Picker safe to use? Why is it better than browser extensions?
+Screen Color Picker uses zero browser permissions, can't read any of your other tabs, and runs entirely client-side. Browser extensions like ColorZilla require 'read all data on the websites you visit' — a permission that lets them read passwords, banking pages, anything. The browser-native EyeDropper API is sandboxed and only returns the pixel color, not the surrounding context.
+
+### Why doesn't the live picker work in Firefox or Safari?
+Firefox and Safari haven't shipped the EyeDropper API yet. Mozilla's official position is that they don't plan to implement it; WebKit (Safari) hasn't signaled support either. For those browsers, use 'Pick from screenshot' — getDisplayMedia is universally supported (Chrome 72+, Firefox 66+, Safari 13+, Edge 79+).
+
+### Does Screen Color Picker work on mobile?
+Partially. On mobile Chrome (Android), the EyeDropper API exists but can only sample inside the current browser tab — not from other apps. For full-screen sampling, use a desktop browser. The Screenshot Picker works on mobile too, but mobile browsers offer fewer capture sources than desktop.
+
+### What browsers support window.EyeDropper as of 2026?
+Chrome 95+ (Oct 2021), Edge 95+, Brave (1.32+), Opera 81+, Arc, Vivaldi, and any Chromium-based browser. Firefox: no, with no plans. Safari: no signal. Mobile Chromium: tab-only sampling. Check caniuse.com/eyedropper-api for real-time status.
+
+### Can I pick colors from a PDF or video?
+Yes. The live EyeDropper picks any visible pixel — including PDFs open in your browser or system PDF reader, video frames paused in any player, streamed content, and images in any app. For paused videos in another tab, Screenshot mode captures the exact frame you want without focus loss.
+
+### Does Screen Color Picker work offline?
+After your browser has loaded the page once, Screen Color Picker works fully offline. It's a static site with no backend — no API calls, no analytics pings, no remote dependencies needed at runtime. Install it as a bookmark for instant offline access; we recommend installing as a PWA for fastest launch.
+
+### How accurate is the color sampling? Does it match Photoshop?
+Pixel-perfect. The EyeDropper API returns the exact sRGB color of the sampled pixel, identical to what tools like Photoshop's Eyedropper or macOS Digital Color Meter return for the same pixel. Screenshot mode also samples directly from the captured bitmap with no compression.
+
+### What is OKLCH and why should I care?
+OKLCH is a perceptually uniform color space introduced in 2020 by Björn Ottosson. CSS Color Level 4 (2023+) supports it natively. It produces predictable color manipulations — lightening or darkening a color by the same amount perceptually looks like the same amount of change. Modern design systems (Tailwind v4, OpenProps) increasingly use OKLCH for color tokens. Most online color pickers don't expose OKLCH; we do.
+
+### What's the difference between HEX, RGB, HSL, and OKLCH?
+HEX (#RRGGBB) is a compact text encoding of RGB — most common in web code. RGB (red, green, blue) is the device-native format. HSL (hue, saturation, lightness) is more intuitive for humans to manipulate but isn't perceptually uniform. OKLCH (lightness, chroma, hue) is the modern perceptually-uniform choice, recommended for design systems shipping in 2024+. Screen Color Picker shows all four for every color you pick, so you can copy whichever matches your codebase.
+
+### Does Screen Color Picker support color blindness or contrast checking?
+Not yet — we're considering a WCAG contrast checker and color blindness simulation modes in a future release. For now, every color output displays in 4 formats simultaneously (HEX, RGB, HSL, OKLCH) so you can plug them into your favorite contrast checker.
+
+### Can I export my palette to Figma, Tailwind, or a design file?
+Export is on our roadmap (CSS variables, Tailwind tokens, JSON, .ase Adobe Swatch Exchange). For now, your palette is saved in browser localStorage and you can copy individual colors in any of the 4 formats with one click.
+
+### How is Screen Color Picker different from ColorZilla?
+ColorZilla is a Chrome extension that requires 'read all data on the websites you visit' permission, is ad-injected in the free tier, and only works inside the browser tab where it's installed. Screen Color Picker is a zero-install website that uses your browser's native EyeDropper API, requires no permissions, works system-wide (outside the browser too), has no ads, and supports OKLCH out of the box.
+
+### Why 'Screen Color Picker'? What's with the name?
+'Trail' because we save your recent palette as you go — a trail of colors you've picked. We're a tiny one-tap utility, not a full design suite. Less is the moat.
+

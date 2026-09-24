@@ -87,8 +87,13 @@ const webAppSchema = {
   alternateName: alternateNames,
   applicationCategory: "DesignApplication",
   applicationSubCategory: "ColorPicker",
-  operatingSystem: "Any browser",
-  offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+  operatingSystem: "Any (web browser)",
+  offers: [
+    { "@type": "Offer", price: "0", priceCurrency: "USD" },
+    { "@type": "Offer", price: "0", priceCurrency: "INR" },
+  ],
+  isAccessibleForFree: true,
+  dateModified: site.lastUpdated,
   featureList: features,
   publisher: { "@id": `${site.url}/#organization` },
 };
@@ -127,6 +132,14 @@ const faqSchema = {
       >
         {lede}
       </p>
+
+      <div class="mt-8 mx-auto max-w-2xl text-left rounded-md p-5" style="background-color: var(--color-bg-elevated); box-shadow: var(--shadow-ring);">
+        <p class="eyebrow mb-2">TL;DR</p>
+        <p class="text-[15px] leading-relaxed text-[var(--color-fg-secondary)]">
+          {site.name} is a free color picker that runs entirely in your browser. Click once and sample any pixel on your screen, even outside the browser, then copy it as HEX, RGB, HSL or OKLCH. Picked colors never leave your device. Key limit: live picking needs desktop Chrome, Edge, Brave or Opera; other browsers use screenshot mode.
+        </p>
+        <p class="mt-3 text-sm text-[var(--color-muted)]">Last updated <time datetime={site.lastUpdated}>{site.lastUpdatedLabel}</time></p>
+      </div>
     </div>
   </section>
 

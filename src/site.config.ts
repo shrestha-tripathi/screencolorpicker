@@ -58,6 +58,10 @@ export const site = {
    * analytics property. See astro-google-analytics-4 skill.
    */
   gaId: env.PUBLIC_GA_MEASUREMENT_ID ?? "G-39NCRFEZPJ",
+
+  /** Freshness stamp — shown as "Last updated" + JSON-LD dateModified. */
+  lastUpdated: "2026-09-24",
+  lastUpdatedLabel: "September 2026",
 } as const;
 
 /**
