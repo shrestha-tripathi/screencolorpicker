@@ -1,0 +1,30 @@
+# Screen Color Picker
+
+> Free in-browser color picker: sample any pixel on your screen (even outside the browser) and copy it as HEX, RGB, HSL or OKLCH. No install, no account.
+
+## What it does
+Uses the browser-native EyeDropper API (desktop Chrome/Edge/Brave/Opera 95+) to sample any on-screen pixel. A screenshot mode (getDisplayMedia + 10x magnifier) works in Firefox and Safari too. Keeps a local palette of recent colors.
+
+## Privacy
+Picked colors and screenshot frames are processed locally and never uploaded. Palette history is stored in localStorage. The site uses Google Analytics 4 and AdSense behind a consent banner (see /privacy-policy/).
+
+## Limits
+Live picking is Chromium desktop only; no mobile browser supports EyeDropper. The live picker cancels on focus loss. Screenshot mode needs a screen-share prompt each time.
+
+## Pages
+- [Home: live screen color picker (EyeDropper) + screenshot mode](https://screencolorpicker.com/): Home: live screen color picker (EyeDropper) + screenshot mode
+- [Screen color picker overview](https://screencolorpicker.com/screen-color-picker/): Screen color picker overview
+- [Get HEX codes from any screen pixel](https://screencolorpicker.com/hex-color-picker/): Get HEX codes from any screen pixel
+- [RGB values from the screen](https://screencolorpicker.com/rgb-color-picker/): RGB values from the screen
+- [HSL values from the screen](https://screencolorpicker.com/hsl-color-picker/): HSL values from the screen
+- [OKLCH output for modern CSS / Tailwind v4](https://screencolorpicker.com/oklch-color-picker/): OKLCH output for modern CSS / Tailwind v4
+- [Pick colors from images and PDFs](https://screencolorpicker.com/color-picker-from-image/): Pick colors from images and PDFs
+- [No-extension color picking](https://screencolorpicker.com/color-picker-without-extension/): No-extension color picking
+- [Permission-free ColorZilla alternative](https://screencolorpicker.com/colorzilla-alternative/): Permission-free ColorZilla alternative
+- [Sampling outside Figma](https://screencolorpicker.com/figma-color-picker-alternative/): Sampling outside Figma
+- [Eyedropper on Windows](https://screencolorpicker.com/eyedropper-for-windows/): Eyedropper on Windows
+- [Eyedropper on macOS](https://screencolorpicker.com/eyedropper-for-mac/): Eyedropper on macOS
+- [Install as a PWA](https://screencolorpicker.com/install/): Install as a PWA
+- [Full FAQ](https://screencolorpicker.com/faq/): Full FAQ
+- [Guides](https://screencolorpicker.com/blog/): Guides
+- [Privacy by design](https://screencolorpicker.com/privacy/): Privacy by design

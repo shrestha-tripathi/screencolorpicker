@@ -45,6 +45,7 @@ const orgSchema = {
   logo: absoluteUrl("/favicon.svg"),
   description: site.description,
   founder: { "@type": "Person", name: site.author },
+  parentOrganization: { "@type": "Organization", name: "WorksOffline", url: "https://worksoffline.in" },
   ...(site.github && { sameAs: [site.github] }),
 };
 

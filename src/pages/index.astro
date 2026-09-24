@@ -52,10 +52,15 @@ const webAppSchema = {
   description: site.description,
   applicationCategory: "DesignApplication",
   applicationSubCategory: "ColorPicker",
-  operatingSystem: "Any (Chrome, Firefox, Safari, Edge, Opera, Brave)",
+  operatingSystem: "Any (web browser)",
   browserRequirements:
     "EyeDropper API (Chrome 95+, Edge 95+, Brave, Opera) for live picking; getDisplayMedia (universal) for screenshot mode.",
-  offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+  offers: [
+    { "@type": "Offer", price: "0", priceCurrency: "USD" },
+    { "@type": "Offer", price: "0", priceCurrency: "INR" },
+  ],
+  isAccessibleForFree: true,
+  dateModified: site.lastUpdated,
   featureList: [
     "Pick colors from anywhere on screen via EyeDropper API",
     "Screenshot mode for picking from another tab or window",
@@ -132,6 +137,14 @@ const howToSchema = {
         That's the magic of <code class="font-mono text-[13px] sm:text-[14px] text-[var(--color-fg)]" style="background-color: var(--color-surface); padding: 1px 6px; border-radius: 4px;">window.EyeDropper</code> — most developers don't even know it exists.
       </p>
 
+
+      <div class="mt-8 mx-auto max-w-2xl text-left rounded-md p-5" style="background-color: var(--color-bg-elevated); box-shadow: var(--shadow-ring);">
+        <p class="eyebrow mb-2">TL;DR</p>
+        <p class="text-[15px] leading-relaxed text-[var(--color-fg-secondary)]">
+          {site.name} is a free color picker that runs entirely in your browser. Click once and sample any pixel on your screen, even outside the browser, then copy it as HEX, RGB, HSL or OKLCH. Picked colors never leave your device. Key limit: live picking needs desktop Chrome, Edge, Brave or Opera; other browsers use screenshot mode.
+        </p>
+        <p class="mt-3 text-sm text-[var(--color-muted)]">Last updated <time datetime={site.lastUpdated}>{site.lastUpdatedLabel}</time></p>
+      </div>
       {/* Source-strip — visual chips showing what you can sample from */}
       <div class="mt-10 sm:mt-12">
         <p class="eyebrow mb-4">Sample colors from</p>
