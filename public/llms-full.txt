@@ -28,6 +28,15 @@ Live picking is Chromium desktop only; no mobile browser supports EyeDropper. Th
 - [Full FAQ](https://screencolorpicker.com/faq/): Full FAQ
 - [Guides](https://screencolorpicker.com/blog/): Guides
 - [Privacy by design](https://screencolorpicker.com/privacy/): Privacy by design
+- [Guides hub](https://screencolorpicker.com/guides/): all platform/app guides
+- [Color picker for Chromebook](https://screencolorpicker.com/guides/color-picker-for-chromebook/): Color picker for Chromebook
+- [Color picker for Linux](https://screencolorpicker.com/guides/color-picker-for-linux/): Color picker for Linux
+- [Pick a color from a video](https://screencolorpicker.com/guides/pick-color-from-video/): Pick a color from a video
+- [Pick a color from a website](https://screencolorpicker.com/guides/pick-color-from-website/): Pick a color from a website
+- [WCAG contrast checker](https://screencolorpicker.com/guides/wcag-contrast-checker/): WCAG contrast checker
+- [Color picker for Canva](https://screencolorpicker.com/guides/color-picker-for-canva/): Color picker for Canva
+- [Color picker for PowerPoint](https://screencolorpicker.com/guides/color-picker-for-powerpoint/): Color picker for PowerPoint
+- [Color picker for multiple monitors](https://screencolorpicker.com/guides/color-picker-multiple-monitors/): Color picker for multiple monitors
 
 ## FAQ
 

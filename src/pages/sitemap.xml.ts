@@ -1,6 +1,7 @@
 import type { APIRoute } from "astro";
 import { getCollection } from "astro:content";
 import { absoluteUrl } from "../site.config";
+import { pseoEntries, PSEO_BASE } from "../data/pseo";
 
 // Auto-derived sitemap: all static pages + blog collection.
 // Edit STATIC_PAGES when you add a new static .astro page under src/pages/.
@@ -48,7 +49,11 @@ export const GET: APIRoute = async () => {
   }));
 
   const today = new Date().toISOString();
-  const all = [...STATIC_PAGES, ...blogEntries];
+  const guideEntries: SitemapEntry[] = [
+    { path: PSEO_BASE, changefreq: "weekly", priority: 0.7 },
+    ...pseoEntries.map((e) => ({ path: `${PSEO_BASE}/${e.slug}`, changefreq: "monthly" as const, priority: 0.7 })),
+  ];
+  const all = [...STATIC_PAGES, ...guideEntries, ...blogEntries];
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
