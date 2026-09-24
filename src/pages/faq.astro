@@ -90,6 +90,11 @@ const faqs = [
     a: "ColorZilla is a Chrome extension that requires 'read all data on the websites you visit' permission, is ad-injected in the free tier, and only works inside the browser tab where it's installed. Screen Color Picker is a zero-install website that uses your browser's native EyeDropper API, requires no permissions, works system-wide (outside the browser too), has no ads, and supports OKLCH out of the box.",
   },
   {
+    cat: "Compatibility",
+    q: "Can AI agents use this color picker? (WebMCP)",
+    a: "Yes — it's AI agent ready via WebMCP. In browsers that expose navigator.modelContext, the page registers three tools: pick_color (opens the EyeDropper; browsers require a real user click, so the agent may have to ask you to press the button), contrast_check (WCAG contrast ratio for two colors) and convert_color (HEX/RGB to HEX, RGB, HSL or OKLCH). Everything runs locally in your tab.",
+  },
+  {
     cat: "Brand",
     q: "Why 'Screen Color Picker'? What's with the name?",
     a: "'Trail' because we save your recent palette as you go — a trail of colors you've picked. We're a tiny one-tap utility, not a full design suite. Less is the moat.",

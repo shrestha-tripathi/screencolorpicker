@@ -157,3 +157,23 @@ export function contrastTextOn(rgb: Rgb): "#fff" | "#0a0a0b" {
     0.0722 * srgbToLinear(rgb.b);
   return lum > 0.45 ? "#0a0a0b" : "#fff";
 }
+
+// ----------------------------------------------------------------------
+// WCAG 2.x contrast ratio (relative luminance per WCAG 2.1 §1.4.3)
+// ----------------------------------------------------------------------
+
+export function relativeLuminance(rgb: Rgb): number {
+  return (
+    0.2126 * srgbToLinear(rgb.r) +
+    0.7152 * srgbToLinear(rgb.g) +
+    0.0722 * srgbToLinear(rgb.b)
+  );
+}
+
+/** Contrast ratio between two colors, 1–21. */
+export function contrastRatio(a: Rgb, b: Rgb): number {
+  const la = relativeLuminance(a);
+  const lb = relativeLuminance(b);
+  const [hi, lo] = la > lb ? [la, lb] : [lb, la];
+  return (hi + 0.05) / (lo + 0.05);
+}

@@ -32,6 +32,7 @@ import {
   samplePixelHex,
   type CapturedFrame,
 } from "../lib/screenCapture";
+import { registerWebMcp } from "../lib/webmcp";
 
 // ----------------------------------------------------------------------
 // DOM refs
@@ -710,4 +711,18 @@ document.addEventListener("visibilitychange", () => {
   } else if (capturePending) {
     showToast("👋 Welcome back — finish picking in the share dialog");
   }
+});
+
+// WebMCP (progressive enhancement; no-op without navigator.modelContext).
+// pick_color reuses the same pick flow, so results land in the UI + palette.
+registerWebMcp({
+  pickButton: pickBtn,
+  pick: async () => {
+    const hex = await pickColor();
+    if (hex) {
+      setActive(hex);
+      renderPalette(addToPalette(formatHex(parseHex(hex)!)));
+    }
+    return hex;
+  },
 });
