@@ -1,0 +1,140 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import ColorPicker from "../../components/ColorPicker.astro";
+import { site, b, absoluteUrl } from "../../site.config";
+import { pseoEntries, PSEO_BASE, type PseoEntry } from "../../data/pseo";
+
+export function getStaticPaths() {
+  return pseoEntries.map((entry) => ({ params: { slug: entry.slug }, props: { entry } }));
+}
+
+const { entry } = Astro.props as { entry: PseoEntry };
+const url = absoluteUrl(`${PSEO_BASE}/${entry.slug}`);
+const related = entry.related
+  .map((s) => pseoEntries.find((e) => e.slug === s))
+  .filter((e): e is PseoEntry => !!e);
+
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: entry.h1,
+    description: entry.metaDescription,
+    step: entry.steps.map((t, i) => ({ "@type": "HowToStep", position: i + 1, text: t })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: entry.faqs.map((f) => ({
+      "@type": "Question",
+      name: f.q,
+      acceptedAnswer: { "@type": "Answer", text: f.a },
+    })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    url,
+    name: entry.title,
+    dateModified: site.lastUpdated,
+    publisher: { "@id": `${site.url}/#organization` },
+  },
+];
+---
+
+<Layout title={entry.title} description={entry.metaDescription} jsonLd={jsonLd}>
+  <section class="px-4 sm:px-6 pt-16 sm:pt-20 pb-8">
+    <div class="mx-auto max-w-3xl">
+      <nav class="text-sm text-[var(--color-muted)] mb-4" aria-label="Breadcrumb">
+        <a href={b("/")} class="hover:text-[var(--color-fg)]">Home</a> /
+        <a href={b(PSEO_BASE)} class="hover:text-[var(--color-fg)]">Guides</a> /
+        <span class="text-[var(--color-fg-secondary)]">{entry.h1}</span>
+      </nav>
+      <h1 class="heading-display text-[36px] sm:text-[48px] text-balance">{entry.h1}</h1>
+      <p class="mt-5 text-[17px] leading-[1.6] text-[var(--color-fg-secondary)]">{entry.intro}</p>
+      <p class="mt-3 text-sm text-[var(--color-muted)]">
+        Last updated <time datetime={site.lastUpdated}>{site.lastUpdatedLabel}</time>
+      </p>
+    </div>
+  </section>
+
+  <section class="px-4 sm:px-6 pb-12">
+    <div class="mx-auto max-w-4xl"><ColorPicker /></div>
+  </section>
+
+  {entry.contrastTool && (
+    <section class="px-4 sm:px-6 pb-12">
+      <div id="contrast-tool" class="mx-auto max-w-3xl rounded-md p-6" style="background-color: var(--color-bg-elevated); box-shadow: var(--shadow-ring);">
+        <h2 class="heading-section text-[24px] mb-4">Contrast checker</h2>
+        <div class="grid sm:grid-cols-2 gap-4">
+          <label class="text-sm text-[var(--color-fg-secondary)]">Foreground (text)
+            <input id="ct-fg" value="#0a0a0b" class="mt-1 w-full font-mono rounded px-3 py-2 text-[var(--color-fg)]" style="background-color: var(--color-bg); box-shadow: var(--shadow-ring);" />
+          </label>
+          <label class="text-sm text-[var(--color-fg-secondary)]">Background
+            <input id="ct-bg" value="#ffffff" class="mt-1 w-full font-mono rounded px-3 py-2 text-[var(--color-fg)]" style="background-color: var(--color-bg); box-shadow: var(--shadow-ring);" />
+          </label>
+        </div>
+        <div id="ct-preview" class="mt-4 rounded p-4 text-[18px] font-medium">Sample text Aa</div>
+        <p id="ct-out" class="mt-3 font-mono text-[15px] text-[var(--color-fg)]" aria-live="polite"></p>
+      </div>
+    </section>
+  )}
+
+  <section class="px-4 sm:px-6 py-12">
+    <div class="mx-auto max-w-3xl grid gap-10">
+      <div>
+        <h2 class="heading-section text-[28px] mb-4">How to do it</h2>
+        <ol class="list-decimal pl-6 grid gap-2 text-[15.5px] leading-[1.7] text-[var(--color-fg-secondary)]">
+          {entry.steps.map((s) => <li>{s}</li>)}
+        </ol>
+      </div>
+      <div>
+        <h2 class="heading-section text-[28px] mb-4">Tips and gotchas</h2>
+        <ul class="list-disc pl-6 grid gap-2 text-[15.5px] leading-[1.7] text-[var(--color-fg-secondary)]">
+          {entry.tips.map((t) => <li>{t}</li>)}
+        </ul>
+      </div>
+      <div>
+        <h2 class="heading-section text-[28px] mb-4">FAQ</h2>
+        <div class="grid gap-3">
+          {entry.faqs.map((f) => (
+            <details class="rounded-md p-5" style="background-color: var(--color-bg); box-shadow: var(--shadow-ring);">
+              <summary class="cursor-pointer font-semibold text-[16px] text-[var(--color-fg)]">{f.q}</summary>
+              <p class="mt-3 text-[15px] text-[var(--color-fg-secondary)] leading-relaxed">{f.a}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+      <div>
+        <h2 class="heading-section text-[22px] mb-3">Related guides</h2>
+        <ul class="grid gap-1 text-[15px]">
+          {related.map((r) => <li><a href={b(`${PSEO_BASE}/${r.slug}`)} class="underline text-[var(--color-fg)]">{r.h1}</a></li>)}
+          <li><a href={b(PSEO_BASE)} class="underline text-[var(--color-fg)]">All guides →</a></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<script>
+  import { contrastRatio, formatHex } from "../../lib/colorFormats";
+  import { parseColor } from "../../lib/webmcp";
+  const fgEl = document.getElementById("ct-fg") as HTMLInputElement | null;
+  const bgEl = document.getElementById("ct-bg") as HTMLInputElement | null;
+  const out = document.getElementById("ct-out");
+  const prev = document.getElementById("ct-preview");
+  function update(): void {
+    if (!fgEl || !bgEl || !out || !prev) return;
+    const fg = parseColor(fgEl.value);
+    const bg = parseColor(bgEl.value);
+    if (!fg || !bg) { out.textContent = "Enter colors as #rrggbb or rgb(r, g, b)."; return; }
+    const r = contrastRatio(fg, bg);
+    const pf = (n: number) => (r >= n ? "✓" : "✗");
+    prev.style.color = formatHex(fg);
+    prev.style.backgroundColor = formatHex(bg);
+    out.textContent = `${r.toFixed(2)}:1 — AA ${pf(4.5)} · AAA ${pf(7)} · Large AA ${pf(3)} · Large AAA ${pf(4.5)} · UI ${pf(3)}`;
+  }
+  fgEl?.addEventListener("input", update);
+  bgEl?.addEventListener("input", update);
+  update();
+</script>

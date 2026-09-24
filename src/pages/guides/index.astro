@@ -1,0 +1,27 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { b } from "../../site.config";
+import { pseoEntries, PSEO_BASE } from "../../data/pseo";
+---
+
+<Layout
+  title="Color picker guides — Chromebook, Linux, video, websites, Canva, PowerPoint"
+  description="Practical guides for picking exact screen colors on Chromebook and Linux, from videos and websites, for Canva and PowerPoint, plus a WCAG contrast checker."
+>
+  <section class="px-4 sm:px-6 pt-16 sm:pt-20 pb-16">
+    <div class="mx-auto max-w-3xl">
+      <h1 class="heading-display text-[36px] sm:text-[48px] text-balance">Color picker guides</h1>
+      <p class="mt-5 text-[17px] leading-[1.6] text-[var(--color-fg-secondary)]">
+        Platform- and app-specific walkthroughs for sampling exact colors from your screen.
+      </p>
+      <ul class="mt-10 grid gap-4">
+        {pseoEntries.map((e) => (
+          <li class="rounded-md p-5" style="background-color: var(--color-bg); box-shadow: var(--shadow-ring);">
+            <a href={b(`${PSEO_BASE}/${e.slug}`)} class="font-semibold text-[17px] text-[var(--color-fg)] underline">{e.h1}</a>
+            <p class="mt-1 text-[15px] text-[var(--color-fg-secondary)]">{e.metaDescription}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+</Layout>
